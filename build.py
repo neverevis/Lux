@@ -9,4 +9,4 @@ CPP_VERSION     =   "-std=c++23"
 
 SOURCES = " ".join(glob.glob(f"{SOURCE_FOLDER}/**/*.cpp",recursive=True))
 
-subprocess.run(f"{COMPILER} {SOURCES} -o {EXECUTABLE_NAME} {CPP_VERSION}", shell=True)
+subprocess.run(f"{COMPILER} {SOURCES} -o {EXECUTABLE_NAME} {CPP_VERSION} -I{SOURCE_FOLDER} -luser32 -lgdi32 -lopengl32", shell=True)
