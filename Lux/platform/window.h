@@ -1,6 +1,6 @@
 #pragma once
 
-namespace lux{
+namespace Lux{
     class Window{
         public:
         Window(int width, int height, char* title);
