@@ -5,6 +5,9 @@
 namespace Lux{
     class Window{
     public:
+        struct Data;
+        std::unique_ptr<Data>   m_data;
+        
         Window(int width, int height, const char* title);
         ~Window();
 
@@ -13,9 +16,6 @@ namespace Lux{
         void poll_events();
         bool should_close();
         void swap_buffers();
-
-    private:
-        struct Data;
-        std::unique_ptr<Data>   m_data;
+        
     };
 }
