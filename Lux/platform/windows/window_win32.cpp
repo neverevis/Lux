@@ -25,14 +25,14 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     return DefWindowProcA(hwnd, msg, wparam, lparam);
 }
 
-struct Lux::Window::Data{
+struct Lux::Window::NativeData{
     HWND    hwnd        =   nullptr;
     HDC     hdc         =   nullptr;
     bool    close_flag  =   false;
 };
 
 Lux::Window::Window(int width, int height, const char* title)
-    : m_data(std::make_unique<Lux::Window::Data>())
+    : m_data(std::make_unique<Lux::Window::NativeData>())
 {
     HINSTANCE instance = GetModuleHandleA(nullptr);
 
@@ -109,6 +109,14 @@ void Lux::Window::swap_buffers(){
     if(m_data->hdc){
         SwapBuffers(m_data->hdc);
     }
+}
+
+Lux::Window::AgnosticData Lux::Window::get_data(){
+    Lux::Window::AgnosticData data = {};
+    data.slot_a = m_data->hwnd;
+    data.slot_b = m_data->hdc;
+
+    return data;
 }
 
 #endif
