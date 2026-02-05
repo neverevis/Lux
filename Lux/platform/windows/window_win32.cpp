@@ -28,7 +28,6 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 struct Lux::Window::Data{
     HWND    hwnd        =   nullptr;
     HDC     hdc         =   nullptr;
-    HGLRC   hglrc       =   nullptr;
     bool    close_flag  =   false;
 };
 
@@ -68,14 +67,6 @@ Lux::Window::Window(int width, int height, const char* title)
 }
 
 Lux::Window::~Window(){
-    if(m_data->hglrc){
-        if(wglGetCurrentContext() == m_data->hglrc){
-            wglMakeCurrent(nullptr, nullptr);
-        }
-
-        wglDeleteContext(m_data->hglrc);
-    }
-
     if(m_data->hdc){
         ReleaseDC(m_data->hwnd, m_data->hdc);
     }

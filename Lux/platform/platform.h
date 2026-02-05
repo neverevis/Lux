@@ -1,9 +1,11 @@
 #pragma once
 
-#ifdef _WIN32
+#if defined(_WIN32)
     #define PLATFORM_WINDOWS
-#elif __linux__
+#elif defined(__linux__)
     #define PLATFORM_LINUX
-#elif __APPLE__
+#elif defined(__APPLE__)
     #define PLATFORM_APPLE
+#else
+    #error "Platform/OS not supported"
 #endif
