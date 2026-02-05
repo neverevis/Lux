@@ -25,15 +25,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     return DefWindowProcA(hwnd, msg, wparam, lparam);
 }
 
-struct Lux::Window::NativeData{
-    HWND    hwnd        =   nullptr;
-    HDC     hdc         =   nullptr;
-    bool    close_flag  =   false;
-};
-
-Lux::Window::Window(int width, int height, const char* title)
-    : m_data(std::make_unique<Lux::Window::NativeData>())
-{
+Lux::Window::Window(int width, int height, const char* title){
     HINSTANCE instance = GetModuleHandleA(nullptr);
 
     if(!class_registered){
@@ -61,23 +53,20 @@ Lux::Window::Window(int width, int height, const char* title)
     int x = GetSystemMetrics(SM_CXSCREEN)/2 - width/2;
     int y = GetSystemMetrics(SM_CYSCREEN)/2 - height/2;
 
-    m_data->hwnd = CreateWindowExA(0, "window_class", title, WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, instance, nullptr);
+    m_native_handle = CreateWindowExA(0, "window_class", title, WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, instance, nullptr);
 
-    SetWindowLongPtrA(m_data->hwnd, GWLP_USERDATA, (LONG_PTR)this);
+    SetWindowLongPtrA((HWND) m_native_handle, GWLP_USERDATA, (LONG_PTR)this);
 }
 
 Lux::Window::~Window(){
-    if(m_data->hdc){
-        ReleaseDC(m_data->hwnd, m_data->hdc);
-    }
-    if(m_data->hwnd){
-        DestroyWindow(m_data->hwnd);
+    if(m_native_handle){
+        DestroyWindow((HWND) m_native_handle);
     }
 }
 
 bool Lux::Window::show(){
-    if(m_data->hwnd){
-        ShowWindow(m_data->hwnd, SW_SHOW);
+    if(m_native_handle){
+        ShowWindow((HWND) m_native_handle, SW_SHOW);
         return true;
     }
 
@@ -85,8 +74,8 @@ bool Lux::Window::show(){
 }
 
 bool Lux::Window::close(){
-    if(!m_data->close_flag){
-        m_data->close_flag = true;
+    if(!m_close_flag){
+        m_close_flag = true;
         return true;
     }
 
@@ -95,28 +84,18 @@ bool Lux::Window::close(){
 
 void Lux::Window::poll_events(){
     MSG msg;
-    while(PeekMessageA(&msg, m_data->hwnd, 0, 0, PM_REMOVE)){
+    while(PeekMessageA(&msg, (HWND) m_native_handle, 0, 0, PM_REMOVE)){
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 }
 
 bool Lux::Window::should_close(){
-    return m_data->close_flag;
+    return m_close_flag;
 }
 
-void Lux::Window::swap_buffers(){
-    if(m_data->hdc){
-        SwapBuffers(m_data->hdc);
-    }
-}
-
-Lux::Window::AgnosticData Lux::Window::get_data(){
-    Lux::Window::AgnosticData data = {};
-    data.slot_a = m_data->hwnd;
-    data.slot_b = m_data->hdc;
-
-    return data;
+void* Lux::Window::get_native_handle(){
+    return m_native_handle;
 }
 
 #endif
