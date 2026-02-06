@@ -16,10 +16,11 @@ namespace Lux{
         virtual void update() = 0;
         virtual void render() = 0;
         virtual ~Application() = default;
-    private:
-        void loop();
 
+    private:
         Lux::Window     m_window;
         Lux::GLContext  m_gl;
+        
+        void loop();
     };
 }
