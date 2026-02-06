@@ -1,12 +1,14 @@
 #include <core/application.h>
+#include <core/time.h>
 
 Lux::Application::Application(i32 width, i32 height, const char* title)
-    : window(width, height, title),
-      gl(window)
+    : m_window(width, height, title),
+      m_gl(m_window),
+      delta_time()
 
 {
-    gl.make_current();
-    window.show();
+    m_gl.make_current();
+    m_window.show();
 }
 
 void Lux::Application::run(){
@@ -14,10 +16,19 @@ void Lux::Application::run(){
 }
 
 void Lux::Application::loop(){
-    while(!window.should_close()){
-        window.poll_events();
-        update(1);
+    Time last_time;
+    Time current_time;
+
+    last_time = Time::now();
+    
+    while(!m_window.should_close()){
+        current_time = Time::now();
+        delta_time = current_time - last_time;
+        last_time = current_time;
+
+        m_window.poll_events();
+        update();
         render();
-        gl.swap_buffers();
+        m_gl.swap_buffers();
     }
 }

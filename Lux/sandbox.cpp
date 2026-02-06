@@ -3,14 +3,13 @@
 
 class Game : public Lux::Application{
 public:
-    Game(i32 w, i32 h, const char* title) : Application(w,h,title){};
+    Game(i32 w, i32 h, const char* title) : Application(w,h,title){}
 
-    void update (f64 delta_time){
-        std::println("updating!");
+    void update (){
+        std::println("{}", delta_time.as_seconds());
     }
 
     void render(){
-        std::println("rendering!");
     }
 };
 
