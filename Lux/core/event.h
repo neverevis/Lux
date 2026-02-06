@@ -19,9 +19,11 @@ namespace Lux{
         Delete, PageUp, PageDown, Home, End, Insert
     };
 
-    enum class MouseButton{
-        LeftButton, RightButton
-    };
+    namespace Mouse{
+        enum class Button{
+            Left, Right
+        };
+    }
 
     enum class EventType{
         KeyPressed, KeyReleased,
@@ -39,7 +41,7 @@ namespace Lux{
 
         union{
             Key             key;
-            MouseButton     mouse_button;
+            Mouse::Button   mouse_button;
         };
 
         f32 scroll_delta;

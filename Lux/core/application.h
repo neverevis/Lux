@@ -1,9 +1,10 @@
 #pragma once
 #include <core/types.h>
 #include <core/time.h>
+#include <core/event.h>
+#include <core/input.h>
 #include <platform/window.h>
 #include <platform/gl_context.h>
-#include <core/event.h>
 
 namespace Lux{
     class Application{

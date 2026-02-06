@@ -11,6 +11,20 @@
 
 static bool class_registered = false;
 
+Lux::Key translate_key(WPARAM key){
+    if(key >= 'A' && key <= 'Z'){
+        return (Lux::Key)(key - 'A' + 1);
+    }
+
+    if(key >= '0' && key <= '9'){
+        return (Lux::Key)((int)Lux::Key::Num0 - '0');
+    }
+
+    //TODO -> add keys like escape, enter..
+
+    return Lux::Key::Unknown;
+}
+
 LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
     Lux::Window* window = (Lux::Window*) GetWindowLongPtrA(hwnd, GWLP_USERDATA);
 
@@ -35,9 +49,35 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
                 event.key = translate_key(wparam);
                 dispatch = true;
                 break;
-                
+
             case WM_MOUSEMOVE:
                 event.event_type = Lux::EventType::MouseMoved;
+                event.mouse.x = (int) wparam;
+                event.mouse.y = (int) lparam;
+                dispatch = true;
+                break;
+
+            case WM_LBUTTONDOWN:
+                event.event_type = Lux::EventType::MousePressed;
+                event.mouse_button = Lux::Mouse::Button::Left;
+                dispatch = true;
+                break;
+
+            case WM_RBUTTONDOWN:
+                event.event_type = Lux::EventType::MousePressed;
+                event.mouse_button = Lux::Mouse::Button::Right;
+                dispatch = true;
+                break;
+
+            case WM_LBUTTONUP:
+                event.event_type = Lux::EventType::MouseReleased;
+                event.mouse_button = Lux::Mouse::Button::Left;
+                dispatch = true;
+                break;
+
+            case WM_RBUTTONUP:
+                event.event_type = Lux::EventType::MouseReleased;
+                event.mouse_button = Lux::Mouse::Button::Right;
                 dispatch = true;
                 break;
         }
@@ -131,20 +171,6 @@ void Lux::Window::dispatch_event(Event& event){
     if(m_event_callback){
         m_event_callback(event);
     }
-}
-
-Lux::Key translate_key(WPARAM key){
-    if(key >= 'A' && key <= 'Z'){
-        return (Lux::Key)((int)Lux::Key::A - 'A');
-    }
-
-    if(key >= '0' && key <= '9'){
-        return (Lux::Key)((int)Lux::Key::Num0 - '0');
-    }
-
-    //TODO -> add keys like escape, enter..
-
-    return Lux::Key::Unknown;
 }
 
 #endif
