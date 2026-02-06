@@ -3,6 +3,7 @@
 #include <core/time.h>
 #include <platform/window.h>
 #include <platform/gl_context.h>
+#include <core/event.h>
 
 namespace Lux{
     class Application{

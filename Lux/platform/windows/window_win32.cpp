@@ -15,10 +15,35 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     Lux::Window* window = (Lux::Window*) GetWindowLongPtrA(hwnd, GWLP_USERDATA);
 
     if(window){
+        Lux::Event event{};
+        bool dispatch = false;
+
         switch(msg){
             case WM_CLOSE:
                 window->close();
                 break;
+
+            //event types
+            case WM_KEYDOWN:
+                event.event_type = Lux::EventType::KeyPressed;
+                event.key = translate_key(wparam);
+                dispatch = true;
+                break;
+
+            case WM_KEYUP:
+                event.event_type = Lux::EventType::KeyReleased;
+                event.key = translate_key(wparam);
+                dispatch = true;
+                break;
+                
+            case WM_MOUSEMOVE:
+                event.event_type = Lux::EventType::MouseMoved;
+                dispatch = true;
+                break;
+        }
+
+        if(dispatch){
+            window->dispatch_event(event);
         }
     }
 
@@ -96,6 +121,30 @@ bool Lux::Window::should_close(){
 
 void* Lux::Window::get_native_handle(){
     return m_native_handle;
+}
+
+void Lux::Window::set_callback(void (*callback_ptr)(Event& event)){
+    m_event_callback = callback_ptr;
+}
+
+void Lux::Window::dispatch_event(Event& event){
+    if(m_event_callback){
+        m_event_callback(event);
+    }
+}
+
+Lux::Key translate_key(WPARAM key){
+    if(key >= 'A' && key <= 'Z'){
+        return (Lux::Key)((int)Lux::Key::A - 'A');
+    }
+
+    if(key >= '0' && key <= '9'){
+        return (Lux::Key)((int)Lux::Key::Num0 - '0');
+    }
+
+    //TODO -> add keys like escape, enter..
+
+    return Lux::Key::Unknown;
 }
 
 #endif
