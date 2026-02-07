@@ -63,7 +63,7 @@ def main():
     elif success:
         print(f"\n{text_bright_blue}Linking",end="")
         objects = " ".join([str(p) for p in Path(f"{BUILD_DIR}/obj").glob("*.o")])
-        linking = subprocess.run(f"{COMPILER} {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} -luser32 -lgdi32 -lopengl32", shell = True, capture_output = True, text = True)
+        linking = subprocess.run(f"{COMPILER} -v {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} -luser32 -lgdi32 -lopengl32", shell = True, capture_output = True, text = True)
 
         if linking.returncode != 0:
             print(f"{text_red} -> Error!{text_reset}")

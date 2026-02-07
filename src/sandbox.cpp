@@ -14,7 +14,7 @@ public:
 };
 
 int main(){
-    Game game(800,600,"Game!");
+    Game game(800,600,"Sandbox!");
 
     game.run();
 }

@@ -9,7 +9,7 @@ Lux::Application::Application(i32 width, i32 height, const char* title)
 
 {
     m_gl.make_current();
-    m_window.set_callback(Lux::Input::on_event);
+    m_window.m_callback = Lux::Input::on_event;
     m_window.show();
 }
 
