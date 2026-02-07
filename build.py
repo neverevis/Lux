@@ -1,5 +1,6 @@
 import subprocess
 import platform
+import shutil
 from pathlib import Path
 
 def main():
@@ -30,12 +31,18 @@ def main():
     modified = False
     success = True
 
+    for h in Path(SOURCE_DIR).rglob("*.h"):
+        for o in Path(f"{BUILD_DIR}/obj").rglob("*.o"):
+            if h.stat().st_mtime > o.stat().st_mtime:
+                clear_folder(Path(f"{BUILD_DIR}/obj"))
+                break
+
+
     for s in Path(SOURCE_DIR).rglob("*.cpp"):
         should_compile = False
-
+        
         source = Path(s)
         object = Path(f"{BUILD_DIR}/obj/" + source.stem + ".o")
-        object.as_posix
 
         if not object.exists():
             should_compile = True
@@ -76,6 +83,11 @@ def main():
         print(f"\n{text_magenta}=-=-=-=-= ✦ {text_bright_green}Build Done{text_magenta} ✦ =-=-=-=-=\n{text_reset}")
     else:
         print(f"\n{text_magenta}=-=-=-=-= ✦ {text_bright_red}Build Failed{text_magenta} ✦ =-=-=-=-=\n{text_reset}")
+
+def clear_folder(folder_path):
+    if folder_path.exists():
+        shutil.rmtree(folder_path)
+        folder_path.mkdir(parents=True, exist_ok=True)
 
 #log colors
 text_reset      = "\033[0m"

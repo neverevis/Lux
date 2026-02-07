@@ -8,6 +8,7 @@
 #endif
 
 #include <windows.h>
+#include <windowsx.h>
 
 static bool class_registered = false;
 
@@ -52,8 +53,8 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 
             case WM_MOUSEMOVE:
                 event.event_type = Lux::EventType::MouseMoved;
-                event.mouse.x = (int) wparam;
-                event.mouse.y = (int) lparam;
+                event.mouse.x = (i32) GET_X_LPARAM(lparam);
+                event.mouse.y = (i32) GET_Y_LPARAM(lparam);
                 dispatch = true;
                 break;
 
