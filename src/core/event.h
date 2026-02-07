@@ -2,48 +2,62 @@
 #include <core/types.h>
 
 namespace Lux{
-    enum class Key{
-        Unknown = 0,
-        
-        A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-        
-        Num0, Num1, Num2, Num3, Num4, Num5, Num6, Num7, Num8, Num9,
-        
-        Escape, Space, Enter, Backspace, Tab,
-        LShift, RShift, LCtrl, RCtrl, LAlt, RAlt,
-        
-        Up, Down, Left, Right,
-        
-        F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
-        
-        Delete, PageUp, PageDown, Home, End, Insert
+    struct Keyboard{
+        enum class Key{
+            Unknown = 0,
+            
+            A, B, C, D, E, F, G, H, I, J, K, L, M, 
+            N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+            
+            Num0, Num1, Num2, Num3, Num4, 
+            Num5, Num6, Num7, Num8, Num9,
+            
+            Escape, Space, Enter, Backspace, Tab,
+
+            LShift  ,   RShift, 
+            LCtrl   ,   RCtrl, 
+            LAlt    ,   RAlt,
+            
+            Up  , Down, Left, Right,
+            
+            F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+            
+            Delete, PageUp, PageDown, Home, End, Insert
+        };
+
+        enum class State{
+            Pressed, Released
+        };
+
+        Key     key;
+        State   state;
     };
 
-    namespace Mouse{
+    struct Mouse{
         enum class Button{
             Left, Right
         };
-    }
+        enum class State{
+            Pressed, Released, Scrolled
+        };
 
-    enum class EventType{
-        KeyPressed, KeyReleased,
+        Button button;
+        State state;
 
-        MousePressed, MouseReleased, MouseMoved, MouseScrolled
+        i32 x;
+        i32 y;
     };
 
     struct Event{
-        EventType           event_type;
-
-        struct{
-            i32 x;
-            i32 y;
-        }                   mouse;
-
-        union{
-            Key             key;
-            Mouse::Button   mouse_button;
+        enum class Type{
+            Keyboard, Mouse, Window
         };
 
-        f32 scroll_delta;
+        Type type;
+
+        union{
+            Keyboard    keyboard;
+            Mouse       mouse;
+        };
     };
 }
