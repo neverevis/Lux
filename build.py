@@ -3,12 +3,6 @@ import platform
 from pathlib import Path
 
 def main():
-    OS = platform.system()
-    if OS == "Windows":
-        subprocess.run("cls",shell=True)
-    else:
-        subprocess.run("clear",shell=True)
-
     # config
     COMPILER        =   "clang++"
     SOURCE_DIR      =   "src"
@@ -17,7 +11,14 @@ def main():
     CPP_VERSION     =   "-std=c++23"
     INCLUDES        =   ["src/external"]
 
+    #script
     INCLUDES        =   " ".join(["-I" + include for include in INCLUDES])
+
+    OS = platform.system()
+    if OS == "Windows":
+        subprocess.run("cls",shell=True)
+    else:
+        subprocess.run("clear",shell=True)
 
     print(f"{text_magenta}=-=-=-=-= ✦ {text_bright_yellow}Lux builder{text_magenta} ✦ =-=-=-=-=\n")
     print(f"{text_yellow}Platform: {text_bright_cyan}{platform.system()}")
