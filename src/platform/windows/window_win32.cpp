@@ -17,7 +17,7 @@ Lux::Key translate_key(WPARAM key){
     }
 
     if(key >= '0' && key <= '9'){
-        return (Lux::Key)((int)Lux::Key::Num0 - '0');
+        return (Lux::Key)(key - '0' + (int)Lux::Key::Z + 1);
     }
 
     //TODO -> add keys like escape, enter..

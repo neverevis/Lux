@@ -31,10 +31,10 @@ void Lux::Input::on_event(Event& event){
         s_keys[(int)event.key] = false;
     }
     else if(event.event_type == EventType::MousePressed){
-        s_keys[(int)event.mouse_button] = true;
+        s_mouse[(int)event.mouse_button] = true;
     }
     else if(event.event_type == EventType::MouseReleased){
-        s_keys[(int)event.mouse_button] = false;
+        s_mouse[(int)event.mouse_button] = false;
     }
     else if(event.event_type == EventType::MouseMoved){
         s_mouseX = event.mouse.x;
