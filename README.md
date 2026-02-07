@@ -8,14 +8,6 @@
 - [ ] Linux (Planned: X11)
 - [ ] macOS (Planned: Cocoa)
 
-### Features
-- [x] Multi-Platform Window class
-- [x] Inputs (Implementing)
-- [x] OpenGL Context
-- [x] Time manager class
-- [ ] Logger
-- [ ] 2D Renderer
-
 ### How to Run (Windows)
 
 #### Dependencies
@@ -30,7 +22,7 @@ git clone https://github.com/neverevis/Lux
 cd Lux
 ```
 
-2. Change the settings on build.py (Compiler, Debug, Dependencies)
+2. Change the settings on build.py (Compiler, Source Directory, C++ Version, ...)
 > Planing to make a json configuration in the future
 
 3. Compile and run:
