@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <core/event.h>
 
 namespace Lux{
@@ -15,6 +14,10 @@ namespace Lux{
         bool    close();
         void    poll_events();
         bool    should_close();
+
+        u16     width();
+        u16     height();
+
         void*   get_native_handle();
     
     private:

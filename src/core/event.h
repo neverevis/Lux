@@ -38,19 +38,25 @@ namespace Lux{
             Left, Right
         };
         enum class State{
-            Pressed, Released, Scrolled
+            Pressed, Released, Moved, Scrolled
         };
 
         Button button;
         State state;
 
+        bool moving;
         i32 x;
         i32 y;
+        i32 delta_scroll;
+    };
+
+    enum class Action{
+        Close, Minimize, Restore, Resize, OnFocus, OutFocus
     };
 
     struct Event{
         enum class Type{
-            Keyboard, Mouse, Window
+            Keyboard, Mouse, Action
         };
 
         Type type;
@@ -58,6 +64,7 @@ namespace Lux{
         union{
             Keyboard    keyboard;
             Mouse       mouse;
+            Action      action;
         };
     };
 }
