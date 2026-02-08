@@ -299,7 +299,7 @@ u16 Lux::Window::height(){
     RECT r;
     GetClientRect((HWND) m_native_handle, &r);
 
-    return r.right - r.left;
+    return r.bottom - r.top;
 }
 
 #endif

@@ -32,5 +32,6 @@ void Lux::Application::loop(){
         update();
         render();
         m_gl.swap_buffers();
+        Input::flush_frame_data();
     }
 }

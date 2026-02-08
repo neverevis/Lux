@@ -7,10 +7,12 @@ namespace Lux{
     public:
         static bool key_pressed(Keyboard::Key key);
         static bool mouse_pressed(Mouse::Button mouse_button);
+        static i32  mouse_delta_scroll();
         static i32  mouseX();
         static i32  mouseY();
 
         static void on_event(Event& event);
+        static void flush_frame_data();
 
     private:
         static bool s_keys[512];

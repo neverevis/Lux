@@ -24,6 +24,10 @@ i32 Lux::Input::mouseY(){
     return s_mouseY;
 }
 
+i32 Lux::Input::mouse_delta_scroll(){
+    return s_delta_scroll;
+}
+
 void Lux::Input::on_event(Event& event){
     switch(event.type){
         case Event::Type::Keyboard:
@@ -67,4 +71,8 @@ void Lux::Input::mouse_event(Event& event){
 
 void Lux::Input::action_event(Event& event){
 
+}
+
+void Lux::Input::flush_frame_data(){
+    s_delta_scroll = 0;
 }
