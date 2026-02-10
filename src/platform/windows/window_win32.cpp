@@ -1,7 +1,6 @@
-#include <platform/platform.h>
+#include <platform/window.h>
 #ifdef PLATFORM_WINDOWS
 
-#include <platform/window.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN

@@ -1,4 +1,4 @@
-#include <platform/platform.h>
+#include <platform/gl_context.h>
 #ifdef PLATFORM_WINDOWS
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -8,7 +8,6 @@
 #include <windows.h>
 #include <glcorearb.h>
 #include <wglext.h>
-#include <platform/gl_context.h>
 #include <iostream>
 
 Lux::GLContext::GLContext(Lux::Window& window){

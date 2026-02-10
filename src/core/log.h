@@ -1,7 +1,18 @@
 #pragma once
+#include <core/types.h>
+
 #include <print>
 #include <format>
-#include <core/types.h>
+
+#define reset_txt       "\033[0m"
+#define black_txt       "\033[30m"
+#define red_txt         "\033[31m"
+#define green_txt       "\033[32m"
+#define yellow_txt      "\033[33m"
+#define blue_txt        "\033[34m"
+#define magenta_txt     "\033[35m"
+#define cyan_txt        "\033[36m"
+#define white_txt       "\033[37m"
 
 namespace Lux{
     template<typename... Args>
