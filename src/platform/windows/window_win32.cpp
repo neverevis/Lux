@@ -89,7 +89,7 @@ Lux::Keyboard::Key translate_key(WPARAM key, LPARAM lparam){
     to extract that, it must shift 16 bits to right and apply a mask that preserves only the 8 last bits, */
     u32 scancode = (lparam >> 16) & 0xFF;
 
-    /* the 24 bit indicates if the key is left in most cases. */
+    /* the 24 bit indicates if the key is right in most cases. */
     bool is_extended = (lparam >> 24) & 0x1;
 
     switch(key){
