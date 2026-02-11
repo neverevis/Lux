@@ -1,19 +1,21 @@
 import subprocess
 import platform
 import shutil
+import json
 from pathlib import Path
 
-def main():
-    # config
-    COMPILER        =   "clang++"
-    SOURCE_DIR      =   "src"
-    BUILD_DIR       =   "build"
-    EXECUTABLE_NAME =   "sandbox.exe"
-    CPP_VERSION     =   "-std=c++23"
-    INCLUDES        =   ["src/external"]
+# config
+COMPILER        =   "clang++"
+SOURCE_DIR      =   "src"
+BUILD_DIR       =   "build"
+EXECUTABLE_NAME =   "sandbox.exe"
+CPP_VERSION     =   "-std=c++23"
+INCLUDES        =   ["src/external"]
 
+INCLUDES        =   " ".join(["-I" + include for include in INCLUDES])
+
+def main():
     #script
-    INCLUDES        =   " ".join(["-I" + include for include in INCLUDES])
 
     OS = platform.system()
     if OS == "Windows":
@@ -28,8 +30,7 @@ def main():
     Path(f"{BUILD_DIR}/obj").mkdir(parents = True, exist_ok = True)
     Path(f"{BUILD_DIR}/bin").mkdir(parents = True, exist_ok = True)
 
-    modified = False
-    success = True
+    compilation_queue = []
 
     for h in Path(SOURCE_DIR).rglob("*.h"):
         for o in Path(f"{BUILD_DIR}/obj").rglob("*.o"):
@@ -37,37 +38,64 @@ def main():
                 clear_folder(Path(f"{BUILD_DIR}/obj"))
                 break
 
-
+    i = 0
     for s in Path(SOURCE_DIR).rglob("*.cpp"):
-        should_compile = False
-        
         source = Path(s)
         object = Path(f"{BUILD_DIR}/obj/" + source.stem + ".o")
 
+        compilation_queue.append({
+            "path": source.as_posix(),
+            "source_name": source.name,
+            "object_name": object.name,
+            "command": get_compile_command(source, object),
+            "status": "updated"
+        })
+
         if not object.exists():
-            should_compile = True
-            print(f"{text_bright_blue}Compiling {text_bright_yellow}-> {text_bright_cyan}{source.name}",  end = "")
+            compilation_queue[i]["status"] = "new"
 
         if object.exists() and object.stat().st_mtime < source.stat().st_mtime:
-            should_compile = True
-            print(f"{text_bright_blue}Re-Compiling {text_bright_yellow}-> {text_bright_cyan}{source.name}", end = "")
+            compilation_queue[i]["status"] = "outdated"
 
-        if should_compile:
-            compilation = subprocess.run(F"{COMPILER} -c {source} -o {object} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}",shell = True, capture_output = True, text = True)
+        i += 1
+    
+    save_compile_commands(compilation_queue)
+
+    success = True
+    modified = False
+
+    for o in Path(f"{BUILD_DIR}/obj/").rglob("*.o"):
+        object = Path(o)
+        should_delete = True
+        for item in compilation_queue:
+            if item["object_name"] == object.name:
+                should_delete = False
+        if should_delete:
+            print(f"{text_bright_red}Removing {text_yellow}-> {text_cyan}{object.name}")
+            object.unlink()
             modified = True
 
+    print()
+
+    for item in compilation_queue:
+        if item["status"] == "new" or item["status"] == "outdated":
+            modified = True
+            if item["status"] == "new":
+                print(f"{text_bright_blue}Compiling {text_bright_yellow}-> {text_bright_cyan}{item['source_name']}",end="")
+            else:
+                print(f"{text_bright_blue}Re-Compiling {text_bright_yellow}-> {text_bright_cyan}{item['source_name']}",end="");
+    
+            compilation = subprocess.run(item["command"],shell=True,capture_output=True,text=True)
+
             if compilation.returncode != 0:
-                print(f"{text_red} -> Error!{text_reset}")
-                print(f"{compilation.stderr}",end="")
+                print(f"{text_red} -> Error!")
+                print(linking.stderr,end="")
                 success = False
                 break
             else:
                 print(f"{text_bright_green} -> Success!{text_reset}")
 
-    if not modified:
-        print(f"{text_bright_green}everything up-to-date!{text_reset}")
-
-    elif success:
+    if success and modified:
         print(f"\n{text_bright_blue}Linking",end="")
         objects = " ".join([str(p) for p in Path(f"{BUILD_DIR}/obj").glob("*.o")])
         linking = subprocess.run(f"{COMPILER} -v {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} -luser32 -lgdi32 -lopengl32", shell = True, capture_output = True, text = True)
@@ -78,6 +106,9 @@ def main():
             success = False
         else:
             print(f"{text_bright_green} -> Success!{text_reset}")
+
+    if not modified:
+        print(f"{text_bright_green}everything up-to-date!{text_reset}")
     
     if success:
         print(f"\n{text_magenta}=-=-=-=-= ✦ {text_bright_green}Build Done{text_magenta} ✦ =-=-=-=-=\n{text_reset}")
@@ -88,6 +119,24 @@ def clear_folder(folder_path):
     if folder_path.exists():
         shutil.rmtree(folder_path)
         folder_path.mkdir(parents=True, exist_ok=True)
+
+def get_compile_command(source, object):
+    return F"{COMPILER} -c {source.as_posix()} -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
+
+def save_compile_commands(queue):
+    json_data = []
+    root_dir = Path.cwd().as_posix()
+
+    for item in queue:
+        json_data.append({
+            "directory": root_dir,
+            "file": item["path"],
+            "command": item["command"]
+        })
+
+    with open("compile_commands.json","w",encoding="utf-8") as f:
+        json.dump(json_data, f, indent=4)
+        print(f"{text_green}IntelliSense {text_bright_green}updated!")
 
 #log colors
 text_reset      = "\033[0m"

@@ -13,9 +13,7 @@ public:
     void render(){
         int x = 1;
         int y = 5;
-        LUX_INFO("test -> {} {}", x, y);
-        LUX_WARN("test -> {} {}", x, y);
-        LUX_ERROR("test -> {} {}", x, y);
+        LUX_INFO("{}hello {}world", blue_txt, yellow_txt);
     }
 
 };

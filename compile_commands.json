@@ -1,0 +1,32 @@
+[
+    {
+        "directory": "F:/C/Lux",
+        "file": "src/sandbox.cpp",
+        "command": "clang++ -c src/sandbox.cpp -o build/obj/sandbox.o -std=c++23 -Isrc -Isrc/external"
+    },
+    {
+        "directory": "F:/C/Lux",
+        "file": "src/core/application.cpp",
+        "command": "clang++ -c src/core/application.cpp -o build/obj/application.o -std=c++23 -Isrc -Isrc/external"
+    },
+    {
+        "directory": "F:/C/Lux",
+        "file": "src/core/input.cpp",
+        "command": "clang++ -c src/core/input.cpp -o build/obj/input.o -std=c++23 -Isrc -Isrc/external"
+    },
+    {
+        "directory": "F:/C/Lux",
+        "file": "src/core/time.cpp",
+        "command": "clang++ -c src/core/time.cpp -o build/obj/time.o -std=c++23 -Isrc -Isrc/external"
+    },
+    {
+        "directory": "F:/C/Lux",
+        "file": "src/platform/windows/gl_context_wgl.cpp",
+        "command": "clang++ -c src/platform/windows/gl_context_wgl.cpp -o build/obj/gl_context_wgl.o -std=c++23 -Isrc -Isrc/external"
+    },
+    {
+        "directory": "F:/C/Lux",
+        "file": "src/platform/windows/window_win32.cpp",
+        "command": "clang++ -c src/platform/windows/window_win32.cpp -o build/obj/window_win32.o -std=c++23 -Isrc -Isrc/external"
+    }
+]

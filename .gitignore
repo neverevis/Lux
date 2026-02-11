@@ -1,2 +1,9 @@
+.cache/
+
+build/
 *.exe
 *.o
+
+compile_commands.json
+
+.vscode/
