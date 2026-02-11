@@ -1,6 +1,5 @@
 #pragma once
 
-#include <core/core.h>
 #include <core/event.h>
 
 namespace Lux{

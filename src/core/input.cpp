@@ -1,5 +1,4 @@
 #include <core/input.h>
-#include <print>
 
 bool Lux::Input::s_keys[512] = {};
 bool Lux::Input::s_mouse[2] = {};

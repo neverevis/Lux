@@ -8,11 +8,22 @@ from pathlib import Path
 COMPILER        =   "clang++"
 SOURCE_DIR      =   "src"
 BUILD_DIR       =   "build"
+DEBUG_MODE      =   True
 EXECUTABLE_NAME =   "sandbox.exe"
 CPP_VERSION     =   "-std=c++23"
 INCLUDES        =   ["src/external"]
 
+COMPILE_FLAGS = ""
+LINK_FLAGS = ""
+
 INCLUDES        =   " ".join(["-I" + include for include in INCLUDES])
+if DEBUG_MODE:
+    COMPILE_FLAGS = "-g -O0 -DLUX_DEBUG" #-g keeps symbols in binary and -O0 does not optimize (also to keep symbols)
+    LINK_FLAGS = "-g"
+else:
+    COMPILE_FLAGS = "-O3"
+    LINK_FLAGS = "-O3 -s"
+
 
 def main():
     #script
@@ -89,7 +100,7 @@ def main():
 
             if compilation.returncode != 0:
                 print(f"{text_red} -> Error!")
-                print(linking.stderr,end="")
+                print(compilation.stderr,end="")
                 success = False
                 break
             else:
@@ -98,7 +109,7 @@ def main():
     if success and modified:
         print(f"\n{text_bright_blue}Linking",end="")
         objects = " ".join([str(p) for p in Path(f"{BUILD_DIR}/obj").glob("*.o")])
-        linking = subprocess.run(f"{COMPILER} -v {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} -luser32 -lgdi32 -lopengl32", shell = True, capture_output = True, text = True)
+        linking = subprocess.run(f"{COMPILER} {LINK_FLAGS} {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} -luser32 -lgdi32 -lopengl32", shell = True, capture_output = True, text = True)
 
         if linking.returncode != 0:
             print(f"{text_red} -> Error!{text_reset}")
@@ -121,7 +132,7 @@ def clear_folder(folder_path):
         folder_path.mkdir(parents=True, exist_ok=True)
 
 def get_compile_command(source, object):
-    return F"{COMPILER} -c {source.as_posix()} -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
+    return F"{COMPILER} -c {COMPILE_FLAGS} {source.as_posix()} -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
 
 def save_compile_commands(queue):
     json_data = []

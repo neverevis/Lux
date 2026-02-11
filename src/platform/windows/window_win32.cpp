@@ -1,6 +1,7 @@
-#include <platform/window.h>
+#include <platform/platform.h>
 #ifdef PLATFORM_WINDOWS
 
+#include <platform/window.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -82,7 +83,7 @@ Lux::Keyboard::Key translate_key(WPARAM key, LPARAM lparam){
         =-=- Generic WParam Keys -=-=
         The following keys are not specified (left or right) by WParam.
         It must have the scancode or the extended bit on the LParam to get the Virtual Key
-    /*
+    */
 
     /* The scancode is localized in the 16 to 24 bit within the LParam. 
     to extract that, it must shift 16 bits to right and apply a mask that preserves only the 8 last bits, */

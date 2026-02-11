@@ -1,6 +1,5 @@
 #include <core/application.h>
 #include <core/time.h>
-#include <print>
 
 Lux::Application::Application(i32 width, i32 height, const char* title)
     : m_window(width, height, title),

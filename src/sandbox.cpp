@@ -1,6 +1,6 @@
-#define LUX_DEBUG
 #include <core/application.h>
 #include <core/log.h>
+#include <core/assert.h>
 
 class Game : public Lux::Application{
 public:
@@ -13,6 +13,7 @@ public:
     void render(){
         int x = 1;
         int y = 5;
+        LUX_ASSERT(x == 17, "x value = {}, expected 17", x)
         LUX_INFO("{}hello {}world", blue_txt, yellow_txt);
     }
 
