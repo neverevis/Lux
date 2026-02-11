@@ -1,4 +1,5 @@
 #include <core/input.h>
+#include <core/assert.h>
 
 bool Lux::Input::s_keys[512] = {};
 bool Lux::Input::s_mouse[2] = {};

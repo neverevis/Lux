@@ -5,21 +5,45 @@ import json
 from pathlib import Path
 
 # config
-COMPILER        =   "clang++"
-SOURCE_DIR      =   "src"
-BUILD_DIR       =   "build"
-DEBUG_MODE      =   True
-EXECUTABLE_NAME =   "sandbox.exe"
-CPP_VERSION     =   "-std=c++23"
-INCLUDES        =   ["src/external"]
+build_config = Path("build_config.json")
+if not build_config.exists():
+    print(f"Required a build_config.json")
+    exit()
+with open("build_config.json", "r") as f:
+    config = json.load(f)
+
+
+PLATFORM        =   platform.system()
+COMPILER        =   config["compiler"].lower()
+
+if COMPILER == "clang":
+    COMPILER = "clang++"
+elif COMPILER == "gcc":
+    COMPILER = "g++"
+
+SOURCE_DIR      =   config["source directory"]
+BUILD_DIR       =   config["build directory"]
+
+DEBUG_MODE = config["compilation mode"]
+if DEBUG_MODE == "debug":
+    DEBUG_MODE = True
+else:
+    DEBUG_MODE = False
+    
+EXECUTABLE_NAME =   config["executable name"]
+
+if PLATFORM == "Windows":
+    EXECUTABLE_NAME += ".exe"
+
+CPP_VERSION     =   f"-std=c++{config['c++ version']}"
+INCLUDES        =   " ".join(["-I" + include for include in config["includes"]])
 
 COMPILE_FLAGS = ""
 LINK_FLAGS = ""
 
-INCLUDES        =   " ".join(["-I" + include for include in INCLUDES])
 if DEBUG_MODE:
-    COMPILE_FLAGS = "-g -O0 -DLUX_DEBUG" #-g keeps symbols in binary and -O0 does not optimize (also to keep symbols)
-    LINK_FLAGS = "-g"
+        COMPILE_FLAGS = "-g -O0 -DLUX_DEBUG" #-g keeps symbols in binary and -O0 does not optimize (also to keep symbols)
+        LINK_FLAGS = "-g"
 else:
     COMPILE_FLAGS = "-O3"
     LINK_FLAGS = "-O3 -s"
@@ -45,7 +69,7 @@ def main():
 
     for h in Path(SOURCE_DIR).rglob("*.h"):
         for o in Path(f"{BUILD_DIR}/obj").rglob("*.o"):
-            if h.stat().st_mtime > o.stat().st_mtime:
+            if h.stat().st_mtime > o.stat().st_mtime or build_config.stat().st_mtime > o.stat().st_mtime:
                 clear_folder(Path(f"{BUILD_DIR}/obj"))
                 break
 
