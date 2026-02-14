@@ -1,7 +1,5 @@
-# ✦ Lux Engine
-![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge&logo=cplusplus)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
-> Multi platform Game Engine being made from scratch in C++
+![Lux Banner](assets/branding/banner.png)
+# ✦ Lux
 
 ### Platform Support
 - [x] Windows (Implementing Win32 Backend)
@@ -22,12 +20,10 @@ git clone https://github.com/neverevis/Lux
 cd Lux
 ```
 
-2. Change the settings on build.py (Compiler, Source Directory, C++ Version, ...)
-> Planing to make a json configuration in the future
+2. Change the settings on build_config.json (Compiler, Source Directory, C++ Version, ...)
 
-3. Compile and run:
+3. Use the build.py script to compile:
 ```bash
 python build.py
 build/bin/sandbox.exe
 ```
-> if you change the BUILD_DIR on the build.py, the second command has to be adjusted to the new path
