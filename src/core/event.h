@@ -44,7 +44,6 @@ namespace Lux{
         Button button;
         State state;
 
-        bool moving;
         i32 x;
         i32 y;
         i32 delta_scroll;

@@ -1,4 +1,5 @@
 #include <core/time.h>
+#include <chrono>
 
 Lux::Time Lux::Time::now(){
     std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();

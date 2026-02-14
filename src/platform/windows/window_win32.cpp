@@ -2,6 +2,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/window.h>
+#include <core/debug.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -218,6 +219,8 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 Lux::Window::Window(int width, int height, const char* title){
     HINSTANCE instance = GetModuleHandleA(nullptr);
 
+    LUX_VERIFY(instance, "failed to get instance");
+
     if(!class_registered){
         WNDCLASSA wc = {};
 
@@ -228,7 +231,7 @@ Lux::Window::Window(int width, int height, const char* title){
         wc.lpfnWndProc = window_callback;
         wc.style = CS_OWNDC;
 
-        RegisterClassA(&wc);
+        LUX_VERIFY(RegisterClassA(&wc),"failed to register window class");
 
         class_registered = true;
     }
@@ -244,6 +247,8 @@ Lux::Window::Window(int width, int height, const char* title){
     int y = GetSystemMetrics(SM_CYSCREEN)/2 - height/2;
 
     m_native_handle = CreateWindowExA(0, "window_class", title, WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, instance, nullptr);
+
+    LUX_VERIFY(m_native_handle, "failed to create a window");
 
     SetWindowLongPtrA((HWND) m_native_handle, GWLP_USERDATA, (LONG_PTR)this);
 }

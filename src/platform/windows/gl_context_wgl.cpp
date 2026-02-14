@@ -2,6 +2,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/gl_context.h>
+#include <core/debug.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -21,6 +22,8 @@ Lux::GLContext::GLContext(Lux::Window& window){
         HWND dummy_hwnd = (HWND) dummy.get_native_handle();
         HDC dummy_hdc = GetDC(dummy_hwnd);
 
+        LUX_VERIFY(dummy_hdc, "failed to get display handle for dummy window");
+
         PIXELFORMATDESCRIPTOR pfd =  {};
         pfd.nSize           = sizeof(PIXELFORMATDESCRIPTOR);
         pfd.iPixelType      = PFD_TYPE_RGBA;
@@ -33,14 +36,20 @@ Lux::GLContext::GLContext(Lux::Window& window){
 
         int pixel_format = ChoosePixelFormat(dummy_hdc, &pfd);
 
-        SetPixelFormat(dummy_hdc, pixel_format, &pfd);
+        LUX_VERIFY(SetPixelFormat(dummy_hdc, pixel_format, &pfd), "failed to set pixel format");
+
 
         HGLRC dummy_hglrc = wglCreateContext(dummy_hdc);
 
-        wglMakeCurrent(dummy_hdc, dummy_hglrc);
+
+        LUX_VERIFY(wglMakeCurrent(dummy_hdc, dummy_hglrc), "failed to make context current");
+
 
         wglChoosePixelFormatARB     = (PFNWGLCHOOSEPIXELFORMATARBPROC)      wglGetProcAddress("wglChoosePixelFormatARB");
         wglCreateContextAttribsARB  = (PFNWGLCREATECONTEXTATTRIBSARBPROC)   wglGetProcAddress("wglCreateContextAttribsARB");
+
+        LUX_VERIFY(wglChoosePixelFormatARB, "failed to get wglChoosePixelFormatARB pointer");
+        LUX_VERIFY(wglCreateContextAttribsARB, "failed to get wglCreateContextAttribsARB pointer");
 
         wglMakeCurrent(nullptr, nullptr);
         wglDeleteContext(dummy_hglrc);
@@ -51,15 +60,16 @@ Lux::GLContext::GLContext(Lux::Window& window){
     m_display   = (void*) GetDC((HWND) m_window);
 
     int pixel_attribs[] = {
+        WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
         WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
         WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
         WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-        WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
         WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
         WGL_COLOR_BITS_ARB, 32,
         WGL_DEPTH_BITS_ARB, 24,
         WGL_STENCIL_BITS_ARB, 8,
         0
+        
     };
 
     int pixel_format;
@@ -67,10 +77,12 @@ Lux::GLContext::GLContext(Lux::Window& window){
 
     wglChoosePixelFormatARB((HDC) m_display, pixel_attribs, nullptr, 1, &pixel_format, &num_formats);
 
+    LUX_VERIFY(pixel_format, "failed to choose pixel format");
+
     PIXELFORMATDESCRIPTOR pfd;
     DescribePixelFormat((HDC) m_display, pixel_format, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
-    SetPixelFormat((HDC) m_display, pixel_format, &pfd);
+    LUX_VERIFY(SetPixelFormat((HDC) m_display, pixel_format, &pfd), "failed to set pixel format");
 
     int attribs[] = {
         WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
@@ -80,6 +92,8 @@ Lux::GLContext::GLContext(Lux::Window& window){
     };
 
     m_context = wglCreateContextAttribsARB((HDC) m_display, 0, attribs);
+
+    LUX_VERIFY(m_context, "failed to create GL context");
 }
 
 Lux::GLContext::~GLContext(){

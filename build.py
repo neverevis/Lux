@@ -156,7 +156,7 @@ def clear_folder(folder_path):
         folder_path.mkdir(parents=True, exist_ok=True)
 
 def get_compile_command(source, object):
-    return F"{COMPILER} -c {COMPILE_FLAGS} {source.as_posix()} -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
+    return F"{COMPILER} -c {COMPILE_FLAGS} {source.as_posix()} -MMD -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
 
 def save_compile_commands(queue):
     json_data = []
