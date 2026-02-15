@@ -3,25 +3,25 @@
 #include <core/time.h>
 #include <core/event.h>
 #include <core/input.h>
-#include <platform/window.h>
-#include <platform/gl_context.h>
+#include <memory>
 
 namespace Lux{
-    class Application{
-    public:
-        Lux::Time delta_time;
 
+    
+    class Application{
+        public:
+        Lux::Time delta_time;
+        
         Application(i32 width, i32 height, const char* title);
+        ~Application();
         
         void    run();
-
+        
         virtual void update() = 0;
         virtual void render() = 0;
-        virtual ~Application() = default;
-
     private:
-        Lux::Window     m_window;
-        Lux::GLContext  m_gl;
+        struct AppImpl;
+        std::unique_ptr<AppImpl> app_impl;
         
         void loop();
     };
