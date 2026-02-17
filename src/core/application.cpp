@@ -3,6 +3,7 @@
 #include <memory>
 #include <platform/window.h>
 #include <platform/gl_context.h>
+#include <platform/gl_renderer.h>
 
 struct Lux::Application::AppImpl{
     Lux::Window m_window;
@@ -16,6 +17,7 @@ Lux::Application::Application(i32 width, i32 height, const char* title)
      app_impl(std::make_unique<AppImpl>(width, height, title))
 {
     app_impl->m_context.make_current();
+    GLRenderer::init();
     app_impl->m_window.m_callback = Lux::Input::on_event;
     app_impl->m_window.show();
 }
