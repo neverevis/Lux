@@ -22,6 +22,13 @@ bool Lux::GLRenderer::init(){
     gl::Clear =         (PFNGLCLEARPROC)        load_fn("glClear");
     gl::ClearColor =    (PFNGLCLEARCOLORPROC)   load_fn("glClearColor");
 
+    bool result =
+    (bool)gl::Clear & (bool)gl::ClearColor;
+
+    if(!result){
+        LUX_ERROR("failed to init GLRenderer");
+    }
+
     return true;
 }
 
@@ -42,7 +49,7 @@ void* Lux::GLRenderer::load_fn(const char* fn_name){
         return fn;
     }
 
-    LUX_VERIFY(true, "failed to load {} function pointer", fn_name);
+    LUX_ERROR("failed to load {} function pointer", fn_name);
 
     return nullptr;
 }
