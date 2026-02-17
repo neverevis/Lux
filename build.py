@@ -40,6 +40,12 @@ INCLUDES        =   " ".join(["-I" + include for include in config["includes"]])
 
 COMPILE_FLAGS = ""
 LINK_FLAGS = ""
+PLATFORM_FLAGS = ""
+
+if PLATFORM == "Windows":
+    PLATFORM_FLAGS = "-luser32 -lopengl32 -lgdi32"
+elif PLATFORM == "Linux":
+    PLATFORM_FLAGS = "-lGL -lX11"
 
 if DEBUG_MODE:
         COMPILE_FLAGS = "-g -O0 -DLUX_DEBUG" #-g keeps symbols in binary and -O0 does not optimize (also to keep symbols)
@@ -133,7 +139,7 @@ def main():
     if success and modified:
         print(f"\n{text_bright_blue}Linking",end="")
         objects = " ".join([str(p) for p in Path(f"{BUILD_DIR}/obj").glob("*.o")])
-        linking = subprocess.run(f"{COMPILER} {LINK_FLAGS} {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} -luser32 -lgdi32 -lopengl32", shell = True, capture_output = True, text = True)
+        linking = subprocess.run(f"{COMPILER} {LINK_FLAGS} {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} {PLATFORM_FLAGS}", shell = True, capture_output = True, text = True)
 
         if linking.returncode != 0:
             print(f"{text_red} -> Error!{text_reset}")
