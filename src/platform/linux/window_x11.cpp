@@ -1,10 +1,10 @@
-#include <X11/X.h>
 #include <platform/platform.h>
 #ifdef PLATFORM_LINUX
 
 #include <platform/window.h>
 #include <core/debug.h>
 
+#include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/glx.h>
