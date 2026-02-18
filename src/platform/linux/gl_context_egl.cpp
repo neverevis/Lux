@@ -33,8 +33,11 @@ Lux::GLContext::GLContext(Lux::Window& window){
     const EGLint context_attribs[] = {
         EGL_CONTEXT_MAJOR_VERSION, 4,
         EGL_CONTEXT_MINOR_VERSION, 6,
+        EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
         EGL_NONE
     };
+
+    LUX_VERIFY(eglBindAPI(EGL_OPENGL_API), "failed to bind OpenGL API");
 
     m_context = (void*) eglCreateContext(m_display, h->egl_config, EGL_NO_CONTEXT, context_attribs);
 
