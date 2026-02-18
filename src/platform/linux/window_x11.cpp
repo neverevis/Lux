@@ -1,3 +1,4 @@
+#include <X11/X.h>
 #include <platform/platform.h>
 #ifdef PLATFORM_LINUX
 
@@ -40,7 +41,6 @@ Lux::Window::Window(int width, int height, const char* title)
         EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
         EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
         EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8,
-        EGL_ALPHA_SIZE, 8,
         EGL_DEPTH_SIZE, 24,
         EGL_NONE
     };
@@ -68,7 +68,7 @@ Lux::Window::Window(int width, int height, const char* title)
     swa.event_mask = ExposureMask | KeyPressMask | ButtonPressMask | StructureNotifyMask;
     swa.background_pixel = XBlackPixel(h->display, h->screen);
     
-    h->window = XCreateWindow(h->display, XRootWindow(h->display, h->visual_info->screen), 0, 0, width, height, 0, h->visual_info->depth, InputOutput, h->visual_info->visual, CWColormap | CWEventMask | CWBackPixel, &swa);
+    h->window = XCreateWindow(h->display, XRootWindow(h->display, h->visual_info->screen), 0, 0, width, height, 0, h->visual_info->depth, InputOutput, h->visual_info->visual, CWColormap | CWEventMask | CWBorderPixel, &swa);
 
     XStoreName(h->display, h->window, title);
 

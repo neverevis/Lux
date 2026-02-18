@@ -41,6 +41,10 @@ Lux::GLContext::~GLContext(){
     
 }
 
+void Lux::GLContext::swap_buffers(){
+    eglSwapBuffers(m_display, m_window);
+}
+
 void Lux::GLContext::make_current(){
     eglMakeCurrent(m_display, m_window, m_window, m_context);
 }
