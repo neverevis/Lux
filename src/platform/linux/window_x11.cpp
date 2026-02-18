@@ -56,6 +56,9 @@ Lux::Window::Window(int width, int height, const char* title)
     h->wmDeleteMessage = XInternAtom(h->display, "WM_DELETE_WINDOW", False);
     XSetWMProtocols(h->display, h->window, &h->wmDeleteMessage, 1);
 
+    m_width = width;
+    m_height = height;
+
     XFlush(h->display);
 }
 
@@ -65,8 +68,19 @@ bool Lux::Window::should_close(){
 
 bool Lux::Window::show(){
     if(m_native_handle){
+        
         X11Handle* h = (X11Handle*) m_native_handle;
+        
+        int def_screen = XDefaultScreen(h->display);
+        int screen_width = XDisplayWidth(h->display, def_screen);
+        int screen_height = XDisplayHeight(h->display, def_screen);
+        
         XMapWindow(h->display, h->window);
+
+        int x = screen_width/2 - m_width/2;
+        int y = screen_height/2 - m_height/2;
+
+        XMoveWindow(h->display, h->window, x, y);
 
         XEvent e;
         do {

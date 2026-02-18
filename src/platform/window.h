@@ -24,5 +24,8 @@ namespace Lux{
         void*   m_native_handle = nullptr;
         bool    m_close_flag    = false;
 
+        u16 m_width;
+        u16 m_height;
+
     };
 }
