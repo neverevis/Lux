@@ -1,9 +1,9 @@
-#include "platform/window.h"
-#include <EGL/eglplatform.h>
 #include <platform/platform.h>
 #ifdef PLATFORM_LINUX
 
 #include <platform/gl_context.h>
+#include <platform/window.h>
+#include <core/debug.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -28,13 +28,17 @@ Lux::GLContext::GLContext(Lux::Window& window){
     
     m_window = eglCreateWindowSurface(m_display, h->egl_config, (EGLNativeWindowType) h->window, nullptr);
 
+    LUX_VERIFY(m_window, "failed to create window surface");
+
     const EGLint context_attribs[] = {
         EGL_CONTEXT_MAJOR_VERSION, 4,
         EGL_CONTEXT_MINOR_VERSION, 6,
         EGL_NONE
     };
 
-    m_context = (void*) eglCreateContext(m_display, h->egl_config, nullptr, context_attribs);
+    m_context = (void*) eglCreateContext(m_display, h->egl_config, EGL_NO_CONTEXT, context_attribs);
+
+    LUX_VERIFY(m_context, "failed to create egl context");
 }
 
 Lux::GLContext::~GLContext(){

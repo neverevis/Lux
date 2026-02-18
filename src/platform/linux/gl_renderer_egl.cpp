@@ -13,7 +13,7 @@ PFNGLCLEARPROC          gl::Clear = nullptr;
 PFNGLCLEARCOLORPROC     gl::ClearColor = nullptr;
 
 bool Lux::GLRenderer::init(){
-    if(eglGetCurrentContext()){
+    if(!eglGetCurrentContext()){
         LUX_ERROR("failed to init GLRenderer. no context is active");   
         return false; 
     }

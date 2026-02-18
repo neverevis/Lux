@@ -35,7 +35,9 @@ Lux::Window::Window(int width, int height, const char* title)
 
     h->egl_display = eglGetDisplay((EGLNativeDisplayType) h->display);
 
-    eglInitialize(h->egl_display , nullptr, nullptr);
+    LUX_VERIFY(h->egl_display, "failed to load egl display");
+
+    LUX_VERIFY(eglInitialize(h->egl_display , nullptr, nullptr), "failed to initialize egl");
 
     EGLint egl_attribs[] = {
         EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
@@ -57,11 +59,13 @@ Lux::Window::Window(int width, int height, const char* title)
 
     h->visual_info = XGetVisualInfo(h->display, VisualIDMask, &vinfo_template, &n);
 
+    LUX_VERIFY(h->visual_info, "failed to get visual info");
+
     h->screen = XDefaultScreen(h->display);
 
-    LUX_VERIFY(h->visual_info, "failed to choose visual info");
-
     Colormap cmap = XCreateColormap(h->display, XRootWindow(h->display, h->visual_info->screen), h->visual_info->visual, AllocNone);
+
+    LUX_VERIFY(cmap, "failed to create color map");
 
     XSetWindowAttributes swa = {};
     swa.colormap = cmap;
@@ -127,8 +131,10 @@ void Lux::Window::poll_events(){
     while (XPending(h->display)) {
         XNextEvent(h->display, &event);
 
-        if(event.xclient.data.l[0] == h->wmDeleteMessage){
+        if(event.type == ClientMessage){
+            if(event.xclient.data.l[0] == h->wmDeleteMessage){
             m_close_flag = true;
+        }
         }
     }
 }
