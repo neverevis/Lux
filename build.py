@@ -45,7 +45,7 @@ PLATFORM_FLAGS = ""
 if PLATFORM == "Windows":
     PLATFORM_FLAGS = "-luser32 -lopengl32 -lgdi32"
 elif PLATFORM == "Linux":
-    PLATFORM_FLAGS = "-lGL -lX11"
+    PLATFORM_FLAGS = "-lEGL -lGL -lX11"
 
 if DEBUG_MODE:
         COMPILE_FLAGS = "-g -O0 -DLUX_DEBUG" #-g keeps symbols in binary and -O0 does not optimize (also to keep symbols)

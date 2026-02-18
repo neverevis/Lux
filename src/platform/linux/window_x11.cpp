@@ -94,6 +94,12 @@ bool Lux::Window::show(){
     return false;
 }
 
+void* Lux::Window::get_native_handle(){
+    if(m_native_handle){
+        return m_native_handle;
+    }
+}
+
 void Lux::Window::poll_events(){
     X11Handle* h = (X11Handle*) m_native_handle;
     
