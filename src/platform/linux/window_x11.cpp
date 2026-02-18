@@ -1,4 +1,3 @@
-#include "core/log.h"
 #include <platform/platform.h>
 #ifdef PLATFORM_LINUX
 
