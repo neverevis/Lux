@@ -1,3 +1,4 @@
+#include "core/log.h"
 #include <platform/platform.h>
 #ifdef PLATFORM_LINUX
 
@@ -13,9 +14,12 @@ struct X11Handle{
     int screen;
     Window window;
     XVisualInfo* visual_info;
+    Atom wmDeleteMessage;
 };
 
-Lux::Window::Window(int width, int height, const char* title){
+Lux::Window::Window(int width, int height, const char* title)
+    : m_close_flag(false)
+{
     X11Handle* h = new X11Handle{};
     m_native_handle = h;
 
@@ -49,25 +53,55 @@ Lux::Window::Window(int width, int height, const char* title){
 
     XStoreName(h->display, h->window, title);
 
-    Atom wm_delete = XInternAtom(h->display, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols(h->display, h->window, &wm_delete, 1);
-
-    XMapWindow(h->display, h->window);
-
-    XEvent e;
-    do {
-        XNextEvent(h->display, &e);
-    } while (e.type != MapNotify);
+    h->wmDeleteMessage = XInternAtom(h->display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(h->display, h->window, &h->wmDeleteMessage, 1);
 
     XFlush(h->display);
 }
 
+bool Lux::Window::should_close(){
+    return m_close_flag;
+}
+
+bool Lux::Window::show(){
+    if(m_native_handle){
+        X11Handle* h = (X11Handle*) m_native_handle;
+        XMapWindow(h->display, h->window);
+
+        XEvent e;
+        do {
+            XNextEvent(h->display, &e);
+        } while (e.type != MapNotify);
+
+        XFlush(h->display);
+
+        return true;
+    }
+
+    return false;
+}
+
 void Lux::Window::poll_events(){
     X11Handle* h = (X11Handle*) m_native_handle;
-    XEvent ev;
+    
+    XEvent event;
     while (XPending(h->display)) {
-        XNextEvent(h->display, &ev);
+        XNextEvent(h->display, &event);
+
+        if(event.xclient.data.l[0] == h->wmDeleteMessage){
+            m_close_flag = true;
+        }
     }
+}
+
+bool Lux::Window::close(){
+    if(!m_close_flag){
+        m_close_flag = true;
+
+        return true;
+    }
+
+    return false;
 }
 
 Lux::Window::~Window(){
