@@ -1,4 +1,5 @@
 #include <platform/window.h>
+#include <print>
 
 int main(){
     Lux::Window window(800,800,"window");

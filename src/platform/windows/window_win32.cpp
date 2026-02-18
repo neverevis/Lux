@@ -1,3 +1,5 @@
+#include "core/log.h"
+#include <cstdio>
 #include <platform/platform.h>
 #ifdef PLATFORM_WINDOWS
 
@@ -115,7 +117,7 @@ Lux::Keyboard::Key translate_key(WPARAM key, LPARAM lparam){
 LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
     Lux::Window* window = (Lux::Window*) GetWindowLongPtrA(hwnd, GWLP_USERDATA);
 
-    if(window && window->m_callback){
+    if(window){
         Lux::Event event{};
         bool dispatch = false;
 
@@ -208,7 +210,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
                 }
         }
 
-        if(dispatch){
+        if(dispatch && window->m_callback){
             window->m_callback(event);
         }
     }
