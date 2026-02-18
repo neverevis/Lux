@@ -7,6 +7,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/glx.h>
+#include <EGL/egl.h>
 
 struct X11Handle{
     Display* display;
@@ -14,6 +15,10 @@ struct X11Handle{
     Window window;
     XVisualInfo* visual_info;
     Atom wmDeleteMessage;
+
+    //egl
+    EGLDisplay egl_display;
+    EGLConfig egl_config;
 };
 
 Lux::Window::Window(int width, int height, const char* title)
@@ -25,30 +30,45 @@ Lux::Window::Window(int width, int height, const char* title)
     XSetWindowAttributes window_attributes = {};
 
     h->display = XOpenDisplay(nullptr);
-
     LUX_VERIFY(h->display, "failed to connect to X server");
 
-    int vis_attr[] = {
-        GLX_RGBA,
-        GLX_DEPTH_SIZE, 24,
-        GLX_DOUBLEBUFFER,
-        None
+    h->egl_display = eglGetDisplay((EGLNativeDisplayType) h->display);
+
+    eglInitialize(h->egl_display , nullptr, nullptr);
+
+    EGLint egl_attribs[] = {
+        EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
+        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+        EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8,
+        EGL_ALPHA_SIZE, 8,
+        EGL_DEPTH_SIZE, 24,
+        EGL_NONE
     };
+
+    EGLint num_configs;
+    eglChooseConfig(h->egl_display, egl_attribs, &h->egl_config, 1, &num_configs);
+
+    EGLint vid;
+    eglGetConfigAttrib(h->egl_display, h->egl_config, EGL_NATIVE_VISUAL_ID, &vid);
+
+    XVisualInfo vinfo_template;
+    vinfo_template.visualid = vid;
+    int n;
+
+    h->visual_info = XGetVisualInfo(h->display, VisualIDMask, &vinfo_template, &n);
 
     h->screen = XDefaultScreen(h->display);
 
-    h->visual_info = glXChooseVisual(h->display, h->screen, vis_attr);
-
     LUX_VERIFY(h->visual_info, "failed to choose visual info");
 
-    Colormap cmap = XCreateColormap(h->display, XRootWindow(h->display, h->screen), h->visual_info->visual, AllocNone);
+    Colormap cmap = XCreateColormap(h->display, XRootWindow(h->display, h->visual_info->screen), h->visual_info->visual, AllocNone);
 
     XSetWindowAttributes swa = {};
     swa.colormap = cmap;
     swa.event_mask = ExposureMask | KeyPressMask | ButtonPressMask | StructureNotifyMask;
     swa.background_pixel = XBlackPixel(h->display, h->screen);
     
-    h->window = XCreateWindow(h->display, XRootWindow(h->display, h->screen), 0, 0, width, height, 0, h->visual_info->depth, InputOutput, h->visual_info->visual, CWColormap | CWEventMask | CWBackPixel, &swa);
+    h->window = XCreateWindow(h->display, XRootWindow(h->display, h->visual_info->screen), 0, 0, width, height, 0, h->visual_info->depth, InputOutput, h->visual_info->visual, CWColormap | CWEventMask | CWBackPixel, &swa);
 
     XStoreName(h->display, h->window, title);
 

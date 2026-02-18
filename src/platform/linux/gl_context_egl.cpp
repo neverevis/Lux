@@ -15,30 +15,18 @@ struct X11Handle{
     Window window;
     XVisualInfo* visual_info;
     Atom wmDeleteMessage;
+
+    //egl
+    EGLDisplay egl_display;
+    EGLConfig egl_config;
 };
 
 Lux::GLContext::GLContext(Lux::Window& window){
     X11Handle* h = (X11Handle*) window.get_native_handle();
-    m_display = eglGetDisplay((EGLNativeDisplayType) h->display);
 
-    eglInitialize(m_display , nullptr, nullptr);
-
-    const int egl_attribs[] = {
-        EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
-        EGL_RED_SIZE, 8,
-        EGL_BLUE_SIZE, 8,
-        EGL_GREEN_SIZE, 8,
-        EGL_ALPHA_SIZE, 8,
-        EGL_DEPTH_SIZE, 24,
-        EGL_NONE
-    };
-
-    EGLConfig egl_config;
-    EGLint num_config;
+    m_display = h->egl_display;
     
-    eglChooseConfig(m_display, egl_attribs, &egl_config, 1, &num_config);
-
-    m_window = eglCreateWindowSurface(m_display, egl_config, (EGLNativeWindowType) h->window, nullptr);
+    m_window = eglCreateWindowSurface(m_display, h->egl_config, (EGLNativeWindowType) h->window, nullptr);
 
     const EGLint context_attribs[] = {
         EGL_CONTEXT_MAJOR_VERSION, 4,
@@ -46,7 +34,7 @@ Lux::GLContext::GLContext(Lux::Window& window){
         EGL_NONE
     };
 
-    m_context = (void*) eglCreateContext(m_display, egl_config, nullptr, context_attribs);
+    m_context = (void*) eglCreateContext(m_display, h->egl_config, nullptr, context_attribs);
 }
 
 Lux::GLContext::~GLContext(){
