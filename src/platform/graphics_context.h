@@ -1,4 +1,5 @@
 #pragma once
+#include "platform/linux/egl_handles.h"
 #include <platform/window.h>
 
 namespace Lux::Platform{
@@ -10,6 +11,7 @@ namespace Lux::Platform{
         bool create(const Window& window);
         void make_current();
         void swap_buffers();
+        const GraphicsRequirements query_requirements();
     private:
         ContextHandle m_context_handle;
         const System& m_system;

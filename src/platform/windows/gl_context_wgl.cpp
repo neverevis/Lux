@@ -1,4 +1,4 @@
-#include <platform/platform.h>
+#include <platform/detect.h>
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/gl_context.h>

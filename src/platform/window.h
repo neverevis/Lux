@@ -1,5 +1,6 @@
 #pragma once
 
+#include "platform/linux/egl_handles.h"
 #include <core/event.h>
 #include <platform/handles.h>
 #include <platform/system.h>
@@ -9,7 +10,7 @@ namespace Lux::Platform{
     public:
         void (*m_callback)(Event& event) = nullptr;
 
-        Window(const System& system, i32 width, i32 height, const char* title);
+        Window(const System& system, const GraphicsRequirements&, i32 width, i32 height, const char* title);
         ~Window();
 
         bool    show();
@@ -20,7 +21,7 @@ namespace Lux::Platform{
         u16     width();
         u16     height();
 
-        void*   get_native_handle();
+        const WindowHandle& get_native_handle() const;
     
     private:
         WindowHandle    m_window_handle;

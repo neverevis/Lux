@@ -1,4 +1,5 @@
 #include <core/application.h>
+#include <GL/gl.h>
 
 
 class Game : public Lux::Application{
@@ -10,7 +11,8 @@ public:
     }
 
     void render(){
-
+        glClearColor(1, 0, 1, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 };
 

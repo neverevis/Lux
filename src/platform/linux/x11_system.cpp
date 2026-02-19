@@ -1,3 +1,4 @@
+#include "platform/linux/x11_handles.h"
 #include <platform/detect.h>
 #ifdef PLATFORM_LINUX
 
@@ -12,6 +13,10 @@ Lux::Platform::System::System(){
 
 Lux::Platform::System::~System(){
     XCloseDisplay((Display*) m_system_handle.display);
+}
+
+const Lux::Platform::SystemHandle& Lux::Platform::System::get_native_handle() const{
+    return m_system_handle;
 }
 
 #endif

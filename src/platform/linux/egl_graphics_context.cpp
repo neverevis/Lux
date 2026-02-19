@@ -1,3 +1,5 @@
+#include "platform/linux/egl_handles.h"
+#include <EGL/eglplatform.h>
 #include <platform/detect.h>
 #ifdef PLATFORM_LINUX
 
@@ -5,26 +7,12 @@
 #include <platform/window.h>
 #include <core/debug.h>
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <EGL/egl.h>
-
-struct X11Handle{
-    Display* display;
-    int screen;
-    Window window;
-    XVisualInfo* visual_info;
-    Atom wmDeleteMessage;
-
-    //egl
-    EGLDisplay egl_display;
-    EGLConfig egl_config;
-};
 
 Lux::Platform::GraphicsContext::GraphicsContext(const System& system)
     : m_system(system)
 {
-    m_context_handle.egl_display = eglGetDisplay((EGLNativeDisplayType) display);
+    m_context_handle.egl_display = eglGetDisplay((EGLNativeDisplayType) system.get_native_handle().display);
     LUX_VERIFY(m_context_handle.egl_display , "failed to load egl display");
     
     LUX_VERIFY(eglInitialize(m_context_handle.egl_display  , nullptr, nullptr), "failed to initialize egl");
@@ -39,22 +27,27 @@ Lux::Platform::GraphicsContext::GraphicsContext(const System& system)
 
     EGLint num_configs;
     eglChooseConfig(m_context_handle.egl_display , egl_attribs, &m_context_handle.egl_config, 1, &num_configs);
-
-    eglGetConfigAttrib(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NATIVE_VISUAL_ID, &gr.visual_id);
 }
 
-Lux::Platform::GraphicsContext::~GraphicsContext(){{
-
-}
+Lux::Platform::GraphicsContext::~GraphicsContext(){
     
 }
 
+const Lux::Platform::GraphicsRequirements Lux::Platform::GraphicsContext::query_requirements(){
+    EGLint id;
+    eglGetConfigAttrib(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NATIVE_VISUAL_ID, &id);
+    
+    GraphicsRequirements gr;
+    gr.visual_id = (unsigned long) id;
+
+    return gr;
+}
+
 bool Lux::Platform::GraphicsContext::create(const Window& window){
-    X11Handle* h = (X11Handle*) window.get_native_handle();
+    m_window = &window;
+    m_context_handle.egl_surface = eglCreateWindowSurface(m_context_handle.egl_display, m_context_handle.egl_config, (EGLNativeWindowType) m_window->get_native_handle().window, nullptr);
 
-    m_window = eglCreateWindowSurface(m_display, h->egl_config, (EGLNativeWindowType) h->window, nullptr);
-
-    LUX_VERIFY(m_window, "failed to create window surface");
+    LUX_VERIFY(m_context_handle.egl_surface, "failed to create window surface");
 
     const EGLint context_attribs[] = {
         EGL_CONTEXT_MAJOR_VERSION, 4,
@@ -65,23 +58,23 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     LUX_VERIFY(eglBindAPI(EGL_OPENGL_API), "failed to bind OpenGL API");
 
-    m_context = (void*) eglCreateContext(m_display, h->egl_config, EGL_NO_CONTEXT, context_attribs);
+    m_context_handle.egl_context = eglCreateContext(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NO_CONTEXT, context_attribs);
 
-    LUX_VERIFY(m_context, "failed to create egl context");
+    LUX_VERIFY(m_context_handle.egl_context, "failed to create egl context");
 
-    if(!m_context){
+    if(!m_context_handle.egl_context){
         return false;
     }
 
     return true;
 }
 
-void Lux::GLContext::swap_buffers(){
-    eglSwapBuffers(m_display, m_window);
+void Lux::Platform::GraphicsContext::swap_buffers(){
+    eglSwapBuffers(m_context_handle.egl_display, m_context_handle.egl_surface);
 }
 
-void Lux::GLContext::make_current(){
-    eglMakeCurrent(m_display, m_window, m_window, m_context);
+void Lux::Platform::GraphicsContext::make_current(){
+    eglMakeCurrent(m_context_handle.egl_display, m_context_handle.egl_surface, m_context_handle.egl_surface, m_context_handle.egl_context);
 }
 
 #endif

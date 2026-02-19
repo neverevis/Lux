@@ -4,88 +4,73 @@
 #include <platform/window.h>
 #include <core/debug.h>
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <GL/glx.h>
-#include <EGL/egl.h>
 
-struct X11Handle{
-    Display* display;
-    int screen;
-    Window window;
-    XVisualInfo* visual_info;
-    Atom wmDeleteMessage;
-
-    //egl
-    EGLDisplay egl_display;
-    EGLConfig egl_config;
-};
-
-Lux::Window::Window(i32 width, i32 height, const char* title)
-    : m_close_flag(false)
+Lux::Platform::Window::Window(const System& system, const GraphicsRequirements& graphics_requirements, i32 width, i32 height, const char* title)
+    : m_close_flag(false),
+      m_system(system)
 {
-    
-    X11Handle* h = new X11Handle{};
-    m_native_handle = h;
+    Display* display = (Display*) system.get_native_handle().display;
+    int screen = system.get_native_handle().screen;
 
-    h->display = XOpenDisplay(nullptr);
-    LUX_VERIFY(h->display, "failed to connect to X server");
+    XVisualInfo visual_info_template = {};
+    visual_info_template.visualid = graphics_requirements.visual_id;
 
-    h->visual_info = XGetVisualInfo(h->display, VisualIDMask, &vinfo_template, &n);
+    int num_items;
 
-    LUX_VERIFY(h->visual_info, "failed to get visual info");
+    XVisualInfo* visual_info = XGetVisualInfo(display, VisualIDMask, &visual_info_template, &num_items);
 
-    h->screen = XDefaultScreen(h->display);
+    LUX_VERIFY(visual_info, "failed to get visual info");
 
-    Colormap cmap = XCreateColormap(h->display, XRootWindow(h->display, h->visual_info->screen), h->visual_info->visual, AllocNone);
+    Colormap cmap = XCreateColormap(display, XRootWindow(display, visual_info->screen), visual_info->visual, AllocNone);
 
     LUX_VERIFY(cmap, "failed to create color map");
 
     XSetWindowAttributes swa = {};
     swa.colormap = cmap;
     swa.event_mask = ExposureMask | KeyPressMask | ButtonPressMask | StructureNotifyMask;
-    swa.background_pixel = XBlackPixel(h->display, h->screen);
+    swa.background_pixel = XBlackPixel(display, screen);
     
-    h->window = XCreateWindow(h->display, XRootWindow(h->display, h->visual_info->screen), 0, 0, width, height, 0, h->visual_info->depth, InputOutput, h->visual_info->visual, CWColormap | CWEventMask | CWBorderPixel, &swa);
+    m_window_handle.window = XCreateWindow(display, XRootWindow(display, visual_info->screen), 0, 0, width, height, 0, visual_info->depth, InputOutput, visual_info->visual, CWColormap | CWEventMask | CWBorderPixel, &swa);
 
-    XStoreName(h->display, h->window, title);
+    XStoreName(display, m_window_handle.window, title);
 
-    h->wmDeleteMessage = XInternAtom(h->display, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols(h->display, h->window, &h->wmDeleteMessage, 1);
+    m_window_handle.wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", False);
+    XSetWMProtocols(display, m_window_handle.window, &m_window_handle.wmDeleteMessage, 1);
 
     m_width = width;
     m_height = height;
 
-    XFlush(h->display);
+    XFlush(display);
+
+    m_window_handle.visual_info = visual_info;
 }
 
-bool Lux::Window::should_close(){
+bool Lux::Platform::Window::should_close(){
     return m_close_flag;
 }
 
-bool Lux::Window::show(){
-    if(m_native_handle){
+bool Lux::Platform::Window::show(){
+    if(m_window_handle.window){
+        Display* display = (Display*) m_system.get_native_handle().display;
+
+        int def_screen = XDefaultScreen(display);
+        int screen_width = XDisplayWidth(display, def_screen);
+        int screen_height = XDisplayHeight(display, def_screen);
         
-        X11Handle* h = (X11Handle*) m_native_handle;
-        
-        int def_screen = XDefaultScreen(h->display);
-        int screen_width = XDisplayWidth(h->display, def_screen);
-        int screen_height = XDisplayHeight(h->display, def_screen);
-        
-        XMapWindow(h->display, h->window);
+        XMapWindow(display, m_window_handle.window);
 
         int x = screen_width/2 - m_width/2;
         int y = screen_height/2 - m_height/2;
 
-        XMoveWindow(h->display, h->window, x, y);
+        XMoveWindow(display, m_window_handle.window, x, y);
 
         XEvent e;
         do {
-            XNextEvent(h->display, &e);
+            XNextEvent(display, &e);
         } while (e.type != MapNotify);
 
-        XFlush(h->display);
+        XFlush(display);
 
         return true;
     }
@@ -93,28 +78,25 @@ bool Lux::Window::show(){
     return false;
 }
 
-void* Lux::Window::get_native_handle(){
-    if(m_native_handle){
-        return m_native_handle;
-    }
+const Lux::Platform::WindowHandle& Lux::Platform::Window::get_native_handle() const{
+    return m_window_handle;
 }
 
-void Lux::Window::poll_events(){
-    X11Handle* h = (X11Handle*) m_native_handle;
-    
+void Lux::Platform::Window::poll_events(){
+    Display* display = (Display*) m_system.get_native_handle().display;
     XEvent event;
-    while (XPending(h->display)) {
-        XNextEvent(h->display, &event);
+    while (XPending(display)) {
+        XNextEvent(display, &event);
 
         if(event.type == ClientMessage){
-            if(event.xclient.data.l[0] == h->wmDeleteMessage){
-            m_close_flag = true;
-        }
+            if(event.xclient.data.l[0] == m_window_handle.wmDeleteMessage){
+                m_close_flag = true;
+            }
         }
     }
 }
 
-bool Lux::Window::close(){
+bool Lux::Platform::Window::close(){
     if(!m_close_flag){
         m_close_flag = true;
 
@@ -124,14 +106,11 @@ bool Lux::Window::close(){
     return false;
 }
 
-Lux::Window::~Window(){
-    X11Handle* h = (X11Handle*) m_native_handle;
+Lux::Platform::Window::~Window(){
+    Display* display = (Display*) m_system.get_native_handle().display;
 
-    XDestroyWindow(h->display, h->window);
-    XFree(h->visual_info);
-    XCloseDisplay(h->display);
-
-    delete h;
+    XDestroyWindow(display, m_window_handle.window);
+    XFree(m_window_handle.visual_info);
 }
 
 #endif

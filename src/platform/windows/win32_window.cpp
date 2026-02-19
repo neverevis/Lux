@@ -1,6 +1,6 @@
 #include "core/log.h"
 #include <cstdio>
-#include <platform/platform.h>
+#include <platform/detect.h>
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/window.h>

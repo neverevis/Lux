@@ -1,5 +1,5 @@
 #include "core/log.h"
-#include <platform/platform.h>
+#include <platform/detect.h>
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/gl_renderer.h>

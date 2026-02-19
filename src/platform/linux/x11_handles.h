@@ -8,5 +8,7 @@ namespace Lux::Platform{
 
     struct WindowHandle{
         unsigned long   window = 0;
+        unsigned long   wmDeleteMessage = 0;
+        void* visual_info = nullptr;
     };
 }
