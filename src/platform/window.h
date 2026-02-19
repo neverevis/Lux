@@ -1,13 +1,15 @@
 #pragma once
 
 #include <core/event.h>
+#include <platform/handles.h>
+#include <platform/system.h>
 
-namespace Lux{
+namespace Lux::Platform{
     class Window{
     public:
         void (*m_callback)(Event& event) = nullptr;
 
-        Window(int width, int height, const char* title);
+        Window(const System& system, i32 width, i32 height, const char* title);
         ~Window();
 
         bool    show();
@@ -21,8 +23,10 @@ namespace Lux{
         void*   get_native_handle();
     
     private:
-        void*   m_native_handle = nullptr;
-        bool    m_close_flag    = false;
+        WindowHandle    m_window_handle;
+        const System&   m_system;
+
+        bool m_close_flag = false;
 
         u16 m_width;
         u16 m_height;

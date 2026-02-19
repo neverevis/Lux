@@ -1,4 +1,4 @@
-#include <platform/platform.h>
+#include <platform/detect.h>
 #ifdef PLATFORM_LINUX
 
 #include <platform/window.h>
@@ -22,40 +22,15 @@ struct X11Handle{
     EGLConfig egl_config;
 };
 
-Lux::Window::Window(int width, int height, const char* title)
+Lux::Window::Window(i32 width, i32 height, const char* title)
     : m_close_flag(false)
 {
+    
     X11Handle* h = new X11Handle{};
     m_native_handle = h;
 
-    XSetWindowAttributes window_attributes = {};
-
     h->display = XOpenDisplay(nullptr);
     LUX_VERIFY(h->display, "failed to connect to X server");
-
-    h->egl_display = eglGetDisplay((EGLNativeDisplayType) h->display);
-
-    LUX_VERIFY(h->egl_display, "failed to load egl display");
-
-    LUX_VERIFY(eglInitialize(h->egl_display , nullptr, nullptr), "failed to initialize egl");
-
-    EGLint egl_attribs[] = {
-        EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
-        EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-        EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8,
-        EGL_DEPTH_SIZE, 24,
-        EGL_NONE
-    };
-
-    EGLint num_configs;
-    eglChooseConfig(h->egl_display, egl_attribs, &h->egl_config, 1, &num_configs);
-
-    EGLint vid;
-    eglGetConfigAttrib(h->egl_display, h->egl_config, EGL_NATIVE_VISUAL_ID, &vid);
-
-    XVisualInfo vinfo_template;
-    vinfo_template.visualid = vid;
-    int n;
 
     h->visual_info = XGetVisualInfo(h->display, VisualIDMask, &vinfo_template, &n);
 
