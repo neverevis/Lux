@@ -1,4 +1,3 @@
-#include "platform/linux/x11_handles.h"
 #include <platform/detect.h>
 #ifdef PLATFORM_LINUX
 

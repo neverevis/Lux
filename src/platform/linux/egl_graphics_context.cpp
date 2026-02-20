@@ -1,12 +1,12 @@
-#include "platform/linux/egl_handles.h"
-#include <EGL/eglplatform.h>
 #include <platform/detect.h>
 #ifdef PLATFORM_LINUX
 
+#include <platform/handles.h>
 #include <platform/graphics_context.h>
 #include <platform/window.h>
 #include <core/debug.h>
 
+#include <EGL/eglplatform.h>
 #include <EGL/egl.h>
 
 Lux::Platform::GraphicsContext::GraphicsContext(const System& system)

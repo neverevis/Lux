@@ -139,7 +139,7 @@ def main():
     if success and modified:
         print(f"\n{text_bright_blue}Linking",end="")
         objects = " ".join([str(p) for p in Path(f"{BUILD_DIR}/obj").glob("*.o")])
-        linking = subprocess.run(f"{COMPILER} {LINK_FLAGS} {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} {PLATFORM_FLAGS}", shell = True, capture_output = True, text = True)
+        linking = subprocess.run(f"{COMPILER} {LINK_FLAGS} {objects} -o {BUILD_DIR}/bin/{EXECUTABLE_NAME} {PLATFORM_FLAGS} -Wl,/VERBOSE > linkerrors.txt", shell = True, capture_output = True, text = True)
 
         if linking.returncode != 0:
             print(f"{text_red} -> Error!{text_reset}")

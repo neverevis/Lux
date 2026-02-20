@@ -1,0 +1,5 @@
+LINK : 0 novos modulos e 1 (de 310) modulos foram alterados desde a vinculacao anterior
+Iniciando passo 2
+     wgl_graphics_context.o
+     libcmt.lib(loadcfg.obj)
+Finalizado passo 2

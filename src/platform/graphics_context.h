@@ -1,6 +1,7 @@
 #pragma once
-#include "platform/linux/egl_handles.h"
+#include <platform/system.h>
 #include <platform/window.h>
+#include <platform/handles.h>
 
 namespace Lux::Platform{
     class GraphicsContext{

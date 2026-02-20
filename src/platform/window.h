@@ -1,6 +1,5 @@
 #pragma once
 
-#include "platform/linux/egl_handles.h"
 #include <core/event.h>
 #include <platform/handles.h>
 #include <platform/system.h>

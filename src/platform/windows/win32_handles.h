@@ -10,9 +10,13 @@ namespace Lux::Platform{
     };
 
     struct ContextHandle{
-        void*   hglrc     = nullptr;
+        void*   hglrc                       = nullptr;
+        void*   hdc                         = nullptr;
+        int     pixel_format                = 0;
+        void*   wglCreateContextAttribsARB  = nullptr;
     };
 
     struct GraphicsRequirements{
+        int     pixel_format = 0;
     };
 }
