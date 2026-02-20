@@ -1,8 +1,8 @@
 #pragma once
 
-#include <core/event.h>
-#include <platform/handles.h>
-#include <platform/system.h>
+#include <core/event.hpp>
+#include <platform/handles.hpp>
+#include <platform/system.hpp>
 
 namespace Lux::Platform{
     class Window{

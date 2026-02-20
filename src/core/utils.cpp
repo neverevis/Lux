@@ -1,6 +1,6 @@
-#include <core/utils.h>
+#include <core/utils.hpp>
 #include <cstdio>
-#include <core/debug.h>
+#include <core/debug.hpp>
 
 bool Lux::Utils::read_file(const char* path, char buffer_str[1024]){
     FILE* file = fopen(path, "rb");

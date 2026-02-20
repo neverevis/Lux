@@ -1,8 +1,8 @@
 #pragma once
-#include <core/types.h>
-#include <core/time.h>
-#include <core/event.h>
-#include <core/input.h>
+#include <core/types.hpp>
+#include <core/time.hpp>
+#include <core/event.hpp>
+#include <core/input.hpp>
 #include <memory>
 
 namespace Lux{

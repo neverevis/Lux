@@ -1,10 +1,10 @@
-#include <platform/detect.h>
+#include <platform/detect.hpp>
 #ifdef PLATFORM_LINUX
 
-#include <platform/handles.h>
-#include <platform/graphics_context.h>
-#include <platform/window.h>
-#include <core/debug.h>
+#include <platform/handles.hpp>
+#include <platform/graphics_context.hpp>
+#include <platform/window.hpp>
+#include <core/debug.hpp>
 
 #include <EGL/eglplatform.h>
 #include <EGL/egl.h>

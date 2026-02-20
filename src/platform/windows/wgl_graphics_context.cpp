@@ -1,9 +1,9 @@
-#include <platform/detect.h>
+#include <platform/detect.hpp>
 #ifdef PLATFORM_WINDOWS
 
-#include <platform/window.h>
-#include <platform/graphics_context.h>
-#include <core/debug.h>
+#include <platform/window.hpp>
+#include <platform/graphics_context.hpp>
+#include <core/debug.hpp>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -45,7 +45,7 @@ Lux::Platform::GraphicsContext::GraphicsContext(const Lux::Platform::System& sys
 
     wglMakeCurrent(dummy_hdc, dummy_hglrc);
 
-    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB     = (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
+    PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
 
     int pixel_attribs[] = {
     WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,

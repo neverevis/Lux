@@ -1,5 +1,5 @@
-#include <core/log.h>
-#include <platform/detect.h>
+#include <core/log.hpp>
+#include <platform/detect.hpp>
 
 #if defined(COMPILER_MSVC)
     #define LUX_BREAK() __debugbreak()

@@ -1,8 +1,8 @@
-#include <platform/detect.h>
+#include <platform/detect.hpp>
 #ifdef PLATFORM_LINUX
 
-#include <platform/window.h>
-#include <core/debug.h>
+#include <platform/window.hpp>
+#include <core/debug.hpp>
 
 #include <X11/Xutil.h>
 

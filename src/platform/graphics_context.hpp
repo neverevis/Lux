@@ -1,7 +1,7 @@
 #pragma once
-#include <platform/system.h>
-#include <platform/window.h>
-#include <platform/handles.h>
+#include <platform/system.hpp>
+#include <platform/window.hpp>
+#include <platform/handles.hpp>
 
 namespace Lux::Platform{
     class GraphicsContext{

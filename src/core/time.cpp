@@ -1,4 +1,4 @@
-#include <core/time.h>
+#include <core/time.hpp>
 #include <chrono>
 
 Lux::Time Lux::Time::now(){

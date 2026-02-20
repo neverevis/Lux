@@ -1,7 +1,7 @@
-#include <platform/detect.h>
+#include <platform/detect.hpp>
 #ifdef PLATFORM_LINUX
 
-#include <platform/system.h>
+#include <platform/system.hpp>
 
 #include <X11/Xlib.h>
 

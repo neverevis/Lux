@@ -1,6 +1,6 @@
 #pragma once
-#include <core/event.h>
-#include <core/types.h>
+#include <core/event.hpp>
+#include <core/types.hpp>
 
 namespace Lux{
     class Input{
