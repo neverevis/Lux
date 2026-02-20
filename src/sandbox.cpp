@@ -1,5 +1,4 @@
 #include <core/application.hpp>
-#include <windows.h>
 #include <GL/gl.h>
 
 

@@ -15,9 +15,4 @@ Lux::Platform::System::System()
 Lux::Platform::System::~System(){
     XCloseDisplay((Display*) native.display);
 }
-
-const Lux::Platform::SystemHandle& Lux::Platform::System::get_native_handle() const{
-    return m_system_handle;
-}
-
 #endif

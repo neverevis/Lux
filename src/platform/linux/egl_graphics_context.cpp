@@ -1,7 +1,7 @@
 #include <platform/detect.hpp>
 #ifdef PLATFORM_LINUX
 
-#include <platform/handles.hpp>
+#include <platform/native.hpp>
 #include <platform/graphics_context.hpp>
 #include <platform/window.hpp>
 #include <core/debug.hpp>
@@ -31,7 +31,7 @@ Lux::Platform::GraphicsContext::GraphicsContext(const System& system)
     eglChooseConfig(native.egl_display , egl_attribs, &native_.egl_config, 1, &num_configs);
 
     EGLint id;
-    eglGetConfigAttrib(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NATIVE_VISUAL_ID, &id);
+    eglGetConfigAttrib(native.egl_display, native.egl_config, EGL_NATIVE_VISUAL_ID, &id);
 
     surface_settings_.visual_id = (unsigned long) id;
 }
@@ -42,7 +42,7 @@ Lux::Platform::GraphicsContext::~GraphicsContext(){
 
 bool Lux::Platform::GraphicsContext::create(const Window& window){
     window_ = &window;
-    native_.egl_surface = eglCreateWindowSurface(m_context_handle.egl_display, m_context_handle.egl_config, (EGLNativeWindowType) m_window->get_native_handle().window, nullptr);
+    native_.egl_surface = eglCreateWindowSurface(native.egl_display, native.egl_config, (EGLNativeWindowType) window.native.window, nullptr);
 
     LUX_VERIFY(native.egl_surface, "failed to create window surface");
 
@@ -55,7 +55,7 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     LUX_VERIFY(eglBindAPI(EGL_OPENGL_API), "failed to bind OpenGL API");
 
-    native_.egl_context = eglCreateContext(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NO_CONTEXT, context_attribs);
+    native_.egl_context = eglCreateContext(native.egl_display, native.egl_config, EGL_NO_CONTEXT, context_attribs);
 
     LUX_VERIFY(native.egl_context, "failed to create egl context");
 
@@ -67,11 +67,11 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 }
 
 void Lux::Platform::GraphicsContext::swap_buffers(){
-    eglSwapBuffers(m_context_handle.egl_display, m_context_handle.egl_surface);
+    eglSwapBuffers(native.egl_display, native.egl_surface);
 }
 
 void Lux::Platform::GraphicsContext::make_current(){
-    eglMakeCurrent(m_context_handle.egl_display, m_context_handle.egl_surface, m_context_handle.egl_surface, m_context_handle.egl_context);
+    eglMakeCurrent(native.egl_display, native.egl_surface, native.egl_surface, native.egl_context);
 }
 
 #endif
