@@ -6,59 +6,59 @@ Lux::Time Lux::Time::now(){
     return Time(std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count());
 }
 
-Lux::Time::Time() : m_nanoseconds(0) {};
+Lux::Time::Time() : nanoseconds_(0) {};
 
-Lux::Time::Time(i64 nanoseconds) : m_nanoseconds(nanoseconds) {};
+Lux::Time::Time(i64 nanoseconds) : nanoseconds_(nanoseconds) {};
 
 f32 Lux::Time::as_seconds(){
-    return m_nanoseconds * 1e-9;
+    return nanoseconds_ * 1e-9;
 }
 
 f32 Lux::Time::as_milliseconds(){
-    return m_nanoseconds * 1e-6;
+    return nanoseconds_ * 1e-6;
 }
 
 i64 Lux::Time::as_nanoseconds(){
-    return m_nanoseconds;
+    return nanoseconds_;
 }
 
 Lux::Time Lux::Time::operator+(const Lux::Time& other) const{
-    return Lux::Time(m_nanoseconds + other.m_nanoseconds);
+    return Lux::Time(nanoseconds_ + other.nanoseconds_);
 }
 
 Lux::Time Lux::Time::operator-(const Time& other) const{
-    return Lux::Time(m_nanoseconds - other.m_nanoseconds);
+    return Lux::Time(nanoseconds_ - other.nanoseconds_);
 }
 
 Lux::Time Lux::Time::operator*(const Time& other) const{
-    return Lux::Time(m_nanoseconds * other.m_nanoseconds);
+    return Lux::Time(nanoseconds_ * other.nanoseconds_);
 }
 
 Lux::Time Lux::Time::operator/(const Time& other) const{
-    return Lux::Time(m_nanoseconds / other.m_nanoseconds);
+    return Lux::Time(nanoseconds_ / other.nanoseconds_);
 }
 
 Lux::Time Lux::Time::operator+=(const Time&  other){
-    m_nanoseconds += other.m_nanoseconds;
+    nanoseconds_ += other.nanoseconds_;
     return *this;
 }
 
 Lux::Time Lux::Time::operator-=(const Time&  other){
-    m_nanoseconds -= other.m_nanoseconds;
+    nanoseconds_ -= other.nanoseconds_;
     return *this;
 }
 
 Lux::Time Lux::Time::operator*=(const Time&  other){
-    m_nanoseconds *= other.m_nanoseconds;
+    nanoseconds_ *= other.nanoseconds_;
     return *this;
 }
 
 Lux::Time Lux::Time::operator/=(const Time&  other){
-    m_nanoseconds /= other.m_nanoseconds;
+    nanoseconds_ /= other.nanoseconds_;
     return *this;
 }
 
 Lux::Time Lux::Time::operator=(const Time& other){
-    m_nanoseconds = other.m_nanoseconds;
+    nanoseconds_ = other.nanoseconds_;
     return *this;
 }

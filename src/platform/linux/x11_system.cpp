@@ -5,13 +5,15 @@
 
 #include <X11/Xlib.h>
 
-Lux::Platform::System::System(){
-    m_system_handle.display = XOpenDisplay(nullptr);
-    m_system_handle.screen = XDefaultScreen((Display*) m_system_handle.display);
+Lux::Platform::System::System()
+    : native(native_)
+{
+    native_.display = XOpenDisplay(nullptr);
+    native_.screen = XDefaultScreen((Display*) native.display);
 }
 
 Lux::Platform::System::~System(){
-    XCloseDisplay((Display*) m_system_handle.display);
+    XCloseDisplay((Display*) native.display);
 }
 
 const Lux::Platform::SystemHandle& Lux::Platform::System::get_native_handle() const{

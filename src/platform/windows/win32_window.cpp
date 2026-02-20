@@ -208,26 +208,30 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
                 }
         }
 
-        if(dispatch && window->m_callback){
-            window->m_callback(event);
+        if(dispatch && window->callback_){
+            window->callback_(event);
         }
     }
 
     return DefWindowProcA(hwnd, msg, wparam, lparam);
 }
 
-Lux::Platform::Window::Window(const System& system, const GraphicsRequirements& graphics_requirements, i32 width, i32 height, const char* title)
-    : m_system(system)
+Lux::Platform::Window::Window(const System& system, const SurfaceNativeSettings& surface_settings, i32 width, i32 height, const char* title)
+    : system_(system)
+    , native(native_)
+    , width(width_)
+    , height(height_)
+
 {
     if(!class_registered){
         WNDCLASSA wc = {};
 
-        wc.lpszClassName = "window_class";
-        wc.hInstance = (HINSTANCE) m_system.get_native_handle().hinstance;
-        wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-        wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
-        wc.lpfnWndProc = window_callback;
-        wc.style = CS_OWNDC;
+        wc.lpszClassName    = "window_class";
+        wc.hInstance        = (HINSTANCE) system.native.hinstance;
+        wc.hCursor          = LoadCursor(nullptr, IDC_ARROW);
+        wc.hIcon            = LoadIcon(nullptr, IDI_APPLICATION);
+        wc.lpfnWndProc      = window_callback;
+        wc.style            = CS_OWNDC;
 
         LUX_VERIFY(RegisterClassA(&wc),"failed to register window class");
 
@@ -244,31 +248,31 @@ Lux::Platform::Window::Window(const System& system, const GraphicsRequirements& 
     int x = GetSystemMetrics(SM_CXSCREEN)/2 - width/2;
     int y = GetSystemMetrics(SM_CYSCREEN)/2 - height/2;
 
-    m_window_handle.hwnd = CreateWindowExA(0, "window_class", title, WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, (HINSTANCE) m_system.get_native_handle().hinstance, nullptr);
+    native_.hwnd = CreateWindowExA(0, "window_class", title, WS_OVERLAPPEDWINDOW, x, y, width, height, nullptr, nullptr, (HINSTANCE) system.native.hinstance, nullptr);
 
-    LUX_VERIFY(m_window_handle.hwnd, "failed to create a window");
+    LUX_VERIFY(native.hwnd, "failed to create a window");
 
-    HDC hdc = GetDC((HWND) m_window_handle.hwnd);
+    HDC hdc = GetDC((HWND) native.hwnd);
 
     PIXELFORMATDESCRIPTOR pfd;
-    DescribePixelFormat(hdc, graphics_requirements.pixel_format, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
+    DescribePixelFormat(hdc, surface_settings.pixel_format, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
-    SetPixelFormat(hdc, graphics_requirements.pixel_format, &pfd);
+    SetPixelFormat(hdc, surface_settings.pixel_format, &pfd);
 
-    SetWindowLongPtrA((HWND) m_window_handle.hwnd, GWLP_USERDATA, (LONG_PTR)this);
+    SetWindowLongPtrA((HWND) native.hwnd, GWLP_USERDATA, (LONG_PTR)this);
 
-    ReleaseDC((HWND)m_window_handle.hwnd, hdc);
+    ReleaseDC((HWND) native.hwnd, hdc);
 }
 
 Lux::Platform::Window::~Window(){
-    if(m_window_handle.hwnd){
-        DestroyWindow((HWND) m_window_handle.hwnd);
+    if(native.hwnd){
+        DestroyWindow((HWND) native.hwnd);
     }
 }
 
 bool Lux::Platform::Window::show(){
-    if(m_window_handle.hwnd){
-        ShowWindow((HWND) m_window_handle.hwnd, SW_SHOW);
+    if(native.hwnd){
+        ShowWindow((HWND) native.hwnd, SW_SHOW);
         return true;
     }
 
@@ -276,8 +280,8 @@ bool Lux::Platform::Window::show(){
 }
 
 bool Lux::Platform::Window::close(){
-    if(!m_close_flag){
-        m_close_flag = true;
+    if(!close_flag_){
+        close_flag_ = true;
         return true;
     }
 
@@ -286,32 +290,14 @@ bool Lux::Platform::Window::close(){
 
 void Lux::Platform::Window::poll_events(){
     MSG msg;
-    while(PeekMessageA(&msg, (HWND) m_window_handle.hwnd, 0, 0, PM_REMOVE)){
+    while(PeekMessageA(&msg, (HWND) native.hwnd, 0, 0, PM_REMOVE)){
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 }
 
 bool Lux::Platform::Window::should_close(){
-    return m_close_flag;
-}
-
-const Lux::Platform::WindowHandle& Lux::Platform::Window::get_native_handle() const{
-    return m_window_handle;
-}
-
-u16 Lux::Platform::Window::width(){
-    RECT r;
-    GetClientRect((HWND) m_window_handle.hwnd, &r);
-
-    return r.right - r.left;
-}
-
-u16 Lux::Platform::Window::height(){
-    RECT r;
-    GetClientRect((HWND) m_window_handle.hwnd, &r);
-
-    return r.bottom - r.top;
+    return close_flag_;
 }
 
 #endif

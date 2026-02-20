@@ -1,35 +1,33 @@
 #pragma once
 
 #include <core/event.hpp>
-#include <platform/handles.hpp>
+#include <platform/native.hpp>
 #include <platform/system.hpp>
 
 namespace Lux::Platform{
     class Window{
     public:
-        void (*m_callback)(Event& event) = nullptr;
+        const WindowNativeData& native;
+        const u16& width;
+        const u16& height;
 
-        Window(const System& system, const GraphicsRequirements&, i32 width, i32 height, const char* title);
+        void (*callback_)(Event& event) = nullptr;
+
+        Window(const System& system, const SurfaceNativeSettings& surface_settings, i32 width, i32 height, const char* title);
         ~Window();
 
         bool    show();
         bool    close();
         void    poll_events();
         bool    should_close();
-
-        u16     width();
-        u16     height();
-
-        const WindowHandle& get_native_handle() const;
     
     private:
-        WindowHandle    m_window_handle;
-        const System&   m_system;
+        WindowNativeData    native_;
+        const System&       system_;
 
-        bool m_close_flag = false;
+        bool close_flag_ = false;
 
-        u16 m_width;
-        u16 m_height;
-
+        u16 width_;
+        u16 height_;
     };
 }

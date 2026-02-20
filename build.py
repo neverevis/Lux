@@ -79,6 +79,12 @@ def main():
                 clear_folder(Path(f"{BUILD_DIR}/obj"))
                 break
 
+    for h in Path(SOURCE_DIR).rglob("*.hpp"):
+        for o in Path(f"{BUILD_DIR}/obj").rglob("*.o"):
+            if h.stat().st_mtime > o.stat().st_mtime or build_config.stat().st_mtime > o.stat().st_mtime:
+                clear_folder(Path(f"{BUILD_DIR}/obj"))
+                break
+
     i = 0
     for s in Path(SOURCE_DIR).rglob("*.cpp"):
         source = Path(s)

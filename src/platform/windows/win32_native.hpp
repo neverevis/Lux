@@ -1,22 +1,21 @@
 #pragma once
 
 namespace Lux::Platform{
-    struct SystemHandle{
+    struct SystemNativeData{
         void*   hinstance = nullptr;
     };
 
-    struct WindowHandle{
+    struct WindowNativeData{
         void*   hwnd      = nullptr;
     };
 
-    struct ContextHandle{
+    struct ContextNativeData{
         void*   hglrc                       = nullptr;
         void*   hdc                         = nullptr;
-        int     pixel_format                = 0;
         void*   wglCreateContextAttribsARB  = nullptr;
     };
 
-    struct GraphicsRequirements{
+    struct SurfaceNativeSettings{
         int     pixel_format = 0;
     };
 }

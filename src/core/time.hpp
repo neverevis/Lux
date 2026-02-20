@@ -5,7 +5,7 @@
 namespace Lux{
     class Time{
     private:
-        i64 m_nanoseconds;
+        i64 nanoseconds_;
     public:
         Time();
         Time(i64 nanoseconds);

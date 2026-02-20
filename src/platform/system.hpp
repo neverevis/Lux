@@ -1,15 +1,15 @@
 #pragma once
-#include <platform/handles.hpp>
+#include <platform/native.hpp>
 
 namespace Lux::Platform{
     class System{
     public:
+        const SystemNativeData& native;
+
         System();
         ~System();
 
-        const SystemHandle& get_native_handle() const;
-
     private:
-        SystemHandle m_system_handle;
+        SystemNativeData native_;
     };
 }

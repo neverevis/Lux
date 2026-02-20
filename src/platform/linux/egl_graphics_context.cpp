@@ -10,12 +10,14 @@
 #include <EGL/egl.h>
 
 Lux::Platform::GraphicsContext::GraphicsContext(const System& system)
-    : m_system(system)
+    : system_(system)
+    , native(native_)
+    , surface_settings(surface_settings_)
 {
-    m_context_handle.egl_display = eglGetDisplay((EGLNativeDisplayType) system.get_native_handle().display);
-    LUX_VERIFY(m_context_handle.egl_display , "failed to load egl display");
+    native_.egl_display = eglGetDisplay((EGLNativeDisplayType) system.native.display);
+    LUX_VERIFY(native.egl_display, "failed to load egl display");
     
-    LUX_VERIFY(eglInitialize(m_context_handle.egl_display  , nullptr, nullptr), "failed to initialize egl");
+    LUX_VERIFY(eglInitialize(native.egl_display, nullptr, nullptr), "failed to initialize egl");
 
     EGLint egl_attribs[] = {
         EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
@@ -26,28 +28,23 @@ Lux::Platform::GraphicsContext::GraphicsContext(const System& system)
     };
 
     EGLint num_configs;
-    eglChooseConfig(m_context_handle.egl_display , egl_attribs, &m_context_handle.egl_config, 1, &num_configs);
+    eglChooseConfig(native.egl_display , egl_attribs, &native_.egl_config, 1, &num_configs);
+
+    EGLint id;
+    eglGetConfigAttrib(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NATIVE_VISUAL_ID, &id);
+
+    surface_settings_.visual_id = (unsigned long) id;
 }
 
 Lux::Platform::GraphicsContext::~GraphicsContext(){
     
 }
 
-const Lux::Platform::GraphicsRequirements Lux::Platform::GraphicsContext::query_requirements(){
-    EGLint id;
-    eglGetConfigAttrib(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NATIVE_VISUAL_ID, &id);
-    
-    GraphicsRequirements gr;
-    gr.visual_id = (unsigned long) id;
-
-    return gr;
-}
-
 bool Lux::Platform::GraphicsContext::create(const Window& window){
-    m_window = &window;
-    m_context_handle.egl_surface = eglCreateWindowSurface(m_context_handle.egl_display, m_context_handle.egl_config, (EGLNativeWindowType) m_window->get_native_handle().window, nullptr);
+    window_ = &window;
+    native_.egl_surface = eglCreateWindowSurface(m_context_handle.egl_display, m_context_handle.egl_config, (EGLNativeWindowType) m_window->get_native_handle().window, nullptr);
 
-    LUX_VERIFY(m_context_handle.egl_surface, "failed to create window surface");
+    LUX_VERIFY(native.egl_surface, "failed to create window surface");
 
     const EGLint context_attribs[] = {
         EGL_CONTEXT_MAJOR_VERSION, 4,
@@ -58,11 +55,11 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     LUX_VERIFY(eglBindAPI(EGL_OPENGL_API), "failed to bind OpenGL API");
 
-    m_context_handle.egl_context = eglCreateContext(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NO_CONTEXT, context_attribs);
+    native_.egl_context = eglCreateContext(m_context_handle.egl_display, m_context_handle.egl_config, EGL_NO_CONTEXT, context_attribs);
 
-    LUX_VERIFY(m_context_handle.egl_context, "failed to create egl context");
+    LUX_VERIFY(native.egl_context, "failed to create egl context");
 
-    if(!m_context_handle.egl_context){
+    if(!native.egl_context){
         return false;
     }
 

@@ -1,19 +1,19 @@
-#include "platform/graphics_context.h"
-#include "platform/system.h"
-#include <core/application.h>
-#include <core/time.h>
+#include <platform/system.hpp>
+#include <platform/graphics_context.hpp>
+#include <core/application.hpp>
+#include <core/time.hpp>
 #include <memory>
-#include <platform/window.h>
+#include <platform/window.hpp>
 
 struct Lux::Application::AppImpl{
-    Lux::Platform::System           m_system;
-    Lux::Platform::GraphicsContext  m_context;
-    Lux::Platform::Window           m_window;
+    Lux::Platform::System           system_;
+    Lux::Platform::GraphicsContext  context_;
+    Lux::Platform::Window           window_;
 
     AppImpl(i32 width, i32 height, const char* title)
-        : m_system(),
-        m_context(m_system),
-        m_window(m_system, m_context.query_requirements(), width, height, title)
+        : system_(),
+          context_(system_),
+          window_(system_, context_.surface_settings, width, height, title)
     {}
 };
 
@@ -21,10 +21,10 @@ Lux::Application::Application(i32 width, i32 height, const char* title)
     :delta_time(),
      app_impl(std::make_unique<AppImpl>(width, height, title))
 {
-    app_impl->m_context.create(app_impl->m_window);
-    app_impl->m_context.make_current();
-    app_impl->m_window.m_callback = Lux::Input::on_event;
-    app_impl->m_window.show();
+    app_impl->context_.create(app_impl->window_);
+    app_impl->context_.make_current();
+    app_impl->window_.callback_ = Lux::Input::on_event;
+    app_impl->window_.show();
 }
 
 Lux::Application::~Application() = default;
@@ -39,15 +39,15 @@ void Lux::Application::loop(){
 
     last_time = Time::now();
     
-    while(!app_impl->m_window.should_close()){
+    while(!app_impl->window_.should_close()){
         current_time = Time::now();
         delta_time = current_time - last_time;
         last_time = current_time;
 
-        app_impl->m_window.poll_events();
+        app_impl->window_.poll_events();
         update();
         render();
-        app_impl->m_context.swap_buffers();
+        app_impl->context_.swap_buffers();
         Input::flush_frame_data();
     }
 }

@@ -14,17 +14,19 @@
 #include <wglext.h>
 
 Lux::Platform::GraphicsContext::GraphicsContext(const Lux::Platform::System& system)
-    : m_system(system)
+    : system_(system)
+    , native(native_)
+    , surface_settings(surface_settings_)
 {
 
     WNDCLASSA wc = {};
-    wc.hInstance = (HINSTANCE) m_system.get_native_handle().hinstance;
+    wc.hInstance = (HINSTANCE) system.native.hinstance;
     wc.lpszClassName = "dummy_class";
     wc.lpfnWndProc = DefWindowProc;
 
     RegisterClass(&wc);
 
-    HWND dummy_hwnd = CreateWindowExA(0, "dummy_class", "", WS_OVERLAPPEDWINDOW, 0, 0, 1, 1, nullptr, nullptr, (HINSTANCE) m_system.get_native_handle().hinstance, nullptr);
+    HWND dummy_hwnd = CreateWindowExA(0, "dummy_class", "", WS_OVERLAPPEDWINDOW, 0, 0, 1, 1, nullptr, nullptr, (HINSTANCE) system.native.hinstance, nullptr);
     HDC dummy_hdc = GetDC(dummy_hwnd);
 
     PIXELFORMATDESCRIPTOR pfd =  {};
@@ -62,9 +64,9 @@ Lux::Platform::GraphicsContext::GraphicsContext(const Lux::Platform::System& sys
 
     UINT num_formats;
 
-    wglChoosePixelFormatARB(dummy_hdc, pixel_attribs, nullptr, 1, &m_context_handle.pixel_format, &num_formats);
+    wglChoosePixelFormatARB(dummy_hdc, pixel_attribs, nullptr, 1, &surface_settings_.pixel_format, &num_formats);
 
-    m_context_handle.wglCreateContextAttribsARB  = (void*) wglGetProcAddress("wglCreateContextAttribsARB");
+    native_.wglCreateContextAttribsARB = (void*) wglGetProcAddress("wglCreateContextAttribsARB");
 
     wglMakeCurrent(nullptr, nullptr);
     wglDeleteContext(dummy_hglrc);
@@ -77,9 +79,9 @@ Lux::Platform::GraphicsContext::~GraphicsContext(){
 }
 
 bool Lux::Platform::GraphicsContext::create(const Window& window){
-    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)m_context_handle.wglCreateContextAttribsARB;
+    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC) native.wglCreateContextAttribsARB;
 
-    m_context_handle.hdc = GetDC((HWND) window.get_native_handle().hwnd);
+    native_.hdc = GetDC((HWND) window.native.hwnd);
 
     int attribs[] = {
         WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
@@ -88,25 +90,18 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
         0
     };
 
-    m_context_handle.hglrc  = wglCreateContextAttribsARB((HDC)m_context_handle.hdc, nullptr, attribs);
+    native_.hglrc = wglCreateContextAttribsARB((HDC) native.hdc, nullptr, attribs);
 
     return true;
 }
 
-const Lux::Platform::GraphicsRequirements Lux::Platform::GraphicsContext::query_requirements(){
-    GraphicsRequirements gr = {};
-    gr.pixel_format = m_context_handle.pixel_format;
-
-    return gr;
-}
-
 void Lux::Platform::GraphicsContext::make_current(){
     
-    wglMakeCurrent((HDC) m_context_handle.hdc, (HGLRC)m_context_handle.hglrc);
+    wglMakeCurrent((HDC) native.hdc, (HGLRC) native.hglrc);
 }
 
 void Lux::Platform::GraphicsContext::swap_buffers(){
-    SwapBuffers((HDC) m_context_handle.hdc);
+    SwapBuffers((HDC) native.hdc);
 }
 
 #endif

@@ -1,14 +1,14 @@
 #pragma once
 
 namespace Lux::Platform{
-    struct ContextHandle{
+    struct ContextNativeData{
         void* egl_display = nullptr;
         void* egl_config  = nullptr;
         void* egl_context = nullptr;
         void* egl_surface = nullptr;
     };
 
-    struct GraphicsRequirements{
+    struct SurfaceNativeSettings{
         unsigned long visual_id = 0;
     };
 }
