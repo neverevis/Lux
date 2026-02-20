@@ -4,6 +4,9 @@
 #include <platform/native.hpp>
 #include <platform/graphics_context.hpp>
 #include <platform/window.hpp>
+
+#include <graphics/gl.hpp>
+
 #include <core/debug.hpp>
 
 #include <EGL/eglplatform.h>
@@ -62,6 +65,8 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
     if(!native.egl_context){
         return false;
     }
+
+    Lux::Graphics::gl::init();
 
     return true;
 }

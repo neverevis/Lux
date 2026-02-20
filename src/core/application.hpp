@@ -6,8 +6,6 @@
 #include <memory>
 
 namespace Lux{
-
-    
     class Application{
         public:
         Lux::Time delta_time;

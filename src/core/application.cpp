@@ -1,9 +1,11 @@
+#include <core/application.hpp>
+
 #include <platform/system.hpp>
 #include <platform/graphics_context.hpp>
-#include <core/application.hpp>
+#include <platform/window.hpp>
+
 #include <core/time.hpp>
 #include <memory>
-#include <platform/window.hpp>
 
 struct Lux::Application::AppImpl{
     Lux::Platform::System           system_;

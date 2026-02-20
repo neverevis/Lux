@@ -1,4 +1,4 @@
-#include <gl/shader.hpp>
+#include <graphics/shader.hpp>
 #include <core/types.hpp>
 #include <core/utils.hpp>
 

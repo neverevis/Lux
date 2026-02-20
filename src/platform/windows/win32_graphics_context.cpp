@@ -3,6 +3,9 @@
 
 #include <platform/window.hpp>
 #include <platform/graphics_context.hpp>
+
+#include <graphics/gl.hpp>
+
 #include <core/debug.hpp>
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -91,6 +94,8 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
     };
 
     native_.hglrc = wglCreateContextAttribsARB((HDC) native.hdc, nullptr, attribs);
+
+    Lux::Graphics::gl::init();
 
     return true;
 }
