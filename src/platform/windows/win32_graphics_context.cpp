@@ -94,12 +94,13 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     while(!done){
         int attribs[] = {
-            WGL_CONTEXT_MAJOR_VERSION_ARB, version[i][0],
-            WGL_CONTEXT_MINOR_VERSION_ARB, version[i][1],
+            WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+            WGL_CONTEXT_MINOR_VERSION_ARB, 6,
             WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
             0
         };
 
+        LUX_BREAK();
         native_.hglrc = wglCreateContextAttribsARB((HDC) native.hdc, nullptr, attribs);
 
         if(native_.hglrc){
@@ -117,8 +118,6 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
     if(!success){
         return false;
     }
-
-    Lux::Graphics::gl::init();
 
     return success;
 }

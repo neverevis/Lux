@@ -32,6 +32,7 @@ namespace Lux::Graphics::gl{
 
     using namespace Lux::Platform;
     bool init(){
+        LUX_BREAK();
         Clear       =                   (PFNGLCLEARPROC)                        load_gl_function("glClear");
         ClearColor  =                   (PFNGLCLEARCOLORPROC)                   load_gl_function("glClearColor");
         GetError    =                   (PFNGLGETERRORPROC)                     load_gl_function("glGetError");

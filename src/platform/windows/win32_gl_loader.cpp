@@ -9,7 +9,7 @@
 
 #include <windows.h>
 
-void* Lux::Platform::load_gl_function(const char *fn_name){
+void* Lux::Platform::load_gl_function(const char* fn_name){
     void* fn = (void*) wglGetProcAddress(fn_name);
     
     if(fn)
