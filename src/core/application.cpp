@@ -36,6 +36,7 @@ void Lux::Application::run(){
 }
 
 void Lux::Application::loop(){
+    setup();
     Time last_time;
     Time current_time;
 

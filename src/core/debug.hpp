@@ -15,7 +15,7 @@
         MACRO_START                                     \
         if(!(condition)){                               \
             LUX_ERROR(msg __VA_OPT__(,) __VA_ARGS__);   \
-            LUX_BREAK()                                 \
+            LUX_BREAK();                                \
         }                                               \
         MACRO_END
 #else
