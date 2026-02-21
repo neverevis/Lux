@@ -49,20 +49,37 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     LUX_VERIFY(native.egl_surface, "failed to create window surface");
 
-    const EGLint context_attribs[] = {
-        EGL_CONTEXT_MAJOR_VERSION, 4,
-        EGL_CONTEXT_MINOR_VERSION, 6,
-        EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
-        EGL_NONE
-    };
-
     LUX_VERIFY(eglBindAPI(EGL_OPENGL_API), "failed to bind OpenGL API");
 
-    native_.egl_context = eglCreateContext(native.egl_display, native.egl_config, EGL_NO_CONTEXT, context_attribs);
+    int version[8][2] = {{4,6},{4,5},{4,4},{4,3},{4,2},{4,1},{4,0},{3,3}};
+    int i = 0;
 
-    LUX_VERIFY(native.egl_context, "failed to create egl context");
+    bool done = false;
+    bool success = false;
 
-    if(!native.egl_context){
+    while(!done){
+        const EGLint context_attribs[] = {
+        EGL_CONTEXT_MAJOR_VERSION, version[i][0],
+        EGL_CONTEXT_MINOR_VERSION, version[i][1],
+        EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
+        EGL_NONE
+        };
+
+        native_.egl_context = eglCreateContext(native.egl_display, native.egl_config, EGL_NO_CONTEXT, context_attribs);
+
+        if(native_.egl_context){
+            LUX_INFO("OpenGL Core {}.{}",version[i][0],version[i][1]);
+            done = true;
+            success = true;
+        }else if(i < 7){
+            i++;
+        }else{
+            LUX_INFO("Failed to load GL Context");
+            done = true;
+        }
+    }
+
+    if(!success){
         return false;
     }
 

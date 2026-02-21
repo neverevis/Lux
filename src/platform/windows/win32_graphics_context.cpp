@@ -86,18 +86,41 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     native_.hdc = GetDC((HWND) window.native.hwnd);
 
-    int attribs[] = {
-        WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-        WGL_CONTEXT_MINOR_VERSION_ARB, 6,
-        WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-        0
-    };
+    int version[8][2] = {{4,6},{4,5},{4,4},{4,3},{4,2},{4,1},{4,0},{3,3}};
+    int i = 0;
 
-    native_.hglrc = wglCreateContextAttribsARB((HDC) native.hdc, nullptr, attribs);
+    bool done = false;
+    bool success = false;
+
+    while(!done){
+        int attribs[] = {
+            WGL_CONTEXT_MAJOR_VERSION_ARB, version[i][0],
+            WGL_CONTEXT_MINOR_VERSION_ARB, version[i][1],
+            WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+            0
+        };
+
+        native_.hglrc = wglCreateContextAttribsARB((HDC) native.hdc, nullptr, attribs);
+
+        if(native_.hglrc){
+            LUX_INFO("OpenGL Core {}.{}",version[i][0],version[i][1]);
+            done = true;
+            success = true;
+        }else if(i < 7){
+            i++;
+        }else{
+            LUX_INFO("Failed to load GL Context");
+            done = true;
+        }
+    }
+
+    if(!success){
+        return false;
+    }
 
     Lux::Graphics::gl::init();
 
-    return true;
+    return success;
 }
 
 void Lux::Platform::GraphicsContext::make_current(){
