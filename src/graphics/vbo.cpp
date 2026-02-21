@@ -3,7 +3,7 @@
 namespace gl = Lux::Graphics::gl;
 Lux::VBO::VBO(std::vector<float>& vertices){
     gl::CreateBuffers(1, &id_);
-    gl::NamedBufferStorage(id_, vertices.size(), vertices.data(), GL_DYNAMIC_STORAGE_BIT);
+    gl::NamedBufferStorage(id_, vertices.size() * sizeof(vertices[0]), vertices.data(), GL_DYNAMIC_STORAGE_BIT);
 }
 
 Lux::VBO::~VBO(){

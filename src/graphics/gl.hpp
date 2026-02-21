@@ -8,6 +8,7 @@ namespace Lux::Graphics::gl{
     extern PFNGLCLEARPROC                          Clear                           ;
     extern PFNGLCLEARCOLORPROC                     ClearColor                      ;
     extern PFNGLGETERRORPROC                       GetError                        ;
+    extern PFNGLDISABLEPROC                        Disable;
     
     extern PFNGLGETSTRINGIPROC                     GetStringi                      ;
     extern PFNGLGETINTEGERVPROC                    GetIntegerv                     ;

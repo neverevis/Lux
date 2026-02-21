@@ -8,6 +8,7 @@ namespace Lux::Graphics::gl{
     PFNGLCLEARPROC                          Clear                           = nullptr;
     PFNGLCLEARCOLORPROC                     ClearColor                      = nullptr;
     PFNGLGETERRORPROC                       GetError                        = nullptr;
+    PFNGLDISABLEPROC                        Disable                         = nullptr;
     
     PFNGLGETSTRINGIPROC                     GetStringi                      = nullptr;
     PFNGLGETINTEGERVPROC                    GetIntegerv                     = nullptr;
@@ -51,6 +52,7 @@ namespace Lux::Graphics::gl{
         LOAD_GL_FN(Clear,"glClear");
         LOAD_GL_FN(ClearColor, "glClearColor");
         LOAD_GL_FN(GetError,"glGetError");
+        LOAD_GL_FN(Disable, "glDisable");
 
         LOAD_GL_FN(GetStringi,"glGetStringi");
         LOAD_GL_FN(GetIntegerv,"glGetIntegerv");

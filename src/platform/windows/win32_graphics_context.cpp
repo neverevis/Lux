@@ -78,7 +78,7 @@ Lux::Platform::GraphicsContext::GraphicsContext(const Lux::Platform::System& sys
 }
 
 Lux::Platform::GraphicsContext::~GraphicsContext(){
-  
+    //TODO
 }
 
 bool Lux::Platform::GraphicsContext::create(const Window& window){

@@ -13,5 +13,6 @@ namespace Lux{
         GLint id_;
 
         void check_shader_errors(GLuint shader);
+        void check_linking_errors();
     };
 }

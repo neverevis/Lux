@@ -45,12 +45,15 @@ Lux::Shader::Shader(const char* vert_path, const char* frag_path){
 
     gl::LinkProgram(id_);
 
+    check_linking_errors();
+
     gl::DeleteShader(v_shader);
     gl::DeleteShader(f_shader);
 
 }
 
 Lux::Shader::~Shader(){
+    //TODO
 }
 
 void Lux::Shader::use(){
@@ -68,6 +71,21 @@ void Lux::Shader::check_shader_errors(GLuint shader){
         GLchar info_log[512];
 
         gl::GetShaderInfoLog(shader, 512, nullptr, info_log);
+        LUX_ERROR("{}", info_log);
+    }
+}
+
+void Lux::Shader::check_linking_errors(){
+    GLint success;
+    
+    gl::GetProgramiv(id_, GL_LINK_STATUS, &success);
+
+    LUX_INFO("{}",success);
+
+    if(success != GL_TRUE){
+        GLchar info_log[512];
+
+        gl::GetProgramInfoLog(id_, 512, nullptr, info_log);
         LUX_ERROR("{}", info_log);
     }
 }
