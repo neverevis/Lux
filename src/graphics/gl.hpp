@@ -2,6 +2,8 @@
 #include <glcorearb.h>
 
 namespace Lux::Graphics::gl{
+    extern bool loaded;
+
     extern PFNGLCLEARPROC       Clear;
     extern PFNGLCLEARCOLORPROC  ClearColor;
     extern PFNGLGETERRORPROC    GetError;
@@ -28,7 +30,7 @@ namespace Lux::Graphics::gl{
     extern PFNGLGETTEXTUREHANDLEARBPROC GetTextureHandleARB;
     extern PFNGLMAKETEXTUREHANDLERESIDENTARBPROC MakeTextureHandleResidentARB;
 
-    bool init();
+    bool init(void* (*get_fn_address)(const char* fn_name));
 
     #define GL_CHECK() \
     do { \

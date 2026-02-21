@@ -94,13 +94,12 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     while(!done){
         int attribs[] = {
-            WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-            WGL_CONTEXT_MINOR_VERSION_ARB, 6,
+            WGL_CONTEXT_MAJOR_VERSION_ARB, version[i][0],
+            WGL_CONTEXT_MINOR_VERSION_ARB, version[i][1],
             WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
             0
         };
 
-        LUX_BREAK();
         native_.hglrc = wglCreateContextAttribsARB((HDC) native.hdc, nullptr, attribs);
 
         if(native_.hglrc){
@@ -125,6 +124,26 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 void Lux::Platform::GraphicsContext::make_current(){
     
     wglMakeCurrent((HDC) native.hdc, (HGLRC) native.hglrc);
+    if(!Graphics::gl::loaded)
+        Graphics::gl::init(get_fn_address);
+}
+
+void* Lux::Platform::GraphicsContext::get_fn_address(const char* fn_name){
+    void* fn = (void*) wglGetProcAddress(fn_name);
+    
+    if(fn)
+        return fn;
+
+    HMODULE opengl32 = LoadLibraryA("opengl32.dll");
+
+    if(!opengl32)
+        return nullptr;
+
+    fn = (void*) GetProcAddress(opengl32, fn_name);
+
+    LUX_ASSERT(fn, "failed to load {}", fn_name);
+
+    return fn;
 }
 
 void Lux::Platform::GraphicsContext::swap_buffers(){

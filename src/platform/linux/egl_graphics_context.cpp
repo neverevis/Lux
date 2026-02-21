@@ -94,6 +94,14 @@ void Lux::Platform::GraphicsContext::swap_buffers(){
 
 void Lux::Platform::GraphicsContext::make_current(){
     eglMakeCurrent(native.egl_display, native.egl_surface, native.egl_surface, native.egl_context);
+    if(!Graphics::gl::loaded)
+        Graphics::gl::init(get_fn_address);
+}
+
+void* Lux::Platform::GraphicsContext::get_fn_address(const char* fn_name){
+    void* fn = (void*) eglGetProcAddress(fn_name);
+    LUX_ASSERT(fn, "failed to load {}", fn_name);
+    return fn;
 }
 
 #endif

@@ -17,10 +17,13 @@ namespace Lux::Platform{
         void make_current();
         void swap_buffers();
 
-    private:
+        
+        private:
         ContextNativeData   native_;
         SurfaceNativeSettings surface_settings_;
         const System&       system_;
         const Window*       window_ = nullptr;
+        
+        static void* get_fn_address(const char* fn_name);
     };
 }
