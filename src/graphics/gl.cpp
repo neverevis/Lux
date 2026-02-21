@@ -12,6 +12,19 @@ namespace Lux::Graphics::gl{
     PFNGLGETSTRINGIPROC                     GetStringi                      = nullptr;
     PFNGLGETINTEGERVPROC                    GetIntegerv                     = nullptr;
 
+    PFNGLCREATEBUFFERSPROC                  CreateBuffers                   = nullptr;
+    PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              = nullptr;
+    PFNGLDELETEBUFFERSPROC                  DeleteBuffers                   = nullptr;
+
+    PFNGLCREATEVERTEXARRAYSPROC             CreateVertexArrays              = nullptr;
+    PFNGLVERTEXARRAYVERTEXBUFFERPROC        VertexArrayVertexBuffer         = nullptr;
+    PFNGLENABLEVERTEXARRAYATTRIBEXTPROC     EnableVertexArrayAttrib         = nullptr;
+    PFNGLVERTEXARRAYATTRIBFORMATPROC        VertexArrayAttribFormat         = nullptr;
+    PFNGLVERTEXARRAYATTRIBBINDINGPROC       VertexArrayAttribBinding        = nullptr;
+    PFNGLBINDVERTEXARRAYPROC                BindVertexArray                 = nullptr;
+
+    PFNGLDRAWARRAYSPROC                     DrawArrays                      = nullptr;
+
     PFNGLCREATESHADERPROC                   CreateShader                    = nullptr;
     PFNGLGETSHADERIVPROC                    GetShaderiv                     = nullptr;
     PFNGLSHADERSOURCEPROC                   ShaderSource                    = nullptr;
@@ -21,6 +34,7 @@ namespace Lux::Graphics::gl{
     PFNGLCREATEPROGRAMPROC                  CreateProgram                   = nullptr;
     PFNGLATTACHSHADERPROC                   AttachShader                    = nullptr;
     PFNGLLINKPROGRAMPROC                    LinkProgram                     = nullptr;
+    PFNGLUSEPROGRAMPROC                     UseProgram                      = nullptr;
     PFNGLGETPROGRAMIVPROC                   GetProgramiv                    = nullptr;
     PFNGLGETPROGRAMINFOLOGPROC              GetProgramInfoLog               = nullptr;
     
@@ -32,33 +46,50 @@ namespace Lux::Graphics::gl{
     PFNGLMAKETEXTUREHANDLERESIDENTARBPROC   MakeTextureHandleResidentARB    = nullptr;
 
     bool init(void* (*get_fn_address)(const char* fn_name)){
-        Clear       =                   (PFNGLCLEARPROC)                        get_fn_address("glClear");
-        ClearColor  =                   (PFNGLCLEARCOLORPROC)                   get_fn_address("glClearColor");
-        GetError    =                   (PFNGLGETERRORPROC)                     get_fn_address("glGetError");
-        
-        GetIntegerv =                   (PFNGLGETINTEGERVPROC)                  get_fn_address("glGetIntegerv");
-        GetStringi  =                   (PFNGLGETSTRINGIPROC)                   get_fn_address("glGetStringi");
+        #define LOAD_GL_FN(fn, name) fn = (decltype(fn)) get_fn_address(name)
 
-        CreateShader =                  (PFNGLCREATESHADERPROC)                 get_fn_address("glCreateShader");
-        GetShaderiv =                   (PFNGLGETSHADERIVPROC)                  get_fn_address("glGetShaderiv");
-        ShaderSource =                  (PFNGLSHADERSOURCEPROC)                 get_fn_address("glShaderSource");
-        CompileShader =                 (PFNGLCOMPILESHADERPROC)                get_fn_address("glCompileShader");
-        GetShaderInfoLog =              (PFNGLGETSHADERINFOLOGPROC)             get_fn_address("glGetShaderInfoLog");
-        DeleteShader =                  (PFNGLDELETESHADERPROC)                 get_fn_address("glDeleteShader");
-        CreateProgram =                 (PFNGLCREATEPROGRAMPROC)                get_fn_address("glCreateProgram");
-        AttachShader =                  (PFNGLATTACHSHADERPROC)                 get_fn_address("glAttachShader");
-        LinkProgram =                   (PFNGLLINKPROGRAMPROC)                  get_fn_address("glLinkProgram");
-        GetProgramiv =                  (PFNGLGETPROGRAMIVPROC)                 get_fn_address("glGetProgramiv");
-        GetProgramInfoLog =             (PFNGLGETPROGRAMINFOLOGPROC)            get_fn_address("glGetProgramInfoLog");
+        LOAD_GL_FN(Clear,"glClear");
+        LOAD_GL_FN(ClearColor, "glClearColor");
+        LOAD_GL_FN(GetError,"glGetError");
 
-        CreateTextures =                (PFNGLCREATETEXTURESPROC)               get_fn_address("glCreateTextures");
-        TextureStorage2D =              (PFNGLTEXTURESTORAGE2DPROC)             get_fn_address("glTextureStorage2D");
-        TextureParameteri =             (PFNGLTEXTUREPARAMETERIPROC)            get_fn_address("glTextureParameteri");
-        TextureSubImage2D =             (PFNGLTEXTURESUBIMAGE2DPROC)            get_fn_address("glTextureSubImage2D");
-        GetTextureHandleARB =           (PFNGLGETTEXTUREHANDLEARBPROC)          get_fn_address("glGetTextureHandleARB");
-        MakeTextureHandleResidentARB =  (PFNGLMAKETEXTUREHANDLERESIDENTARBPROC) get_fn_address("glMakeTextureHandleResidentARB");
+        LOAD_GL_FN(GetStringi,"glGetStringi");
+        LOAD_GL_FN(GetIntegerv,"glGetIntegerv");
+
+        LOAD_GL_FN(CreateBuffers,"glCreateBuffers");
+        LOAD_GL_FN(NamedBufferStorage,"glNamedBufferStorage");
+        LOAD_GL_FN(DeleteBuffers,"glDeleteBuffers");
+
+        LOAD_GL_FN(CreateVertexArrays,"glCreateVertexArrays");
+        LOAD_GL_FN(VertexArrayVertexBuffer,"glVertexArrayVertexBuffer");
+        LOAD_GL_FN(EnableVertexArrayAttrib,"glEnableVertexArrayAttrib");
+        LOAD_GL_FN(VertexArrayAttribFormat,"glVertexArrayAttribFormat");
+        LOAD_GL_FN(VertexArrayAttribBinding,"glVertexArrayAttribBinding");
+        LOAD_GL_FN(BindVertexArray,"glBindVertexArray");
+
+        LOAD_GL_FN(DrawArrays,"glDrawArrays");
+
+        LOAD_GL_FN(CreateShader,"glCreateShader");
+        LOAD_GL_FN(GetShaderiv,"glGetShaderiv");
+        LOAD_GL_FN(ShaderSource,"glShaderSource");
+        LOAD_GL_FN(CompileShader,"glCompileShader");
+        LOAD_GL_FN(GetShaderInfoLog,"glGetShaderInfoLog");
+        LOAD_GL_FN(DeleteShader,"glDeleteShader");
+        LOAD_GL_FN(CreateProgram,"glCreateProgram");
+        LOAD_GL_FN(AttachShader,"glAttachShader");
+        LOAD_GL_FN(LinkProgram,"glLinkProgram");
+        LOAD_GL_FN(UseProgram,"glUseProgram");
+        LOAD_GL_FN(GetProgramiv,"glGetProgramiv");
+        LOAD_GL_FN(GetProgramInfoLog,"glGetProgramInfoLog");
+
+        LOAD_GL_FN(CreateTextures,"glCreateTextures");
+        LOAD_GL_FN(TextureStorage2D,"glTextureStorage2D");
+        LOAD_GL_FN(TextureParameteri,"glTextureParameteri");
+        LOAD_GL_FN(TextureSubImage2D,"glTextureSubImage2D");
+        LOAD_GL_FN(GetTextureHandleARB,"glGetTextureHandleARB");
+        LOAD_GL_FN(MakeTextureHandleResidentARB,"glMakeTextureHandleResidentARB");
 
         loaded = true;
+        #undef LOAD_GL_FN
         return true;
     }
 }

@@ -1,34 +1,49 @@
 #pragma once
 #include <glcorearb.h>
+#include <core/debug.hpp>
 
 namespace Lux::Graphics::gl{
     extern bool loaded;
 
-    extern PFNGLCLEARPROC       Clear;
-    extern PFNGLCLEARCOLORPROC  ClearColor;
-    extern PFNGLGETERRORPROC    GetError;
+    extern PFNGLCLEARPROC                          Clear                           ;
+    extern PFNGLCLEARCOLORPROC                     ClearColor                      ;
+    extern PFNGLGETERRORPROC                       GetError                        ;
+    
+    extern PFNGLGETSTRINGIPROC                     GetStringi                      ;
+    extern PFNGLGETINTEGERVPROC                    GetIntegerv                     ;
 
-    extern PFNGLGETINTEGERVPROC GetIntegerv;
-    extern PFNGLGETSTRINGIPROC  GetStringi;
+    extern PFNGLCREATEBUFFERSPROC                  CreateBuffers                   ;
+    extern PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              ;
+    extern PFNGLDELETEBUFFERSPROC                  DeleteBuffers;
 
-    extern PFNGLCREATESHADERPROC CreateShader;
-    extern PFNGLSHADERSOURCEPROC ShaderSource;
-    extern PFNGLCOMPILESHADERPROC CompileShader;
-    extern PFNGLGETSHADERINFOLOGPROC GetShaderInfoLog;
-    extern PFNGLDELETESHADERPROC DeleteShader;
-    extern PFNGLGETSHADERIVPROC GetShaderiv;
-    extern PFNGLCREATEPROGRAMPROC CreateProgram;
-    extern PFNGLATTACHSHADERPROC AttachShader;
-    extern PFNGLLINKPROGRAMPROC LinkProgram;
-    extern PFNGLGETPROGRAMIVPROC GetProgramiv;
-    extern PFNGLGETPROGRAMINFOLOGPROC GetProgramInfoLog;
+    extern PFNGLCREATEVERTEXARRAYSPROC             CreateVertexArrays              ;
+    extern PFNGLVERTEXARRAYVERTEXBUFFERPROC        VertexArrayVertexBuffer         ;
+    extern PFNGLENABLEVERTEXARRAYATTRIBEXTPROC     EnableVertexArrayAttrib         ;
+    extern PFNGLVERTEXARRAYATTRIBFORMATPROC        VertexArrayAttribFormat         ;
+    extern PFNGLVERTEXARRAYATTRIBBINDINGPROC       VertexArrayAttribBinding        ;
+    extern PFNGLBINDVERTEXARRAYPROC                BindVertexArray                 ;
 
-    extern PFNGLCREATETEXTURESPROC CreateTextures;
-    extern PFNGLTEXTURESTORAGE2DPROC TextureStorage2D;
-    extern PFNGLTEXTUREPARAMETERIPROC TextureParameteri;
-    extern PFNGLTEXTURESUBIMAGE2DPROC TextureSubImage2D;
-    extern PFNGLGETTEXTUREHANDLEARBPROC GetTextureHandleARB;
-    extern PFNGLMAKETEXTUREHANDLERESIDENTARBPROC MakeTextureHandleResidentARB;
+    extern PFNGLDRAWARRAYSPROC                     DrawArrays                      ;
+
+    extern PFNGLCREATESHADERPROC                   CreateShader                    ;
+    extern PFNGLGETSHADERIVPROC                    GetShaderiv                     ;
+    extern PFNGLSHADERSOURCEPROC                   ShaderSource                    ;
+    extern PFNGLCOMPILESHADERPROC                  CompileShader                   ;
+    extern PFNGLGETSHADERINFOLOGPROC               GetShaderInfoLog                ;
+    extern PFNGLDELETESHADERPROC                   DeleteShader                    ;
+    extern PFNGLCREATEPROGRAMPROC                  CreateProgram                   ;
+    extern PFNGLATTACHSHADERPROC                   AttachShader                    ;
+    extern PFNGLLINKPROGRAMPROC                    LinkProgram                     ;
+    extern PFNGLUSEPROGRAMPROC                     UseProgram                      ;
+    extern PFNGLGETPROGRAMIVPROC                   GetProgramiv                    ;
+    extern PFNGLGETPROGRAMINFOLOGPROC              GetProgramInfoLog               ;
+    
+    extern PFNGLCREATETEXTURESPROC                 CreateTextures                  ;
+    extern PFNGLTEXTURESTORAGE2DPROC               TextureStorage2D                ;
+    extern PFNGLTEXTUREPARAMETERIPROC              TextureParameteri               ;
+    extern PFNGLTEXTURESUBIMAGE2DPROC              TextureSubImage2D               ;
+    extern PFNGLGETTEXTUREHANDLEARBPROC            GetTextureHandleARB             ;
+    extern PFNGLMAKETEXTUREHANDLERESIDENTARBPROC   MakeTextureHandleResidentARB    ;
 
     bool init(void* (*get_fn_address)(const char* fn_name));
 
@@ -36,7 +51,7 @@ namespace Lux::Graphics::gl{
     do { \
         GLenum err; \
         while((err = Lux::Graphics::gl::GetError()) != GL_NO_ERROR) { \
-            printf("OpenGL error 0x%x at %s:%d\n", err, __FILE__, __LINE__); \
+            LUX_INFO("OpenGL error {}", err); \
         } \
     } while(0)
 }

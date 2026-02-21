@@ -53,6 +53,10 @@ Lux::Shader::Shader(const char* vert_path, const char* frag_path){
 Lux::Shader::~Shader(){
 }
 
+void Lux::Shader::use(){
+    gl::UseProgram(id_);
+}
+
 void Lux::Shader::check_shader_errors(GLuint shader){
     GLint success;
     

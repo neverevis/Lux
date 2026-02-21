@@ -1,13 +1,13 @@
 #include <core/application.hpp>
 #include <graphics/shader.hpp>
 
+namespace gl = Lux::Graphics::gl;
 class Game : public Lux::Application{
 public:
     Game(i32 w, i32 h, const char* title) : Lux::Application(w, h, title){}
 
 
     void setup(){
-        Lux::Shader shader("a", "b");
     }
 
     void update(){
