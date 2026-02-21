@@ -1,4 +1,5 @@
 #include <core/application.hpp>
+#include <graphics/shader.hpp>
 
 class Game : public Lux::Application{
 public:
@@ -6,6 +7,7 @@ public:
 
 
     void setup(){
+        Lux::Shader shader("a", "b");
     }
 
     void update(){

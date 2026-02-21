@@ -11,6 +11,9 @@ namespace Lux::Graphics::gl{
 
     extern PFNGLCREATESHADERPROC CreateShader;
     extern PFNGLSHADERSOURCEPROC ShaderSource;
+    extern PFNGLCOMPILESHADERPROC CompileShader;
+    extern PFNGLGETSHADERINFOLOGPROC GetShaderInfoLog;
+    extern PFNGLDELETESHADERPROC DeleteShader;
     extern PFNGLGETSHADERIVPROC GetShaderiv;
     extern PFNGLCREATEPROGRAMPROC CreateProgram;
     extern PFNGLATTACHSHADERPROC AttachShader;

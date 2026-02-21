@@ -14,6 +14,9 @@ namespace Lux::Graphics::gl{
     PFNGLCREATESHADERPROC                   CreateShader                    = nullptr;
     PFNGLGETSHADERIVPROC                    GetShaderiv                     = nullptr;
     PFNGLSHADERSOURCEPROC                   ShaderSource                    = nullptr;
+    PFNGLCOMPILESHADERPROC                  CompileShader                   = nullptr;
+    PFNGLGETSHADERINFOLOGPROC               GetShaderInfoLog                = nullptr;
+    PFNGLDELETESHADERPROC                   DeleteShader                    = nullptr;
     PFNGLCREATEPROGRAMPROC                  CreateProgram                   = nullptr;
     PFNGLATTACHSHADERPROC                   AttachShader                    = nullptr;
     PFNGLLINKPROGRAMPROC                    LinkProgram                     = nullptr;
@@ -37,8 +40,11 @@ namespace Lux::Graphics::gl{
         GetStringi  =                   (PFNGLGETSTRINGIPROC)                   load_gl_function("glGetStringi");
 
         CreateShader =                  (PFNGLCREATESHADERPROC)                 load_gl_function("glCreateShader");
-        GetShaderiv =                   (PFNGLGETSHADERIVPROC)                  load_gl_function("glShaderiv");
+        GetShaderiv =                   (PFNGLGETSHADERIVPROC)                  load_gl_function("glGetShaderiv");
         ShaderSource =                  (PFNGLSHADERSOURCEPROC)                 load_gl_function("glShaderSource");
+        CompileShader =                 (PFNGLCOMPILESHADERPROC)                load_gl_function("glCompileShader");
+        GetShaderInfoLog =              (PFNGLGETSHADERINFOLOGPROC)             load_gl_function("glGetShaderInfoLog");
+        DeleteShader =                  (PFNGLDELETESHADERPROC)                 load_gl_function("glDeleteShader");
         CreateProgram =                 (PFNGLCREATEPROGRAMPROC)                load_gl_function("glCreateProgram");
         AttachShader =                  (PFNGLATTACHSHADERPROC)                 load_gl_function("glAttachShader");
         LinkProgram =                   (PFNGLLINKPROGRAMPROC)                  load_gl_function("glLinkProgram");
