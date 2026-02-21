@@ -83,7 +83,7 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
         return false;
     }
 
-    Lux::Graphics::gl::init();
+    Lux::Graphics::gl::init(get_fn_address);
 
     return true;
 }
