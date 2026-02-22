@@ -3,12 +3,12 @@
 #include <graphics/gl.hpp>
 
 namespace Lux{
-    class VBO{
+    class EBO{
     public:
         const GLuint& id = id_;
 
-        VBO();
-        ~VBO();
+        EBO();
+        ~EBO();
 
         void set_size(size_t size);
         void submit_data(const void* data, size_t size, size_t offset);

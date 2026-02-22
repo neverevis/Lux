@@ -15,6 +15,7 @@ namespace Lux::Graphics::gl{
 
     PFNGLCREATEBUFFERSPROC                  CreateBuffers                   = nullptr;
     PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              = nullptr;
+    PFNGLNAMEDBUFFERSUBDATAPROC             NamedBufferSubData              = nullptr;
     PFNGLDELETEBUFFERSPROC                  DeleteBuffers                   = nullptr;
 
     PFNGLCREATEVERTEXARRAYSPROC             CreateVertexArrays              = nullptr;
@@ -26,10 +27,12 @@ namespace Lux::Graphics::gl{
     PFNGLBINDVERTEXARRAYPROC                BindVertexArray                 = nullptr;
     PFNGLVERTEXARRAYBINDINGDIVISORPROC      VertexArrayBindingDivisor       = nullptr;
     PFNGLVERTEXARRAYELEMENTBUFFERPROC       VertexArrayElementBuffer        = nullptr;
+    PFNGLDELETEVERTEXARRAYSPROC             DeleteVertexArrays              = nullptr;
 
     PFNGLDRAWARRAYSPROC                     DrawArrays                      = nullptr;
     PFNGLDRAWELEMENTSPROC                   DrawElements                    = nullptr;
-    PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstaced              = nullptr;
+    PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstanced             = nullptr;
+    PFNGLDRAWELEMENTSINSTANCEDPROC          DrawElementsInstanced           = nullptr;
 
     PFNGLCREATESHADERPROC                   CreateShader                    = nullptr;
     PFNGLGETSHADERIVPROC                    GetShaderiv                     = nullptr;
@@ -43,6 +46,7 @@ namespace Lux::Graphics::gl{
     PFNGLUSEPROGRAMPROC                     UseProgram                      = nullptr;
     PFNGLGETPROGRAMIVPROC                   GetProgramiv                    = nullptr;
     PFNGLGETPROGRAMINFOLOGPROC              GetProgramInfoLog               = nullptr;
+    PFNGLDELETEPROGRAMPROC                  DeleteProgram                   = nullptr;
     
     PFNGLCREATETEXTURESPROC                 CreateTextures                  = nullptr;
     PFNGLTEXTURESTORAGE2DPROC               TextureStorage2D                = nullptr;
@@ -64,6 +68,7 @@ namespace Lux::Graphics::gl{
 
         LOAD_GL_FN(CreateBuffers,"glCreateBuffers");
         LOAD_GL_FN(NamedBufferStorage,"glNamedBufferStorage");
+        LOAD_GL_FN(NamedBufferSubData,"glNamedBufferSubData");
         LOAD_GL_FN(DeleteBuffers,"glDeleteBuffers");
 
         LOAD_GL_FN(CreateVertexArrays,"glCreateVertexArrays");
@@ -75,10 +80,12 @@ namespace Lux::Graphics::gl{
         LOAD_GL_FN(BindVertexArray,"glBindVertexArray");
         LOAD_GL_FN(VertexArrayBindingDivisor, "glVertexArrayBindingDivisor");
         LOAD_GL_FN(VertexArrayElementBuffer, "glVertexArrayElementBuffer");
+        LOAD_GL_FN(DeleteVertexArrays, "glDeleteVertexArrays");
 
         LOAD_GL_FN(DrawArrays,"glDrawArrays");
         LOAD_GL_FN(DrawElements,"glDrawElements");
-        LOAD_GL_FN(DrawArraysInstaced, "glDrawArraysInstanced");
+        LOAD_GL_FN(DrawArraysInstanced, "glDrawArraysInstanced");
+        LOAD_GL_FN(DrawElementsInstanced,"glDrawElementsInstanced");
 
         LOAD_GL_FN(CreateShader,"glCreateShader");
         LOAD_GL_FN(GetShaderiv,"glGetShaderiv");
@@ -92,6 +99,7 @@ namespace Lux::Graphics::gl{
         LOAD_GL_FN(UseProgram,"glUseProgram");
         LOAD_GL_FN(GetProgramiv,"glGetProgramiv");
         LOAD_GL_FN(GetProgramInfoLog,"glGetProgramInfoLog");
+        LOAD_GL_FN(DeleteProgram,"glDeleteProgram");
 
         LOAD_GL_FN(CreateTextures,"glCreateTextures");
         LOAD_GL_FN(TextureStorage2D,"glTextureStorage2D");

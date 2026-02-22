@@ -15,6 +15,7 @@ namespace Lux::Graphics::gl{
 
     extern PFNGLCREATEBUFFERSPROC                  CreateBuffers                   ;
     extern PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              ;
+    extern PFNGLNAMEDBUFFERSUBDATAPROC             NamedBufferSubData;
     extern PFNGLDELETEBUFFERSPROC                  DeleteBuffers;
 
     extern PFNGLCREATEVERTEXARRAYSPROC             CreateVertexArrays              ;
@@ -26,10 +27,12 @@ namespace Lux::Graphics::gl{
     extern PFNGLBINDVERTEXARRAYPROC                BindVertexArray                 ;
     extern PFNGLVERTEXARRAYBINDINGDIVISORPROC      VertexArrayBindingDivisor;
     extern PFNGLVERTEXARRAYELEMENTBUFFERPROC       VertexArrayElementBuffer;
+    extern PFNGLDELETEVERTEXARRAYSPROC             DeleteVertexArrays;
 
     extern PFNGLDRAWARRAYSPROC                     DrawArrays                      ;
     extern PFNGLDRAWELEMENTSPROC                   DrawElements;
     extern PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstanced;
+    extern PFNGLDRAWELEMENTSINSTANCEDPROC          DrawElementsInstanced;
 
     extern PFNGLCREATESHADERPROC                   CreateShader                    ;
     extern PFNGLGETSHADERIVPROC                    GetShaderiv                     ;
@@ -43,6 +46,7 @@ namespace Lux::Graphics::gl{
     extern PFNGLUSEPROGRAMPROC                     UseProgram                      ;
     extern PFNGLGETPROGRAMIVPROC                   GetProgramiv                    ;
     extern PFNGLGETPROGRAMINFOLOGPROC              GetProgramInfoLog               ;
+    extern PFNGLDELETEPROGRAMPROC                  DeleteProgram;
     
     extern PFNGLCREATETEXTURESPROC                 CreateTextures                  ;
     extern PFNGLTEXTURESTORAGE2DPROC               TextureStorage2D                ;

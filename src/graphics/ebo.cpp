@@ -1,17 +1,17 @@
 #include <graphics/gl.hpp>
-#include <graphics/vbo.hpp>
+#include <graphics/ebo.hpp>
 
 namespace gl = Lux::Graphics::gl;
-Lux::VBO::VBO(){
+Lux::EBO::EBO(){
     gl::CreateBuffers(1, &id_);
 }
 
-Lux::VBO::~VBO(){
+Lux::EBO::~EBO(){
     if(id_ != 0)
         gl::DeleteBuffers(1, &id_);
 }
 
-void Lux::VBO::set_size(size_t size){
+void Lux::EBO::set_size(size_t size){
     if(!stored_){
         stored_ = true;
         size_ = size;
@@ -19,7 +19,7 @@ void Lux::VBO::set_size(size_t size){
     }
 }
 
-void Lux::VBO::submit_data(const void* data, size_t size, size_t offset){
+void Lux::EBO::submit_data(const void* data, size_t size, size_t offset){
     if(stored_ && (size + offset) <= size_){
         gl::NamedBufferSubData(id_, offset, size, data);
     }

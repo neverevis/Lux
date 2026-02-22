@@ -7,28 +7,31 @@ Lux::VAO::VAO(){
 }
 
 Lux::VAO::~VAO(){
-
+    gl::DeleteVertexArrays(1, &id_);
 }
 
 void Lux::VAO::bind(){
     gl::BindVertexArray(id_);
 }
 
-void Lux::VAO::link_vbo(VBO& vbo, size_t vertex_size, GLint binding_index){
-    // put the VBO into a specific binding index inside this VAO. also set the binding index stride (how many bytes represents a single vertex)
-    gl::VertexArrayVertexBuffer(id_, binding_index, vbo.id, 0, vertex_size);
+void Lux::VAO::link_vbo(VBO& vbo, size_t stride, GLint binding_index){
+    // stores a vbo in a binding index and sets a stride
+    gl::VertexArrayVertexBuffer(id_, binding_index, vbo.id, 0, stride);
 }
 
-void Lux::VAO::set_location(GLuint location, GLint data_type, GLuint size, GLuint offset, GLint binding_index){
-    // activates the location on shader
+void Lux::VAO::link_ebo(EBO& ebo){
+    gl::VertexArrayElementBuffer(id_, ebo.id);
+}
+
+void Lux::VAO::location_format(GLint location, GLenum type, GLuint quantity){
     gl::EnableVertexArrayAttrib(id_, location);
-    // describes how the location should interpret and take VBO vertices contained in a binding index
-    gl::VertexArrayAttribFormat(id_, location, size, data_type, GL_FALSE, offset);
-    //  sets which binding index the location should take the VBO from
+    gl::VertexArrayAttribFormat(id_, location, quantity, type, GL_FALSE, 0);
+}
+
+void Lux::VAO::set_location_binding(GLint location ,GLint binding_index){
     gl::VertexArrayAttribBinding(id_, location, binding_index);
 }
 
-void Lux::VAO::set_divisor(GLuint location, GLint binding_index, GLuint divisor){
-    //sets a binding index as divisor (should only step next once all the vertices iterates)
+void Lux::VAO::set_binding_divisor(GLint binding_index, GLuint divisor){
     gl::VertexArrayBindingDivisor(id_, binding_index, divisor);
 }

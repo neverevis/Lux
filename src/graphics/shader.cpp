@@ -53,7 +53,7 @@ Lux::Shader::Shader(const char* vert_path, const char* frag_path){
 }
 
 Lux::Shader::~Shader(){
-    //TODO
+    gl::DeleteProgram(id_);
 }
 
 void Lux::Shader::use(){
@@ -77,8 +77,6 @@ void Lux::Shader::check_linking_errors(){
     GLint success;
     
     gl::GetProgramiv(id_, GL_LINK_STATUS, &success);
-
-    LUX_INFO("{}",success);
 
     if(success != GL_TRUE){
         GLchar info_log[512];
