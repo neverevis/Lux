@@ -1,8 +1,13 @@
 #version 450 core
+#extension GL_ARB_bindless_texture : require
+#extension GL_ARB_gpu_shader_int64 : enable
 
-layout (location = 0) in vec3 aColor;
+in vec2 vUv;
+flat in uint64_t vHandle;
+
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(aColor, 1.0);
+    sampler2D myTex = sampler2D(vHandle);
+    FragColor = texture(myTex, vUv);
 }

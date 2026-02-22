@@ -21,10 +21,15 @@ namespace Lux::Graphics::gl{
     extern PFNGLVERTEXARRAYVERTEXBUFFERPROC        VertexArrayVertexBuffer         ;
     extern PFNGLENABLEVERTEXARRAYATTRIBEXTPROC     EnableVertexArrayAttrib         ;
     extern PFNGLVERTEXARRAYATTRIBFORMATPROC        VertexArrayAttribFormat         ;
+    extern PFNGLVERTEXARRAYATTRIBLFORMATPROC       VertexArrayAttribLFormat;
     extern PFNGLVERTEXARRAYATTRIBBINDINGPROC       VertexArrayAttribBinding        ;
     extern PFNGLBINDVERTEXARRAYPROC                BindVertexArray                 ;
+    extern PFNGLVERTEXARRAYBINDINGDIVISORPROC      VertexArrayBindingDivisor;
+    extern PFNGLVERTEXARRAYELEMENTBUFFERPROC       VertexArrayElementBuffer;
 
     extern PFNGLDRAWARRAYSPROC                     DrawArrays                      ;
+    extern PFNGLDRAWELEMENTSPROC                   DrawElements;
+    extern PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstanced;
 
     extern PFNGLCREATESHADERPROC                   CreateShader                    ;
     extern PFNGLGETSHADERIVPROC                    GetShaderiv                     ;

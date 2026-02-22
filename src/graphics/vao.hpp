@@ -13,8 +13,9 @@ namespace Lux{
 
         void bind();
 
-        void link_vbo(VBO& vbo, size_t vertex_size);
-        void set_location(GLuint location, GLint data_type, GLuint size, GLuint offset);
+        void link_vbo(VBO& vbo, size_t vertex_size, GLint binding_index);
+        void set_location(GLuint location, GLint data_type, GLuint size, GLuint offset, GLint binding_index);
+        void set_divisor(GLuint location, GLint binding_index, GLuint divisor);
 
     private:
         GLuint id_;

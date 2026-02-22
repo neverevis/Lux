@@ -64,9 +64,7 @@ void Lux::Shader::check_shader_errors(GLuint shader){
     GLint success;
     
     gl::GetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-    LUX_INFO("{}",success);
-
+    
     if(success != GL_TRUE){
         GLchar info_log[512];
 

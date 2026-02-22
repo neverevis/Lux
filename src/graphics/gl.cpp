@@ -21,10 +21,15 @@ namespace Lux::Graphics::gl{
     PFNGLVERTEXARRAYVERTEXBUFFERPROC        VertexArrayVertexBuffer         = nullptr;
     PFNGLENABLEVERTEXARRAYATTRIBEXTPROC     EnableVertexArrayAttrib         = nullptr;
     PFNGLVERTEXARRAYATTRIBFORMATPROC        VertexArrayAttribFormat         = nullptr;
+    PFNGLVERTEXARRAYATTRIBLFORMATPROC       VertexArrayAttribLFormat        = nullptr;
     PFNGLVERTEXARRAYATTRIBBINDINGPROC       VertexArrayAttribBinding        = nullptr;
     PFNGLBINDVERTEXARRAYPROC                BindVertexArray                 = nullptr;
+    PFNGLVERTEXARRAYBINDINGDIVISORPROC      VertexArrayBindingDivisor       = nullptr;
+    PFNGLVERTEXARRAYELEMENTBUFFERPROC       VertexArrayElementBuffer        = nullptr;
 
     PFNGLDRAWARRAYSPROC                     DrawArrays                      = nullptr;
+    PFNGLDRAWELEMENTSPROC                   DrawElements                    = nullptr;
+    PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstaced              = nullptr;
 
     PFNGLCREATESHADERPROC                   CreateShader                    = nullptr;
     PFNGLGETSHADERIVPROC                    GetShaderiv                     = nullptr;
@@ -65,10 +70,15 @@ namespace Lux::Graphics::gl{
         LOAD_GL_FN(VertexArrayVertexBuffer,"glVertexArrayVertexBuffer");
         LOAD_GL_FN(EnableVertexArrayAttrib,"glEnableVertexArrayAttrib");
         LOAD_GL_FN(VertexArrayAttribFormat,"glVertexArrayAttribFormat");
+        LOAD_GL_FN(VertexArrayAttribLFormat, "glVertexArrayAttribLFormat");
         LOAD_GL_FN(VertexArrayAttribBinding,"glVertexArrayAttribBinding");
         LOAD_GL_FN(BindVertexArray,"glBindVertexArray");
+        LOAD_GL_FN(VertexArrayBindingDivisor, "glVertexArrayBindingDivisor");
+        LOAD_GL_FN(VertexArrayElementBuffer, "glVertexArrayElementBuffer");
 
         LOAD_GL_FN(DrawArrays,"glDrawArrays");
+        LOAD_GL_FN(DrawElements,"glDrawElements");
+        LOAD_GL_FN(DrawArraysInstaced, "glDrawArraysInstanced");
 
         LOAD_GL_FN(CreateShader,"glCreateShader");
         LOAD_GL_FN(GetShaderiv,"glGetShaderiv");
