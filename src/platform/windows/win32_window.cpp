@@ -2,6 +2,7 @@
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/window.hpp>
+#include <platform/system.hpp>
 #include <core/debug.hpp>
 
 #ifndef WIN32_LEAN_AND_MEAN

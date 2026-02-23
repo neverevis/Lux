@@ -1,10 +1,11 @@
 #pragma once
 
-#include <platform/system.hpp>
-#include <platform/window.hpp>
 #include <platform/native.hpp>
 
 namespace Lux::Platform{
+    struct System;
+    struct Window;
+    
     class GraphicsContext{
     public:
         const ContextNativeData&        native;

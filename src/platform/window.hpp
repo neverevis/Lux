@@ -2,9 +2,9 @@
 
 #include <core/event.hpp>
 #include <platform/native.hpp>
-#include <platform/system.hpp>
 
 namespace Lux::Platform{
+    class System;
     class Window{
     public:
         const WindowNativeData& native;

@@ -1,4 +1,3 @@
-#include <graphics/opengl/gl.hpp>
 #include <graphics/opengl/ebo.hpp>
 
 Lux::Graphics::OpenGL::EBO::EBO(){

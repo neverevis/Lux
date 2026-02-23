@@ -1,3 +1,5 @@
+#pragma once
+
 #include <core/log.hpp>
 #include <platform/detect.hpp>
 

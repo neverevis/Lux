@@ -1,4 +1,6 @@
 #include <graphics/opengl/vao.hpp>
+#include <graphics/opengl/vbo.hpp>
+#include <graphics/opengl/ebo.hpp>
 
 Lux::Graphics::OpenGL::VAO::VAO(){
     gl::CreateVertexArrays(1, &id_);

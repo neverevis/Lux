@@ -1,12 +1,11 @@
 #include <platform/detect.hpp>
 #ifdef PLATFORM_LINUX
 
-#include <platform/native.hpp>
 #include <platform/graphics_context.hpp>
+#include <platform/system.hpp>
 #include <platform/window.hpp>
-
+#include <platform/native.hpp>
 #include <graphics/opengl/gl.hpp>
-
 #include <core/debug.hpp>
 
 #include <EGL/eglplatform.h>

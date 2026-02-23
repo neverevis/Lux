@@ -2,6 +2,7 @@
 #ifdef PLATFORM_LINUX
 
 #include <platform/window.hpp>
+#include <platform/system.hpp>
 #include <core/debug.hpp>
 
 #include <X11/Xutil.h>

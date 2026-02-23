@@ -1,12 +1,12 @@
 #pragma once
-#include <core/event.hpp>
 #include <core/types.hpp>
+#include <core/event.hpp>
 
 namespace Lux{
     class Input{
     public:
-        static bool key_pressed(Keyboard::Key key);
-        static bool mouse_pressed(Mouse::Button mouse_button);
+        static bool key_pressed(Keyboard::Key& key);
+        static bool mouse_pressed(Mouse::Button& mouse_button);
         static i32  mouse_delta_scroll();
         static i32  mouseX();
         static i32  mouseY();

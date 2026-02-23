@@ -1,10 +1,11 @@
 #pragma once
 
 #include <graphics/opengl/gl.hpp>
-#include <graphics/opengl/vbo.hpp>
-#include <graphics/opengl/ebo.hpp>
 
 namespace Lux::Graphics::OpenGL{
+    class VBO;
+    class EBO;
+    
     class VAO{
     public:
         VAO();

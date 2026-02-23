@@ -1,6 +1,6 @@
-#include <core/log.hpp>
 #include <graphics/opengl/shader.hpp>
 #include <graphics/opengl/gl.hpp>
+#include <core/log.hpp>
 #include <core/types.hpp>
 #include <core/debug.hpp>
 

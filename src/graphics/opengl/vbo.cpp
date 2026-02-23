@@ -1,4 +1,3 @@
-#include <graphics/opengl/gl.hpp>
 #include <graphics/opengl/vbo.hpp>
 
 Lux::Graphics::OpenGL::VBO::VBO(){

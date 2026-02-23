@@ -1,7 +1,8 @@
-#include <graphics/opengl/gl.hpp>
-#include "glcorearb.h"
-#include <graphics/opengl/vao.hpp>
 #include <core/application.hpp>
+#include <graphics/opengl/gl.hpp>
+#include <graphics/opengl/vbo.hpp>
+#include <graphics/opengl/ebo.hpp>
+#include <graphics/opengl/vao.hpp>
 #include <graphics/opengl/shader.hpp>
 #include <stb_image.h>
 

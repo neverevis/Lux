@@ -1,8 +1,9 @@
 #include <platform/detect.hpp>
 #ifdef PLATFORM_WINDOWS
 
-#include <platform/window.hpp>
 #include <platform/graphics_context.hpp>
+#include <platform/window.hpp>
+#include <platform/system.hpp>
 
 #include <graphics/gl.hpp>
 
