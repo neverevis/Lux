@@ -1,8 +1,7 @@
-#include "glcorearb.h"
-#include <graphics/gl.hpp>
+#include <graphics/opengl/gl.hpp>
 #include <core/debug.hpp>
 
-namespace Lux::Graphics::gl{
+namespace Lux::Graphics::OpenGL::gl{
     bool loaded = false;
 
     PFNGLCLEARPROC                          Clear                           = nullptr;

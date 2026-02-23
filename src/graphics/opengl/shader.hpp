@@ -1,8 +1,8 @@
 #pragma once
 
-#include <graphics/gl.hpp>
+#include <graphics/opengl/gl.hpp>
 
-namespace Lux{
+namespace Lux::Graphics::OpenGL{
     class Shader{
     public:
         Shader(const char* vert_path, const char* frag_path);

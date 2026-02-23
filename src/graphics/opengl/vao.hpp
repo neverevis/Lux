@@ -1,10 +1,10 @@
 #pragma once
 
-#include <graphics/gl.hpp>
-#include <graphics/vbo.hpp>
-#include <graphics/ebo.hpp>
+#include <graphics/opengl/gl.hpp>
+#include <graphics/opengl/vbo.hpp>
+#include <graphics/opengl/ebo.hpp>
 
-namespace Lux{
+namespace Lux::Graphics::OpenGL{
     class VAO{
     public:
         VAO();

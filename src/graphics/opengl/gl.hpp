@@ -2,7 +2,7 @@
 #include <glcorearb.h>
 #include <core/debug.hpp>
 
-namespace Lux::Graphics::gl{
+namespace Lux::Graphics::OpenGL::gl{
     extern bool loaded;
 
     extern PFNGLCLEARPROC                          Clear                           ;
@@ -60,7 +60,7 @@ namespace Lux::Graphics::gl{
     #define GL_CHECK() \
     do { \
         GLenum err; \
-        while((err = Lux::Graphics::gl::GetError()) != GL_NO_ERROR) { \
+        while((err = Lux::Graphics::OpenGL::gl::GetError()) != GL_NO_ERROR) { \
             LUX_INFO("OpenGL error {}", err); \
         } \
     } while(0)

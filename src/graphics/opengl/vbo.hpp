@@ -1,14 +1,14 @@
 #pragma once
 
-#include <graphics/gl.hpp>
+#include <graphics/opengl/gl.hpp>
 
-namespace Lux{
-    class EBO{
+namespace Lux::Graphics::OpenGL{
+    class VBO{
     public:
         const GLuint& id = id_;
 
-        EBO();
-        ~EBO();
+        VBO();
+        ~VBO();
 
         void set_size(size_t size);
         void submit_data(const void* data, size_t size, size_t offset);

@@ -1,7 +1,6 @@
-#include "core/log.hpp"
-#include "glcorearb.h"
-#include <graphics/shader.hpp>
-#include <graphics/gl.hpp>
+#include <core/log.hpp>
+#include <graphics/opengl/shader.hpp>
+#include <graphics/opengl/gl.hpp>
 #include <core/types.hpp>
 #include <core/debug.hpp>
 
@@ -19,8 +18,7 @@ std::string get_source_str(const char* path){
     return buffer.str();
 }
 
-namespace gl = Lux::Graphics::gl;
-Lux::Shader::Shader(const char* vert_path, const char* frag_path){
+Lux::Graphics::OpenGL::Shader::Shader(const char* vert_path, const char* frag_path){
     GLuint v_shader = gl::CreateShader(GL_VERTEX_SHADER);
     GLuint f_shader = gl::CreateShader(GL_FRAGMENT_SHADER);
 
@@ -52,15 +50,15 @@ Lux::Shader::Shader(const char* vert_path, const char* frag_path){
 
 }
 
-Lux::Shader::~Shader(){
+Lux::Graphics::OpenGL::Shader::~Shader(){
     gl::DeleteProgram(id_);
 }
 
-void Lux::Shader::use(){
+void Lux::Graphics::OpenGL::Shader::use(){
     gl::UseProgram(id_);
 }
 
-void Lux::Shader::check_shader_errors(GLuint shader){
+void Lux::Graphics::OpenGL::Shader::check_shader_errors(GLuint shader){
     GLint success;
     
     gl::GetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -73,7 +71,7 @@ void Lux::Shader::check_shader_errors(GLuint shader){
     }
 }
 
-void Lux::Shader::check_linking_errors(){
+void Lux::Graphics::OpenGL::Shader::check_linking_errors(){
     GLint success;
     
     gl::GetProgramiv(id_, GL_LINK_STATUS, &success);
