@@ -1,35 +1,39 @@
+#include "graphics/renderer2D.hpp"
 #include <core/application.hpp>
 
 #include <platform/system.hpp>
-#include <platform/graphics_context.hpp>
 #include <platform/window.hpp>
+#include <platform/graphics_context.hpp>
 
-#include <core/time.hpp>
-#include <memory>
+#include <core/event.hpp>
+#include <core/input.hpp>
 
-struct Lux::Application::AppImpl{
+struct Lux::Application::Impl{
     Lux::Platform::System           system_;
     Lux::Platform::GraphicsContext  context_;
     Lux::Platform::Window           window_;
 
-    AppImpl(i32 width, i32 height, const char* title)
-        : system_(),
-          context_(system_),
-          window_(system_, context_.surface_settings, width, height, title)
+    Impl(i32 width, i32 height, const char* title)
+        : system_()
+        , context_(system_)
+        , window_(system_, context_.surface_settings, width, height, title)
     {}
 };
 
 Lux::Application::Application(i32 width, i32 height, const char* title)
     :delta_time(),
-     app_impl(std::make_unique<AppImpl>(width, height, title))
+     impl_(std::make_unique<Impl>(width, height, title))
 {
-    app_impl->context_.create(app_impl->window_);
-    app_impl->context_.make_current();
-    app_impl->window_.callback_ = Lux::Input::on_event;
-    app_impl->window_.show();
+    impl_->context_.create(impl_->window_);
+    impl_->context_.make_current();
+    renderer = new Graphics::Renderer2D;
+    impl_->window_.callback_ = Lux::Input::on_event;
+    impl_->window_.show();
 }
 
-Lux::Application::~Application() = default;
+Lux::Application::~Application(){
+    delete renderer;
+}
 
 void Lux::Application::run(){
     loop();
@@ -42,15 +46,17 @@ void Lux::Application::loop(){
 
     last_time = Time::now();
     
-    while(!app_impl->window_.should_close()){
+    while(!impl_->window_.should_close()){
         current_time = Time::now();
         delta_time = current_time - last_time;
         last_time = current_time;
 
-        app_impl->window_.poll_events();
+        impl_->window_.poll_events();
+        renderer->begin();
         update();
         render();
-        app_impl->context_.swap_buffers();
+        renderer->submit();
+        impl_->context_.swap_buffers();
         Input::flush_frame_data();
     }
 }

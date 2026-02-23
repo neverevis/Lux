@@ -1,14 +1,14 @@
 #pragma once
 #include <core/types.hpp>
 #include <core/time.hpp>
-#include <core/event.hpp>
-#include <core/input.hpp>
+#include <graphics/renderer2D.hpp>
 #include <memory>
 
 namespace Lux{
     class Application{
         public:
         Lux::Time delta_time;
+        Lux::Graphics::Renderer2D* renderer;
         
         Application(i32 width, i32 height, const char* title);
         ~Application();
@@ -19,8 +19,8 @@ namespace Lux{
         virtual void update() = 0;
         virtual void render() = 0;
     private:
-        struct AppImpl;
-        std::unique_ptr<AppImpl> app_impl;
+        struct Impl;
+        std::unique_ptr<Impl> impl_;
         
         void loop();
     };
