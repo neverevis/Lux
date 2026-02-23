@@ -5,7 +5,7 @@
 #include <platform/window.hpp>
 #include <platform/system.hpp>
 
-#include <graphics/gl.hpp>
+#include <graphics/opengl/gl.hpp>
 
 #include <core/debug.hpp>
 
@@ -125,8 +125,8 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 void Lux::Platform::GraphicsContext::make_current(){
     
     wglMakeCurrent((HDC) native.hdc, (HGLRC) native.hglrc);
-    if(!Graphics::gl::loaded)
-        Graphics::gl::init(get_fn_address);
+    if(!Graphics::OpenGL::gl::loaded)
+        Graphics::OpenGL::gl::init(get_fn_address);
 }
 
 void* Lux::Platform::GraphicsContext::get_fn_address(const char* fn_name){

@@ -8,11 +8,11 @@ i32 Lux::Input::s_mouseY = 0;
 i32 Lux::Input::s_delta_scroll = 0;
 
 
-bool Lux::Input::key_pressed(Keyboard::Key& key){
+bool Lux::Input::key_pressed(Keyboard::Key key){
     return s_keys[(u32)key];
 }
 
-bool Lux::Input::mouse_pressed(Mouse::Button& mouse_button){
+bool Lux::Input::mouse_pressed(Mouse::Button mouse_button){
     return s_mouse[(u8)mouse_button];
 }
 

@@ -1,6 +1,7 @@
 #include "graphics/renderer2D.hpp"
 #include <core/application.hpp>
 
+#include <memory>
 #include <platform/system.hpp>
 #include <platform/window.hpp>
 #include <platform/graphics_context.hpp>
@@ -26,14 +27,12 @@ Lux::Application::Application(i32 width, i32 height, const char* title)
 {
     impl_->context_.create(impl_->window_);
     impl_->context_.make_current();
-    renderer = new Graphics::Renderer2D;
+    renderer = std::make_unique<Graphics::Renderer2D>();
     impl_->window_.callback_ = Lux::Input::on_event;
     impl_->window_.show();
 }
 
-Lux::Application::~Application(){
-    delete renderer;
-}
+Lux::Application::~Application() = default;
 
 void Lux::Application::run(){
     loop();

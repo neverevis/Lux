@@ -8,7 +8,7 @@ namespace Lux{
     class Application{
         public:
         Lux::Time delta_time;
-        Lux::Graphics::Renderer2D* renderer;
+        std::unique_ptr<Graphics::Renderer2D>renderer;
         
         Application(i32 width, i32 height, const char* title);
         ~Application();
