@@ -21,9 +21,9 @@ public:
         }
 
         if(up){
-            x+= 20;
+            x+= 800 * delta_time.as_seconds();
         }else{
-            x-= 20;
+            x-= 800 * delta_time.as_seconds();
         }
     }
 

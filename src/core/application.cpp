@@ -21,8 +21,8 @@ struct Lux::Application::Impl{
 };
 
 Lux::Application::Application(i32 width, i32 height, const char* title)
-    :delta_time(),
-     impl_(std::make_unique<Impl>(width, height, title))
+    : delta_time()
+    , impl_(std::make_unique<Impl>(width, height, title))
 {
     impl_->context_.create(impl_->window_);
     impl_->context_.make_current();
