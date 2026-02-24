@@ -5,7 +5,7 @@
 #include <platform/system.hpp>
 #include <platform/window.hpp>
 #include <platform/native.hpp>
-#include <graphics/opengl/gl.hpp>
+#include <graphics/gl.hpp>
 #include <core/debug.hpp>
 
 #include <EGL/eglplatform.h>
@@ -82,7 +82,7 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
         return false;
     }
 
-    Lux::Graphics::OpenGL::gl::init(get_fn_address);
+    Lux::Graphics::gl::init(get_fn_address);
 
     return true;
 }
@@ -93,8 +93,8 @@ void Lux::Platform::GraphicsContext::swap_buffers(){
 
 void Lux::Platform::GraphicsContext::make_current(){
     eglMakeCurrent(native.egl_display, native.egl_surface, native.egl_surface, native.egl_context);
-    if(!Graphics::OpenGL::gl::loaded)
-        Graphics::OpenGL::gl::init(get_fn_address);
+    if(!Graphics::gl::loaded)
+        Graphics::gl::init(get_fn_address);
 }
 
 void* Lux::Platform::GraphicsContext::get_fn_address(const char* fn_name){

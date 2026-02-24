@@ -4,6 +4,7 @@
 #include <platform/system.hpp>
 #include <platform/window.hpp>
 #include <platform/graphics_context.hpp>
+#include <graphics/renderer.hpp>
 
 #include <core/event.hpp>
 #include <core/input.hpp>

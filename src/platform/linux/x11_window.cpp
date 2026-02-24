@@ -11,8 +11,6 @@ Lux::Platform::Window::Window(const System& system, const SurfaceNativeSettings&
     : native(native_)
     , system_(system)
     , close_flag_(false)
-    , width(width_)
-    , height(height_)
     , width_(width)
     , height_(height)
 {
@@ -62,8 +60,8 @@ bool Lux::Platform::Window::show(){
         
         XMapWindow((Display*) system_.native.display, native.window);
 
-        int x = screen_width/2 - width/2;
-        int y = screen_height/2 - height/2;
+        int x = screen_width/2 - width_/2;
+        int y = screen_height/2 - height_/2;
 
         XMoveWindow((Display*) system_.native.display, native.window, x, y);
 
