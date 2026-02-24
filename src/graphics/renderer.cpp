@@ -45,14 +45,13 @@ Lux::Graphics::Renderer::Renderer()
 Lux::Graphics::Renderer::~Renderer() = default;
 
 void Lux::Graphics::Renderer::begin(){
+    gl::Disable(GL_CULL_FACE);
+    gl::Disable(GL_DEPTH_TEST);
     gl::Clear(GL_COLOR_BUFFER_BIT);
 }
 
 void Lux::Graphics::Renderer::submit(){
     for(RenderRequest& r : render_queue){
-        std::cout << "mesh address: " << r.mesh << std::endl;
-        std::cout << "count: " << r.count << std::endl;
-
         vao.link_vbo(r.mesh->get_vbo(), sizeof(VertexData), 0);
         vao.link_ebo(r.mesh->get_ebo());
 

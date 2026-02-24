@@ -21,9 +21,6 @@ namespace Lux::Graphics{
         VBO vertices_vbo_;
         EBO indices_ebo_;
 
-        size_t vertices_vbo_size_ = 0;
-        size_t indices_ebo_size_ = 0;
-
         u32 index_count_ = 0;
     };
 }

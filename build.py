@@ -172,7 +172,6 @@ def clear_folder(folder_path):
 
 def get_compile_command(source, object):
     compile_command = f"{COMPILER} -c {COMPILE_FLAGS} {source.as_posix()} -MMD -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
-    print(f"{compile_command}")
     return compile_command
 
 def save_compile_commands(queue):
