@@ -1,8 +1,8 @@
 #pragma once
 #include <core/types.hpp>
 
-#include <print>
 #include <format>
+#include <iostream>
 
 #define reset_txt       "\033[0m"
 #define black_txt       "\033[30m"
@@ -17,7 +17,7 @@
 namespace Lux{
     template<typename... Args>
     void log(const char* label, const char* label_color, const char* file, i32 line ,std::format_string<Args...> fmt, Args&&... args){
-        std::println("<{}{}{}> <{}{}{} : {}{}{}> {}{}", label_color, label, reset_txt, black_txt, file, reset_txt, green_txt, line, reset_txt, std::format(fmt, std::forward<Args>(args)...), reset_txt);
+        std::cout << std::format("<{}{}{}> <{}{}{} : {}{}{}> {}{}", label_color, label, reset_txt, black_txt, file, reset_txt, green_txt, line, reset_txt, std::format(fmt, std::forward<Args>(args)...), reset_txt) << std::endl;
     }
 
     constexpr const char* filename_only(const char* path) {

@@ -35,7 +35,13 @@ EXECUTABLE_NAME =   config["executable name"]
 if PLATFORM == "Windows":
     EXECUTABLE_NAME += ".exe"
 
-CPP_VERSION     =   f"-std=c++{config['c++ version']}"
+CPP_VERSION = ""
+
+if COMPILER == "clang++":
+    CPP_VERSION     =   f"-std=c++{config['c++ version']}"
+elif COMPILER == "g++":
+    CPP_VERSION     =   f"-std=gnu++{config['c++ version']}"
+
 INCLUDES        =   " ".join(["-I" + include for include in config["includes"]])
 
 COMPILE_FLAGS = ""
@@ -45,7 +51,7 @@ PLATFORM_FLAGS = ""
 if PLATFORM == "Windows":
     PLATFORM_FLAGS = "-luser32 -lopengl32 -lgdi32"
 elif PLATFORM == "Linux":
-    PLATFORM_FLAGS = "-lEGL -lGL -lX11"
+    PLATFORM_FLAGS = "-l:libEGL.so.1 -lX11"
 
 if DEBUG_MODE:
         COMPILE_FLAGS = "-g -O0 -DLUX_DEBUG" #-g keeps symbols in binary and -O0 does not optimize (also to keep symbols)
@@ -168,7 +174,9 @@ def clear_folder(folder_path):
         folder_path.mkdir(parents=True, exist_ok=True)
 
 def get_compile_command(source, object):
-    return F"{COMPILER} -c {COMPILE_FLAGS} {source.as_posix()} -MMD -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
+    compile_command = f"{COMPILER} -c {COMPILE_FLAGS} {source.as_posix()} -MMD -o {object.as_posix()} {CPP_VERSION} -I{SOURCE_DIR} {INCLUDES}"
+    print(f"{compile_command}")
+    return compile_command
 
 def save_compile_commands(queue):
     json_data = []

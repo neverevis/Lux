@@ -1,9 +1,9 @@
 {
     "executable name" :     "sandbox",
-    "compiler" :            "clang",
+    "compiler" :            "gcc",
     "source directory" :    "src",
     "build directory" :     "build",
     "compilation mode" :    "release",
-    "c++ version" :         23,
+    "c++ version" :         20,
     "includes" :            ["src/external"]
 }
