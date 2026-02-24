@@ -1,4 +1,3 @@
-#include "graphics/renderer2D.hpp"
 #include <core/application.hpp>
 
 #include <memory>
@@ -13,24 +12,28 @@ struct Lux::Application::Impl{
     Lux::Platform::System           system_;
     Lux::Platform::GraphicsContext  context_;
     Lux::Platform::Window           window_;
+    Lux::Graphics::Renderer         renderer_;
 
     Impl(i32 width, i32 height, const char* title)
         : system_()
         , context_(system_)
         , window_(system_, context_.surface_settings, width, height, title)
+        , renderer_((prepare_opengl(), Lux::Graphics::Renderer()))
     {}
+
+private:
+    void prepare_opengl(){
+        context_.create(window_);
+        context_.make_current();
+        window_.callback_ = Lux::Input::on_event;
+        window_.show();
+    }
 };
 
 Lux::Application::Application(i32 width, i32 height, const char* title)
     : delta_time()
     , impl_(std::make_unique<Impl>(width, height, title))
-{
-    impl_->context_.create(impl_->window_);
-    impl_->context_.make_current();
-    renderer = std::make_unique<Graphics::Renderer2D>();
-    impl_->window_.callback_ = Lux::Input::on_event;
-    impl_->window_.show();
-}
+{}
 
 Lux::Application::~Application() = default;
 
@@ -51,10 +54,10 @@ void Lux::Application::loop(){
         last_time = current_time;
 
         impl_->window_.poll_events();
-        renderer->begin();
+        impl_->renderer_.begin();
         update();
         render();
-        renderer->submit();
+        impl_->renderer_.submit();
         impl_->context_.swap_buffers();
         Input::flush_frame_data();
     }

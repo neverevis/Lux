@@ -188,6 +188,8 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     
             //action
             case WM_SIZE:
+                window->width_ = static_cast<i32>(LOWORD(lparam));
+                window->height_ = static_cast<i32>(HIWORD(lparam));
                 switch(wparam){
                     case SIZE_MINIMIZED:
                         event.type = Lux::Event::Type::Action;
@@ -220,8 +222,8 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 Lux::Platform::Window::Window(const System& system, const SurfaceNativeSettings& surface_settings, i32 width, i32 height, const char* title)
     : system_(system)
     , native(native_)
-    , width(width_)
-    , height(height_)
+    , width_(width)
+    , height_(height)
 
 {
     if(!class_registered){

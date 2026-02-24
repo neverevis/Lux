@@ -8,8 +8,8 @@ namespace Lux::Platform{
     class Window{
     public:
         const WindowNativeData& native;
-        const u16& width;
-        const u16& height;
+        u16 width_;
+        u16 height_;
 
         void (*callback_)(Event& event) = nullptr;
 
@@ -26,8 +26,5 @@ namespace Lux::Platform{
         const System&       system_;
 
         bool close_flag_ = false;
-
-        u16 width_;
-        u16 height_;
     };
 }

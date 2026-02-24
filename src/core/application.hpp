@@ -1,14 +1,12 @@
 #pragma once
 #include <core/types.hpp>
 #include <core/time.hpp>
-#include <graphics/renderer2D.hpp>
 #include <memory>
 
 namespace Lux{
     class Application{
         public:
         Lux::Time delta_time;
-        std::unique_ptr<Graphics::Renderer2D>renderer;
         
         Application(i32 width, i32 height, const char* title);
         ~Application();

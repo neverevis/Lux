@@ -2,8 +2,8 @@
     "executable name" :     "sandbox",
     "compiler" :            "clang",
     "source directory" :    "src",
-    "build directory" :     "release",
-    "compilation mode" :    "debug",
+    "build directory" :     "build",
+    "compilation mode" :    "release",
     "c++ version" :         23,
     "includes" :            ["src/external"]
 }
