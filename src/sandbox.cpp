@@ -1,5 +1,6 @@
 #include "core/application.hpp"
 #include "core/types.hpp"
+#include <graphics/gl.hpp>
 
 class Sandbox : public Lux::Application{
 public:
@@ -10,15 +11,14 @@ public:
     ~Sandbox() = default;
 
     void setup(){
-
     }
 
     void update(){
-
+        GL_CHECK();
     }
 
     void render(){
-
+        render_quad();
     }
 };
 

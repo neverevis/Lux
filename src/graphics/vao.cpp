@@ -15,19 +15,19 @@ void Lux::Graphics::VAO::bind(){
     gl::BindVertexArray(id_);
 }
 
-void Lux::Graphics::VAO::link_vbo(VBO& vbo, size_t stride, u32 binding_index){
+void Lux::Graphics::VAO::link_vbo(const VBO& vbo, size_t stride, u32 binding_index) const{
     // stores a vbo in a binding index and sets a stride
     gl::VertexArrayVertexBuffer(id_, binding_index, vbo.id, 0, stride);
 }
 
-void Lux::Graphics::VAO::link_ebo(EBO& ebo){
+void Lux::Graphics::VAO::link_ebo(const EBO& ebo) const{
     gl::VertexArrayElementBuffer(id_, ebo.id);
 }
 
-void Lux::Graphics::VAO::set_location_format(u32 location, VertexType type, u32 count){
+void Lux::Graphics::VAO::set_location_format(u32 location, VertexType type, u32 count, u32 offset){
     GLenum gl_type = gl::to_gl_enum(type);
     gl::EnableVertexArrayAttrib(id_, location);
-    gl::VertexArrayAttribFormat(id_, location, count, gl_type, GL_FALSE, 0);
+    gl::VertexArrayAttribFormat(id_, location, count, gl_type, GL_FALSE, offset * sizeof(f32));
 }
 
 void Lux::Graphics::VAO::set_location_binding(u32 location , u32 binding_index){

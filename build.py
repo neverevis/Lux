@@ -35,12 +35,9 @@ EXECUTABLE_NAME =   config["executable name"]
 if PLATFORM == "Windows":
     EXECUTABLE_NAME += ".exe"
 
-CPP_VERSION = ""
 
-if COMPILER == "clang++":
-    CPP_VERSION     =   f"-std=c++{config['c++ version']}"
-elif COMPILER == "g++":
-    CPP_VERSION     =   f"-std=gnu++{config['c++ version']}"
+CPP_VERSION     =   f"-std=c++{config['c++ version']}"
+
 
 INCLUDES        =   " ".join(["-I" + include for include in config["includes"]])
 

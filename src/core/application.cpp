@@ -63,3 +63,7 @@ void Lux::Application::loop(){
         Input::flush_frame_data();
     }
 }
+
+void Lux::Application::render_quad(){
+    impl_->renderer_.draw_rect();
+}
