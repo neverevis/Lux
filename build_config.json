@@ -1,6 +1,6 @@
 {
     "executable name" :     "sandbox",
-    "compiler" :            "clang",
+    "compiler" :            "gcc",
     "source directory" :    "src",
     "build directory" :     "build",
     "compilation mode" :    "debug",
