@@ -60,6 +60,11 @@ void Lux::Graphics::Shader::use(){
     gl::UseProgram(id_);
 }
 
+void Lux::Graphics::Shader::set_uniform_matrix4f(const Lux::Math::Matrix4& matrix4, const char* name){
+    i32 location = gl::GetUniformLocation(id_, name);
+    gl::UniformMatrix4fv(location, 1, GL_FALSE, matrix4.get_data());
+}
+
 void Lux::Graphics::Shader::check_shader_errors(u32 shader){
     GLint success;
     

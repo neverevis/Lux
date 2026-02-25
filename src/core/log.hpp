@@ -14,7 +14,7 @@
 #define cyan_txt        "\033[36m"
 #define white_txt       "\033[37m"
 
-namespace Lux{
+namespace Lux::Core{
     template<typename... Args>
     void log(const char* label, const char* label_color, const char* file, i32 line ,std::format_string<Args...> fmt, Args&&... args){
         std::cout << std::format("<{}{}{}> <{}{}{} : {}{}{}> {}{}", label_color, label, reset_txt, black_txt, file, reset_txt, green_txt, line, reset_txt, std::format(fmt, std::forward<Args>(args)...), reset_txt) << std::endl;
@@ -31,10 +31,10 @@ namespace Lux{
 }
 
 #if defined(LUX_DEBUG)
-#define LUX_INFO(msg, ...)  Lux::log("info", cyan_txt, Lux::filename_only(__FILE__), __LINE__, msg __VA_OPT__(,) __VA_ARGS__)
-#define LUX_WARN(msg, ...)  Lux::log("warn", yellow_txt,__FILE__, __LINE__, msg __VA_OPT__(,) __VA_ARGS__)
+#define LUX_INFO(msg, ...)  Lux::Core::log("info", cyan_txt, Lux::Core::filename_only(__FILE__), __LINE__, msg __VA_OPT__(,) __VA_ARGS__)
+#define LUX_WARN(msg, ...)  Lux::Core::log("warn", yellow_txt,Lux::Core::filename_only(__FILE__), __LINE__, msg __VA_OPT__(,) __VA_ARGS__)
 #else
 #define LUX_INFO(msg, ...)
 #define LUX_WARN(msg, ...)
 #endif
-#define LUX_ERROR(msg, ...) Lux::log("error", red_txt,__FILE__, __LINE__, msg __VA_OPT__(,) __VA_ARGS__)
+#define LUX_ERROR(msg, ...) Lux::Core::log("error", red_txt,Lux::Core::filename_only(__FILE__), __LINE__, msg __VA_OPT__(,) __VA_ARGS__)

@@ -11,7 +11,7 @@ namespace Lux::Platform{
         u16 width_;
         u16 height_;
 
-        void (*callback_)(Event& event) = nullptr;
+        void (*callback_)(Core::Event& event) = nullptr;
 
         Window(const System& system, const SurfaceNativeSettings& surface_settings, i32 width, i32 height, const char* title);
         ~Window();

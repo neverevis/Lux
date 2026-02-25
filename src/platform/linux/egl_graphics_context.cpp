@@ -50,7 +50,7 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
 
     LUX_VERIFY(eglBindAPI(EGL_OPENGL_API), "failed to bind OpenGL API");
 
-    int version[8][2] = {{4,6},{4,5},{4,4},{4,3},{4,2},{4,1},{4,0},{3,3}};
+    int version[8][2] = {{4,6},{4,5}};
     int i = 0;
 
     bool done = false;

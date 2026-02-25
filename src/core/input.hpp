@@ -2,7 +2,7 @@
 #include <core/types.hpp>
 #include <core/event.hpp>
 
-namespace Lux{
+namespace Lux::Core{
     class Input{
     public:
         static bool key_pressed(Keyboard::Key key);

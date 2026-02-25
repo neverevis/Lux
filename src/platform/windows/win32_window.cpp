@@ -14,71 +14,71 @@
 
 static bool class_registered = false;
 
-Lux::Keyboard::Key translate_key(WPARAM key, LPARAM lparam){
+Lux::Core::Keyboard::Key translate_key(WPARAM key, LPARAM lparam){
     if(key >= 'A' && key <= 'Z'){
-        return (Lux::Keyboard::Key)(key - 'A' + 1);
+        return (Lux::Core::Keyboard::Key)(key - 'A' + 1);
     }
 
     if(key >= '0' && key <= '9'){
-        return (Lux::Keyboard::Key)(key - '0' + (int)Lux::Keyboard::Key::Z + 1);
+        return (Lux::Core::Keyboard::Key)(key - '0' + (int)Lux::Core::Keyboard::Key::Z + 1);
     }
 
     switch(key){
         case VK_ESCAPE:
-            return Lux::Keyboard::Key::Escape;
+            return Lux::Core::Keyboard::Key::Escape;
         case VK_SPACE:
-            return Lux::Keyboard::Key::Space;
+            return Lux::Core::Keyboard::Key::Space;
         case VK_RETURN:
-            return Lux::Keyboard::Key::Enter;
+            return Lux::Core::Keyboard::Key::Enter;
         case VK_BACK:
-            return Lux::Keyboard::Key::Backspace;
+            return Lux::Core::Keyboard::Key::Backspace;
         
         case VK_UP:
-            return Lux::Keyboard::Key::Up;
+            return Lux::Core::Keyboard::Key::Up;
         case VK_DOWN:
-            return Lux::Keyboard::Key::Down;
+            return Lux::Core::Keyboard::Key::Down;
         case VK_LEFT:
-            return Lux::Keyboard::Key::Left;
+            return Lux::Core::Keyboard::Key::Left;
         case VK_RIGHT:
-            return Lux::Keyboard::Key::Right;
+            return Lux::Core::Keyboard::Key::Right;
         
         case VK_F1:
-            return Lux::Keyboard::Key::F1;
+            return Lux::Core::Keyboard::Key::F1;
         case VK_F2:
-            return Lux::Keyboard::Key::F2;
+            return Lux::Core::Keyboard::Key::F2;
         case VK_F3:
-            return Lux::Keyboard::Key::F3;
+            return Lux::Core::Keyboard::Key::F3;
         case VK_F4:
-            return Lux::Keyboard::Key::F4;
+            return Lux::Core::Keyboard::Key::F4;
         case VK_F5:
-            return Lux::Keyboard::Key::F5;
+            return Lux::Core::Keyboard::Key::F5;
         case VK_F6:
-            return Lux::Keyboard::Key::F6;
+            return Lux::Core::Keyboard::Key::F6;
         case VK_F7:
-            return Lux::Keyboard::Key::F7;
+            return Lux::Core::Keyboard::Key::F7;
         case VK_F8:
-            return Lux::Keyboard::Key::F8;
+            return Lux::Core::Keyboard::Key::F8;
         case VK_F9:
-            return Lux::Keyboard::Key::F9;
+            return Lux::Core::Keyboard::Key::F9;
         case VK_F10:
-            return Lux::Keyboard::Key::F10;
+            return Lux::Core::Keyboard::Key::F10;
         case VK_F11:
-            return Lux::Keyboard::Key::F11;
+            return Lux::Core::Keyboard::Key::F11;
         case VK_F12:
-            return Lux::Keyboard::Key::F12;
+            return Lux::Core::Keyboard::Key::F12;
 
         case VK_DELETE:
-            return Lux::Keyboard::Key::Delete;
+            return Lux::Core::Keyboard::Key::Delete;
         case VK_PRIOR:
-            return Lux::Keyboard::Key::PageUp;
+            return Lux::Core::Keyboard::Key::PageUp;
         case VK_NEXT:
-            return Lux::Keyboard::Key::PageDown;
+            return Lux::Core::Keyboard::Key::PageDown;
         case VK_HOME:
-            return Lux::Keyboard::Key::Home;
+            return Lux::Core::Keyboard::Key::Home;
         case VK_END:
-            return Lux::Keyboard::Key::End;
+            return Lux::Core::Keyboard::Key::End;
         case VK_INSERT:
-            return Lux::Keyboard::Key::Insert;
+            return Lux::Core::Keyboard::Key::Insert;
     }
 
     /*
@@ -98,17 +98,17 @@ Lux::Keyboard::Key translate_key(WPARAM key, LPARAM lparam){
         //Shift message doesn't support extended bit so it need to be translated by windows using the scancode
         case VK_SHIFT:{
             WPARAM shift = MapVirtualKeyA(scancode, MAPVK_VSC_TO_VK_EX);
-            return shift == VK_LSHIFT ? Lux::Keyboard::Key::LShift : Lux::Keyboard::Key::RShift;
+            return shift == VK_LSHIFT ? Lux::Core::Keyboard::Key::LShift : Lux::Core::Keyboard::Key::RShift;
         }
         
         //The extended bit indicates if the key is the Left one
         case VK_CONTROL:
-            return is_extended ? Lux::Keyboard::Key::RCtrl : Lux::Keyboard::Key::LCtrl;
+            return is_extended ? Lux::Core::Keyboard::Key::RCtrl : Lux::Core::Keyboard::Key::LCtrl;
         case VK_MENU:
-            return is_extended ? Lux::Keyboard::Key::RAlt : Lux::Keyboard::Key::LAlt;
+            return is_extended ? Lux::Core::Keyboard::Key::RAlt : Lux::Core::Keyboard::Key::LAlt;
     }
 
-    return Lux::Keyboard::Key::Unknown;
+    return Lux::Core::Keyboard::Key::Unknown;
 }
 
 
@@ -117,7 +117,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
     Lux::Platform::Window* window = (Lux::Platform::Window*) GetWindowLongPtrA(hwnd, GWLP_USERDATA);
 
     if(window){
-        Lux::Event event{};
+        Lux::Core::Event event{};
         bool dispatch = false;
 
         switch(msg){
@@ -128,60 +128,60 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
             //keyboard
             case WM_SYSKEYDOWN:
             case WM_KEYDOWN:
-                event.type = Lux::Event::Type::Keyboard;
-                event.keyboard.state = Lux::Keyboard::State::Pressed;
+                event.type = Lux::Core::Event::Type::Keyboard;
+                event.keyboard.state = Lux::Core::Keyboard::State::Pressed;
                 event.keyboard.key = translate_key(wparam, lparam);
                 dispatch = true;
                 break;
 
             case WM_SYSKEYUP:
             case WM_KEYUP:
-                event.type = Lux::Event::Type::Keyboard;
-                event.keyboard.state = Lux::Keyboard::State::Released;
+                event.type = Lux::Core::Event::Type::Keyboard;
+                event.keyboard.state = Lux::Core::Keyboard::State::Released;
                 event.keyboard.key = translate_key(wparam, lparam);
                 dispatch = true;
                 break;
 
             //mouse
             case WM_MOUSEMOVE:
-                event.type = Lux::Event::Type::Mouse;
-                event.mouse.state = Lux::Mouse::State::Moved;
+                event.type = Lux::Core::Event::Type::Mouse;
+                event.mouse.state = Lux::Core::Mouse::State::Moved;
                 event.mouse.x = (i32) GET_X_LPARAM(lparam);
                 event.mouse.y = (i32) GET_Y_LPARAM(lparam);
                 dispatch = true;
                 break;
 
             case WM_LBUTTONDOWN:
-                event.type = Lux::Event::Type::Mouse;
-                event.mouse.state = Lux::Mouse::State::Pressed;
-                event.mouse.button = Lux::Mouse::Button::Left;
+                event.type = Lux::Core::Event::Type::Mouse;
+                event.mouse.state = Lux::Core::Mouse::State::Pressed;
+                event.mouse.button = Lux::Core::Mouse::Button::Left;
                 dispatch = true;
                 break;
 
             case WM_RBUTTONDOWN:
-                event.type = Lux::Event::Type::Mouse;
-                event.mouse.state = Lux::Mouse::State::Pressed;
-                event.mouse.button = Lux::Mouse::Button::Right;
+                event.type = Lux::Core::Event::Type::Mouse;
+                event.mouse.state = Lux::Core::Mouse::State::Pressed;
+                event.mouse.button = Lux::Core::Mouse::Button::Right;
                 dispatch = true;
                 break;
 
             case WM_LBUTTONUP:
-                event.type = Lux::Event::Type::Mouse;
-                event.mouse.state = Lux::Mouse::State::Released;
-                event.mouse.button = Lux::Mouse::Button::Left;
+                event.type = Lux::Core::Event::Type::Mouse;
+                event.mouse.state = Lux::Core::Mouse::State::Released;
+                event.mouse.button = Lux::Core::Mouse::Button::Left;
                 dispatch = true;
                 break;
 
             case WM_RBUTTONUP:
-                event.type = Lux::Event::Type::Mouse;
-                event.mouse.state = Lux::Mouse::State::Released;
-                event.mouse.button = Lux::Mouse::Button::Right;
+                event.type = Lux::Core::Event::Type::Mouse;
+                event.mouse.state = Lux::Core::Mouse::State::Released;
+                event.mouse.button = Lux::Core::Mouse::Button::Right;
                 dispatch = true;
                 break;
 
             case WM_MOUSEWHEEL:
-                event.type = Lux::Event::Type::Mouse;
-                event.mouse.state = Lux::Mouse::State::Scrolled;
+                event.type = Lux::Core::Event::Type::Mouse;
+                event.mouse.state = Lux::Core::Mouse::State::Scrolled;
                 event.mouse.delta_scroll = GET_WHEEL_DELTA_WPARAM(wparam);
                 dispatch = true;
                 break;
@@ -192,20 +192,20 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
                 window->height_ = static_cast<i32>(HIWORD(lparam));
                 switch(wparam){
                     case SIZE_MINIMIZED:
-                        event.type = Lux::Event::Type::Action;
-                        event.action = Lux::Action::Minimize;
+                        event.type = Lux::Core::Event::Type::Action;
+                        event.action = Lux::Core::Action::Minimize;
                         dispatch = true;
                         break;
 
                     case SIZE_MAXIMIZED:
-                        event.type = Lux::Event::Type::Action;
-                        event.action = Lux::Action::Resize;
+                        event.type = Lux::Core::Event::Type::Action;
+                        event.action = Lux::Core::Action::Resize;
                         dispatch = true;
                         break;
 
                     case SIZE_RESTORED:
-                        event.type = Lux::Event::Type::Action;
-                        event.action = Lux::Action::Resize;
+                        event.type = Lux::Core::Event::Type::Action;
+                        event.action = Lux::Core::Action::Resize;
                         dispatch = true;
                         break;
                 }

@@ -2,7 +2,7 @@
 
 #include <core/types.hpp>
 
-namespace Lux{
+namespace Lux::Core{
     class Time{
     private:
         i64 nanoseconds_;
@@ -21,11 +21,11 @@ namespace Lux{
         Time operator*(const Time& other) const;
         Time operator/(const Time& other) const;
 
-        Time operator+=(const Time&  other);
-        Time operator-=(const Time&  other);
-        Time operator*=(const Time&  other);
-        Time operator/=(const Time&  other);
+        Time& operator+=(const Time&  other);
+        Time& operator-=(const Time&  other);
+        Time& operator*=(const Time&  other);
+        Time& operator/=(const Time&  other);
 
-        Time operator=(const Time& other);
+        Time& operator=(const Time& other);
     };
 }

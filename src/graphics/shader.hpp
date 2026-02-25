@@ -1,5 +1,6 @@
 #pragma once
 #include <core/types.hpp>
+#include <math/matrix4.hpp>
 
 namespace Lux::Graphics{
     class Shader{
@@ -8,6 +9,7 @@ namespace Lux::Graphics{
         ~Shader();
 
         void use();
+        void set_uniform_matrix4f(const Lux::Math::Matrix4& matrix4, const char* name);
     private:
         u32 id_;
 

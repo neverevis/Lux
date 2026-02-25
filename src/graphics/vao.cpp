@@ -1,3 +1,4 @@
+#include "graphics/data.hpp"
 #include <graphics/vao.hpp>
 #include <graphics/vbo.hpp>
 #include <graphics/ebo.hpp>
@@ -26,8 +27,24 @@ void Lux::Graphics::VAO::link_ebo(const EBO& ebo) const{
 
 void Lux::Graphics::VAO::set_location_format(u32 location, VertexType type, u32 count, u32 offset){
     GLenum gl_type = gl::to_gl_enum(type);
+
+    size_t type_size;
+
+    switch(type){
+        case VertexType::Float32:
+            type_size = sizeof(f32); break;
+        case VertexType::Int32:
+            type_size = sizeof(i32); break;
+        case VertexType::Byte:
+            type_size = 1; break;
+        case VertexType::UnsignedByte:
+            type_size = 1; break;
+        case VertexType::Short16:
+            type_size = sizeof(i16); break;
+    }
+
     gl::EnableVertexArrayAttrib(id_, location);
-    gl::VertexArrayAttribFormat(id_, location, count, gl_type, GL_FALSE, offset * sizeof(f32));
+    gl::VertexArrayAttribFormat(id_, location, count, gl_type, GL_FALSE, offset * type_size);
 }
 
 void Lux::Graphics::VAO::set_location_binding(u32 location , u32 binding_index){

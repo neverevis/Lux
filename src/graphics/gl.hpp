@@ -14,6 +14,9 @@ namespace Lux::Graphics::gl{
     
     extern PFNGLGETSTRINGIPROC                     GetStringi                      ;
     extern PFNGLGETINTEGERVPROC                    GetIntegerv                     ;
+    extern PFNGLGETUNIFORMLOCATIONPROC             GetUniformLocation;
+
+    extern PFNGLUNIFORMMATRIX4FVPROC               UniformMatrix4fv;
 
     extern PFNGLCREATEBUFFERSPROC                  CreateBuffers                   ;
     extern PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              ;

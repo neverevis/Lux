@@ -1,3 +1,4 @@
+#include "math/vector2.hpp"
 #include <core/application.hpp>
 
 #include <memory>
@@ -9,7 +10,7 @@
 #include <core/event.hpp>
 #include <core/input.hpp>
 
-struct Lux::Application::Impl{
+struct Lux::Core::Application::Impl{
     Lux::Platform::System           system_;
     Lux::Platform::GraphicsContext  context_;
     Lux::Platform::Window           window_;
@@ -26,23 +27,23 @@ private:
     void prepare_opengl(){
         context_.create(window_);
         context_.make_current();
-        window_.callback_ = Lux::Input::on_event;
+        window_.callback_ = Lux::Core::Input::on_event;
         window_.show();
     }
 };
 
-Lux::Application::Application(i32 width, i32 height, const char* title)
+Lux::Core::Application::Application(i32 width, i32 height, const char* title)
     : delta_time()
     , impl_(std::make_unique<Impl>(width, height, title))
 {}
 
-Lux::Application::~Application() = default;
+Lux::Core::Application::~Application() = default;
 
-void Lux::Application::run(){
+void Lux::Core::Application::run(){
     loop();
 }
 
-void Lux::Application::loop(){
+void Lux::Core::Application::loop(){
     setup();
     Time last_time;
     Time current_time;
@@ -64,6 +65,6 @@ void Lux::Application::loop(){
     }
 }
 
-void Lux::Application::render_quad(){
-    impl_->renderer_.draw_rect();
+void Lux::Core::Application::draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation){
+    impl_->renderer_.draw_rect(position, width, height, rotation);
 }

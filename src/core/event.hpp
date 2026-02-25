@@ -1,7 +1,7 @@
 #pragma once
 #include <core/types.hpp>
 
-namespace Lux{
+namespace Lux::Core{
     struct Keyboard{
         enum class Key{
             Unknown = 0,

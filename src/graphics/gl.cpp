@@ -1,3 +1,4 @@
+#include "glcorearb.h"
 #include <graphics/gl.hpp>
 #include <core/debug.hpp>
 
@@ -11,6 +12,9 @@ namespace Lux::Graphics::gl{
     
     PFNGLGETSTRINGIPROC                     GetStringi                      = nullptr;
     PFNGLGETINTEGERVPROC                    GetIntegerv                     = nullptr;
+    PFNGLGETUNIFORMLOCATIONPROC             GetUniformLocation              = nullptr;
+
+    PFNGLUNIFORMMATRIX4FVPROC               UniformMatrix4fv                = nullptr;
 
     PFNGLCREATEBUFFERSPROC                  CreateBuffers                   = nullptr;
     PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              = nullptr;
@@ -64,6 +68,9 @@ namespace Lux::Graphics::gl{
 
         LOAD_GL_FN(GetStringi,"glGetStringi");
         LOAD_GL_FN(GetIntegerv,"glGetIntegerv");
+        LOAD_GL_FN(GetUniformLocation,"glGetUniformLocation");
+
+        LOAD_GL_FN(UniformMatrix4fv,"glUniformMatrix4fv");
 
         LOAD_GL_FN(CreateBuffers,"glCreateBuffers");
         LOAD_GL_FN(NamedBufferStorage,"glNamedBufferStorage");

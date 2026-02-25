@@ -1,9 +1,15 @@
 #include "core/application.hpp"
 #include "core/types.hpp"
 #include <graphics/gl.hpp>
+#include <math/matrix4.hpp>
+#include <math/vector2.hpp>
 
-class Sandbox : public Lux::Application{
+namespace gl = Lux::Graphics::gl;
+class Sandbox : public Lux::Core::Application{
 public:
+    f32 degrees = 0;
+
+
     Sandbox(i32 width, i32 height, const char* title)
         : Application(width, height, title)
         {} 
@@ -14,11 +20,12 @@ public:
     }
 
     void update(){
+        degrees += 360 * delta_time.as_seconds();
         GL_CHECK();
     }
 
     void render(){
-        render_quad();
+        draw_rect({400 - 50,400 - 50},200,200, degrees);
     }
 };
 
