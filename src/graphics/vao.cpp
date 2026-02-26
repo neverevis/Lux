@@ -25,7 +25,7 @@ void Lux::Graphics::VAO::link_ebo(const EBO& ebo) const{
     gl::VertexArrayElementBuffer(id_, ebo.id);
 }
 
-void Lux::Graphics::VAO::set_location_format(u32 location, VertexType type, u32 count, u32 offset){
+void Lux::Graphics::VAO::set_location_format(u32 location, VertexType type, u32 count, u32 offset_count){
     GLenum gl_type = gl::to_gl_enum(type);
 
     size_t type_size;

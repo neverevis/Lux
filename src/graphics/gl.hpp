@@ -22,6 +22,7 @@ namespace Lux::Graphics::gl{
     extern PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              ;
     extern PFNGLNAMEDBUFFERSUBDATAPROC             NamedBufferSubData;
     extern PFNGLDELETEBUFFERSPROC                  DeleteBuffers;
+    extern PFNGLMAPNAMEDBUFFERRANGEPROC            MapNamedBufferRange;
 
     extern PFNGLCREATEVERTEXARRAYSPROC             CreateVertexArrays              ;
     extern PFNGLVERTEXARRAYVERTEXBUFFERPROC        VertexArrayVertexBuffer         ;

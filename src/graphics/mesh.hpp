@@ -11,9 +11,6 @@ namespace Lux::Graphics{
     struct Mesh{
     public:
         Mesh();
-        ~Mesh();
-        const i32 id;
-
         void set_vertices_capacity(size_t size);
         void set_indices_capacity(size_t size);
         void set_vertices(VertexData* vertices, u32 count);
@@ -25,7 +22,7 @@ namespace Lux::Graphics{
     private:
         VBO vertices_vbo_;
         EBO indices_ebo_;
-        u32 index_count_ = 0;
+        u32 index_count_;
 
         static i32 assign_id();
 

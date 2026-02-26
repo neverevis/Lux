@@ -12,9 +12,12 @@
 
 namespace Lux::Graphics{
     class Renderer{
-        struct RenderRequest{
-            Mesh* mesh;
-            i32 count;
+        struct RenderCommand{
+            u32     mesh_id;
+            u32     instance_count;
+            
+            void*   arena_bucket; // o ponteiro pro primeiro elemento da bucket deste rendercommand
+            size_t  arena_offset; // o offset para alocação de novas matrizes/materialid
         };
         
     public:
@@ -28,14 +31,14 @@ namespace Lux::Graphics{
 
         void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation);
     private:
-        Shader default_shader_;
-        Mesh quad_;
+        Shader              default_shader_;
+        Mesh                quad_;
 
-        VAO vao;
-        VBO transform_vbo_;
+        VAO                 vao;
+        VBO                 transform_vbo_;
 
-        Core::Arena transform_arena_;
-        Core::Transform* transform_instances_;
+        Core::Arena         transform_arena_;
+        Core::Transform*    transform_instances_;
 
         void setup_default_meshes();
     };

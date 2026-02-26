@@ -20,6 +20,7 @@ namespace Lux::Graphics::gl{
     PFNGLNAMEDBUFFERSTORAGEPROC             NamedBufferStorage              = nullptr;
     PFNGLNAMEDBUFFERSUBDATAPROC             NamedBufferSubData              = nullptr;
     PFNGLDELETEBUFFERSPROC                  DeleteBuffers                   = nullptr;
+    PFNGLMAPNAMEDBUFFERRANGEPROC            MapNamedBufferRange             = nullptr;
 
     PFNGLCREATEVERTEXARRAYSPROC             CreateVertexArrays              = nullptr;
     PFNGLVERTEXARRAYVERTEXBUFFERPROC        VertexArrayVertexBuffer         = nullptr;
@@ -76,6 +77,7 @@ namespace Lux::Graphics::gl{
         LOAD_GL_FN(NamedBufferStorage,"glNamedBufferStorage");
         LOAD_GL_FN(NamedBufferSubData,"glNamedBufferSubData");
         LOAD_GL_FN(DeleteBuffers,"glDeleteBuffers");
+        LOAD_GL_FN(MapNamedBufferRange,"glMapNamedBufferRange");
 
         LOAD_GL_FN(CreateVertexArrays,"glCreateVertexArrays");
         LOAD_GL_FN(VertexArrayVertexBuffer,"glVertexArrayVertexBuffer");

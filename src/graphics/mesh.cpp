@@ -1,18 +1,11 @@
 #include <graphics/mesh.hpp>
 
-i32 Lux::Graphics::Mesh::next_id = 0;
-std::vector<i32> Lux::Graphics::Mesh::free_index_list;
-
 Lux::Graphics::Mesh::Mesh()
-    : id(Mesh::assign_id())
+    : index_count_(0)
 {}
 
-Lux::Graphics::Mesh::~Mesh(){
-    free_index_list.push_back(id);
-}
-
 void Lux::Graphics::Mesh::set_vertices_capacity(size_t size){
-    vertices_vbo_.set_capacity(size);
+    vertices_vbo_.alloc_gpu_memory(size);
 }
 
 void Lux::Graphics::Mesh::set_indices_capacity(size_t size){
@@ -44,19 +37,4 @@ const Lux::Graphics::EBO& Lux::Graphics::Mesh::get_ebo(){
 
 u32 Lux::Graphics::Mesh::get_index_count(){
     return index_count_;
-}
-
-i32 Lux::Graphics::Mesh::assign_id(){
-    i32 id;
-    
-    if(free_index_list.size() != 0){
-        id = free_index_list.back();
-        free_index_list.pop_back();
-
-    }else{
-        id = next_id;
-        next_id++;
-    }
-
-    return id;
 }
