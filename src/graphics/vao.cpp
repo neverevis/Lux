@@ -1,4 +1,4 @@
-#include "graphics/data.hpp"
+#include <graphics/data.hpp>
 #include <graphics/vao.hpp>
 #include <graphics/vbo.hpp>
 #include <graphics/ebo.hpp>
@@ -44,7 +44,7 @@ void Lux::Graphics::VAO::set_location_format(u32 location, VertexType type, u32 
     }
 
     gl::EnableVertexArrayAttrib(id_, location);
-    gl::VertexArrayAttribFormat(id_, location, count, gl_type, GL_FALSE, offset * type_size);
+    gl::VertexArrayAttribFormat(id_, location, count, gl_type, GL_FALSE, offset_count * type_size);
 }
 
 void Lux::Graphics::VAO::set_location_binding(u32 location , u32 binding_index){

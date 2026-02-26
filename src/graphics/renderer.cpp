@@ -8,12 +8,13 @@
 #include <core/debug.hpp>
 #include <graphics/gl.hpp>
 
-#define MAX_INSTANCES 10000
+#define MAX_INSTANCES 100000
 
 namespace gl = Lux::Graphics::gl;
 
 Lux::Graphics::Renderer::Renderer()
     : default_shader_("src/shaders/default.vert", "src/shaders/default.frag")
+    , transform_arena_(MAX_INSTANCES * sizeof(Math::Matrix4))
 {
     default_shader_.use();
     default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,800,800,0,-1.0f,1.0f), "u_Projection");
@@ -42,6 +43,8 @@ Lux::Graphics::Renderer::Renderer()
 
     setup_default_meshes();
 
+    transform_vbo_.alloc_shared_memory(MAX_INSTANCES * sizeof(Math::Matrix4));
+
     gl::ClearColor(0,0,0,1);
 }
 
@@ -50,10 +53,10 @@ Lux::Graphics::Renderer::~Renderer() = default;
 void Lux::Graphics::Renderer::setup_default_meshes(){
     //quad
     VertexData vertices[] = {
-        0.0,0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        1, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-         1, 1, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0,
-         0,1, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
+        0,0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+        1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0,
+        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
     };
 
     IndexData indices[] = {
@@ -73,46 +76,11 @@ void Lux::Graphics::Renderer::begin(){
 }
 
 void Lux::Graphics::Renderer::submit(){
-    RenderRequest* linked = nullptr;
-    for(RenderRequest& rr : render_queue){
-        if(linked != &rr){
-            vao.link_vbo(rr.mesh->get_vbo(), sizeof(VertexData), 0);
-            vao.link_ebo(rr.mesh->get_ebo());
 
-            linked = &rr;
-        }
-
-        transform_instances_.submit_data(rr.transform_instances.data(), rr.transform_instances.size() * sizeof(Math::Matrix4), 0);
-
-        vao.link_vbo(transform_instances_, sizeof(Math::Matrix4), 1);
-
-        gl::DrawElementsInstanced(GL_TRIANGLES, rr.mesh->get_index_count(), GL_UNSIGNED_INT, nullptr, rr.count);
-    }
-
-    render_queue.clear();
 }
 
-void Lux::Graphics::Renderer::add_to_queue(Graphics::Mesh* mesh, Core::Transform& transform){
-    RenderRequest render_request = {};
+void Lux::Graphics::Renderer::add_to_queue(u32 mesh_id, Core::Transform& transform){
 
-    bool found = false;
-
-    for(RenderRequest& rr : render_queue){
-        if(rr.mesh == mesh){
-            rr.count++;
-            rr.transform_instances.push_back(transform.get_matrix());
-            found = true;
-            break;
-        }
-    }
-
-    if(!found){
-        RenderRequest rr;
-        rr.mesh = mesh;
-        rr.transform_instances.push_back(transform.get_matrix());
-        rr.count = 1;
-        render_queue.push_back(rr);
-    }
 }
 
 void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation){
@@ -123,6 +91,4 @@ void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 h
     transform.set_position(Math::Vector3{position.x, position.y, 0.0f});
     transform.set_scale(Math::Vector3{(f32)width, (f32)height, 1.0f});
     transform.set_rotation({0, 0, rotation});
-
-    add_to_queue(&quad_, transform);
 }
