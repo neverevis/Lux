@@ -1,5 +1,7 @@
 #include "core/application.hpp"
+#include "core/log.hpp"
 #include "core/types.hpp"
+#include "graphics/mesh.hpp"
 #include <graphics/gl.hpp>
 #include <math/matrix4.hpp>
 #include <math/vector2.hpp>

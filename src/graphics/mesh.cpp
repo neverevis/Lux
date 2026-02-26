@@ -7,6 +7,10 @@ Lux::Graphics::Mesh::Mesh()
     : id(Mesh::assign_id())
 {}
 
+Lux::Graphics::Mesh::~Mesh(){
+    free_index_list.push_back(id);
+}
+
 void Lux::Graphics::Mesh::set_vertices_capacity(size_t size){
     vertices_vbo_.set_capacity(size);
 }

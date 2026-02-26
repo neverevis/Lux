@@ -18,8 +18,6 @@ Lux::Graphics::Renderer::Renderer()
     default_shader_.use();
     default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,800,800,0,-1.0f,1.0f), "u_Projection");
 
-    transform_instances_.set_capacity(sizeof(Math::Matrix4) * MAX_INSTANCES);
-
     vao.bind();
     vao.set_location_format(0, VertexType::Float32, 3, 0);
     vao.set_location_binding(0, 0);

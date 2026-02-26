@@ -11,6 +11,7 @@ namespace Lux::Graphics{
     struct Mesh{
     public:
         Mesh();
+        ~Mesh();
         const i32 id;
 
         void set_vertices_capacity(size_t size);
