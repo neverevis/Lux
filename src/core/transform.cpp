@@ -31,12 +31,8 @@ Lux::Math::Vector3 Lux::Core::Transform::get_scale(){
 
 Lux::Math::Matrix4 Lux::Core::Transform::get_matrix(){
     if(dirty_){
-        Math::Matrix4 t, r, s;
-        t.translate(position_);
-        r.rotate(rotation_);
-        s.scale(scale_);
 
-        matrix = t * r * s;
+        matrix = Math::Matrix4::translate(position_) * Math::Matrix4::rotate(rotation_) * Math::Matrix4::scale(scale_);
         
         dirty_ = false;
     }

@@ -38,22 +38,24 @@ Lux::Math::Matrix4 Lux::Math::Matrix4::ortho(f32 left, f32 right, f32 bottom, f3
     return result;
 }
 
-Lux::Math::Matrix4& Lux::Math::Matrix4::translate(const Vector3& vec3) {
+Lux::Math::Matrix4 Lux::Math::Matrix4::translate(const Vector3& vec3) {
     /*
          1    0    0    x
          0    1    0    y
          0    0    1    z
          0    0    0    1
     */
+
+    Matrix4 result;
     
-    matrix[12] = vec3.x;
-    matrix[13] = vec3.y;
-    matrix[14] = vec3.z;
+    result.matrix[12] = vec3.x;
+    result.matrix[13] = vec3.y;
+    result.matrix[14] = vec3.z;
     
-    return *this;
+    return result;
 }
 
-Lux::Math::Matrix4& Lux::Math::Matrix4::rotate(const Vector3& vec3){
+Lux::Math::Matrix4 Lux::Math::Matrix4::rotate(const Vector3& vec3){
     /*
         X-axis rotation matrix:
 
@@ -114,14 +116,10 @@ Lux::Math::Matrix4& Lux::Math::Matrix4::rotate(const Vector3& vec3){
 
     Matrix4 result = y * x * z;
 
-    for(int i = 0; i < 16; i++){
-        matrix[i] = result.matrix[i];
-    }
-
-    return *this;
+    return result;
 }
 
-Lux::Math::Matrix4& Lux::Math::Matrix4::scale(const Vector3& vec3){
+Lux::Math::Matrix4 Lux::Math::Matrix4::scale(const Vector3& vec3){
     /*
         Scale matrix
 
@@ -131,11 +129,13 @@ Lux::Math::Matrix4& Lux::Math::Matrix4::scale(const Vector3& vec3){
          0    0    0    1
     */
 
-    matrix[0] *= vec3.x;
-    matrix[5] *= vec3.y;
-    matrix[10] *= vec3.z;
+    Matrix4 result;
 
-    return *this;
+    result.matrix[0] *= vec3.x;
+    result.matrix[5] *= vec3.y;
+    result.matrix[10] *= vec3.z;
+
+    return result;
 }
 
 Lux::Math::Matrix4 Lux::Math::Matrix4::operator*(const Matrix4& other) const{

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/memory.hpp>
+#include <memory/arena.hpp>
 #include <graphics/resource_manager.hpp>
 #include <math/matrix4.hpp>
 #include <core/types.hpp>
@@ -9,6 +9,7 @@
 #include <graphics/vao.hpp>
 #include <core/transform.hpp>
 #include <math/vector2.hpp>
+#include <platform/window.hpp>
 
 namespace Lux::Graphics{
     class Renderer{
@@ -21,25 +22,28 @@ namespace Lux::Graphics{
         };
         
     public:
-        Renderer();
+        Renderer(Platform::Window& window);
         ~Renderer();
 
         void begin();
-        void submit();
+        void end();
 
-        void add_to_queue(u32 mesh_id, Core::Transform& transform);
+        void submit(u32 mesh_id, Core::Transform& transform);
 
         void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation);
+
     private:
-        ResourceManager resource_manager;
-        Shader          default_shader_;
-        Mesh            quad_;
+        ResourceManager             resource_manager;
+        std::vector<RenderCommand>  render_queue;
 
-        VAO             vao;
-        VBO             transform_vbo_;
+        VAO                         vao;
+        VBO                         transform_vbo_;
 
-        Core::Arena     transform_arena_;
-        Math::Matrix4*  transform_instances_;
+        Shader                      default_shader_;
+        u32                         quad_;
+
+        Memory::Arena               transform_arena_;
+        Math::Matrix4*              transform_instances_;
 
         void setup_default_meshes();
     };

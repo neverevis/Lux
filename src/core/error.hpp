@@ -2,7 +2,7 @@
 #include <core/types.hpp>
 
 namespace Lux::Core{
-    enum class Error : u32{
+    enum class Result : u32{
         
     };
 }

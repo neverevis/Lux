@@ -20,7 +20,7 @@ struct Lux::Core::Application::Impl{
         : system_()
         , context_(system_)
         , window_(system_, context_.surface_settings, width, height, title)
-        , renderer_((prepare_opengl(), Lux::Graphics::Renderer()))
+        , renderer_((prepare_opengl(), Graphics::Renderer(window_)))
     {}
 
 private:
@@ -59,7 +59,7 @@ void Lux::Core::Application::loop(){
         impl_->renderer_.begin();
         update();
         render();
-        impl_->renderer_.submit();
+        impl_->renderer_.end();
         impl_->context_.swap_buffers();
         Input::flush_frame_data();
     }

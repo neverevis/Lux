@@ -12,12 +12,12 @@
 
 namespace gl = Lux::Graphics::gl;
 
-Lux::Graphics::Renderer::Renderer()
+Lux::Graphics::Renderer::Renderer(Platform::Window& window)
     : default_shader_("src/shaders/default.vert", "src/shaders/default.frag")
-    , transform_arena_(MAX_INSTANCES * sizeof(Math::Matrix4))
+    , resource_manager(1024)
 {
     default_shader_.use();
-    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,800,800,0,-1.0f,1.0f), "u_Projection");
+    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
 
     vao.bind();
     vao.set_location_format(0, VertexType::Float32, 3, 0);
@@ -41,9 +41,14 @@ Lux::Graphics::Renderer::Renderer()
 
     vao.set_binding_divisor(1, 1);
 
+    vao.link_vbo(transform_vbo_, sizeof(Math::Matrix4), 1);
+
+    render_queue.reserve(sizeof(RenderCommand) * MAX_INSTANCES);
+
     setup_default_meshes();
 
-    transform_vbo_.alloc_shared_memory(MAX_INSTANCES * sizeof(Math::Matrix4));
+    transform_instances_ = (Math::Matrix4*) transform_vbo_.alloc_shared_memory(MAX_INSTANCES * sizeof(Math::Matrix4));
+    transform_arena_.use((u8*)transform_instances_, MAX_INSTANCES * sizeof(Math::Matrix4));
 
     gl::ClearColor(0,0,0,1);
 }
@@ -53,10 +58,10 @@ Lux::Graphics::Renderer::~Renderer() = default;
 void Lux::Graphics::Renderer::setup_default_meshes(){
     //quad
     VertexData vertices[] = {
-        0,0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-        1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0,
-        0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0
+        {0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f},
+        {1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f},
+        {1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f},
+        {0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f}
     };
 
     IndexData indices[] = {
@@ -64,23 +69,18 @@ void Lux::Graphics::Renderer::setup_default_meshes(){
         2,3,0
     };
 
-    quad_.set_vertices_capacity(sizeof(vertices));
-    quad_.set_indices_capacity(sizeof(indices));
-
-    quad_.set_vertices(vertices, 4);
-    quad_.set_indices(indices, 6);
+    quad_ = resource_manager.load_mesh(vertices, indices, sizeof(vertices) / sizeof(VertexData), sizeof(indices) / sizeof(IndexData));
 }
 
 void Lux::Graphics::Renderer::begin(){
     gl::Clear(GL_COLOR_BUFFER_BIT);
 }
 
-void Lux::Graphics::Renderer::submit(){
+void Lux::Graphics::Renderer::submit(u32 mesh_id, Core::Transform& transform){
 
 }
 
-void Lux::Graphics::Renderer::add_to_queue(u32 mesh_id, Core::Transform& transform){
-
+void Lux::Graphics::Renderer::end(){
 }
 
 void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation){
@@ -91,4 +91,6 @@ void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 h
     transform.set_position(Math::Vector3{position.x, position.y, 0.0f});
     transform.set_scale(Math::Vector3{(f32)width, (f32)height, 1.0f});
     transform.set_rotation({0, 0, rotation});
+
+    submit(quad_, transform);
 }
