@@ -21,7 +21,7 @@ namespace Lux::Memory{
                 size_t aligned_address_offset = (offset_ + align - 1) & ~(align - 1);
 
                 if(aligned_address_offset + size <= capacity_){
-                    T* aligned_address = base_ + aligned_address_offset;
+                    T* aligned_address = (T*) (base_ + aligned_address_offset);
 
                     offset_ = aligned_address_offset + size;
                     return aligned_address;

@@ -37,6 +37,7 @@ namespace Lux::Graphics::gl{
     PFNGLDRAWELEMENTSPROC                   DrawElements                    = nullptr;
     PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstanced             = nullptr;
     PFNGLDRAWELEMENTSINSTANCEDPROC          DrawElementsInstanced           = nullptr;
+    PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC DrawElementsInstancedBaseInstance = nullptr;
 
     PFNGLCREATESHADERPROC                   CreateShader                    = nullptr;
     PFNGLGETSHADERIVPROC                    GetShaderiv                     = nullptr;
@@ -94,6 +95,7 @@ namespace Lux::Graphics::gl{
         LOAD_GL_FN(DrawElements,"glDrawElements");
         LOAD_GL_FN(DrawArraysInstanced, "glDrawArraysInstanced");
         LOAD_GL_FN(DrawElementsInstanced,"glDrawElementsInstanced");
+        LOAD_GL_FN(DrawElementsInstancedBaseInstance, "glDrawElementsInstancedBaseInstance");
 
         LOAD_GL_FN(CreateShader,"glCreateShader");
         LOAD_GL_FN(GetShaderiv,"glGetShaderiv");

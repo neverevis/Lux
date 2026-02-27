@@ -23,7 +23,7 @@ public:
     }
 
     void update(){
-        degrees += 360 * delta_time.as_seconds();
+        degrees += 50 * delta_time.as_seconds();
         GL_CHECK();
     }
 

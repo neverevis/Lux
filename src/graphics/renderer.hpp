@@ -13,12 +13,12 @@
 
 namespace Lux::Graphics{
     class Renderer{
-        struct RenderCommand{
-            u32     mesh_id;
-            u32     instance_count;
-            
-            void*   arena_bucket;
-            size_t  arena_offset;
+        struct RenderObject{
+            u32             instance_count;
+            u32             base_instance_index;
+
+            Math::Matrix4*  transform_arena_bucket_ptr;
+            size_t          transform_arena_bucket_offset;
         };
         
     public:
@@ -30,20 +30,24 @@ namespace Lux::Graphics{
 
         void submit(u32 mesh_id, Core::Transform& transform);
 
+        u32 load_mesh(VertexData* vertices, IndexData* indices, u32 vertices_count, u32 indices_count, u32 max_instances);
+        void unload_mesh(u32 mesh_id);
+
         void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation);
 
     private:
-        ResourceManager             resource_manager;
-        std::vector<RenderCommand>  render_queue;
+        ResourceManager                     resource_manager;
+        Memory::StaticPool<RenderObject>    render_table;
+        std::vector<u32>                    active_ids;
 
-        VAO                         vao;
-        VBO                         transform_vbo_;
+        VAO                                 vao;
+        VBO                                 transform_vbo_;
 
-        Shader                      default_shader_;
-        u32                         quad_;
+        Shader                              default_shader_;
+        u32                                 quad_;
 
-        Memory::Arena               transform_arena_;
-        Math::Matrix4*              transform_instances_;
+        Memory::Arena                       transform_arena_;
+        Math::Matrix4*                      transform_instances_ptr_;
 
         void setup_default_meshes();
     };

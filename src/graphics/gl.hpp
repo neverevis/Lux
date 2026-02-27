@@ -39,6 +39,7 @@ namespace Lux::Graphics::gl{
     extern PFNGLDRAWELEMENTSPROC                   DrawElements;
     extern PFNGLDRAWARRAYSINSTANCEDPROC            DrawArraysInstanced;
     extern PFNGLDRAWELEMENTSINSTANCEDPROC          DrawElementsInstanced;
+    extern PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC DrawElementsInstancedBaseInstance;
 
     extern PFNGLCREATESHADERPROC                   CreateShader                    ;
     extern PFNGLGETSHADERIVPROC                    GetShaderiv                     ;
