@@ -1,4 +1,5 @@
 #include <platform/detect.hpp>
+
 #ifdef PLATFORM_WINDOWS
 
 #include <platform/graphics_context.hpp>
@@ -52,6 +53,7 @@ Lux::Platform::GraphicsContext::GraphicsContext(const Lux::Platform::System& sys
     wglMakeCurrent(dummy_hdc, dummy_hglrc);
 
     PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC) wglGetProcAddress("wglChoosePixelFormatARB");
+    native_.wglSwapIntervalEXT = (void*) wglGetProcAddress("wglSwapIntervalEXT");
 
     int pixel_attribs[] = {
     WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
@@ -110,7 +112,7 @@ bool Lux::Platform::GraphicsContext::create(const Window& window){
         }else if(i < 7){
             i++;
         }else{
-            LUX_INFO("Failed to load GL Context");
+            LUX_ERROR("Failed to load GL Context");
             done = true;
         }
     }
@@ -149,6 +151,13 @@ void* Lux::Platform::GraphicsContext::get_fn_address(const char* fn_name){
 
 void Lux::Platform::GraphicsContext::swap_buffers(){
     SwapBuffers((HDC) native.hdc);
+}
+
+void Lux::Platform::GraphicsContext::swap_interval(i32 swap_interval){
+    if(wglGetCurrentContext() != nullptr){
+        PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) native_.wglSwapIntervalEXT;
+        wglSwapIntervalEXT(swap_interval);
+    }
 }
 
 #endif

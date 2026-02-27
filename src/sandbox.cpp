@@ -1,38 +1,41 @@
 #include "core/application.hpp"
-#include "core/log.hpp"
-#include "core/types.hpp"
-#include "graphics/mesh.hpp"
-#include "memory/static_pool.hpp"
-#include <graphics/gl.hpp>
-#include <math/matrix4.hpp>
 #include <math/vector2.hpp>
+#include <vector>
 
-namespace gl = Lux::Graphics::gl;
-class Sandbox : public Lux::Core::Application{
+using namespace Lux;
+
+class Sandbox : public Core::Application {
 public:
-    f32 degrees = 0;
-
-
     Sandbox(i32 width, i32 height, const char* title)
-        : Application(width, height, title)
-        {} 
+        : Application(width, height, title) {}
 
-    ~Sandbox() = default;
-
-    void setup(){
+    void setup() override {
     }
 
-    void update(){
-        degrees += 50 * delta_time.as_seconds();
-        GL_CHECK();
+    void update() override {
     }
 
-    void render(){
-        draw_rect({400 - 50,400 - 50},200,200, degrees);
+    void render() override {
+        const i32 total_instances = 100000;
+        const i32 cols = 400;
+        const f32 size = 1.0f;
+        const f32 gap = 1.0f;
+
+        for (i32 i = 0; i < total_instances; i++) {
+            i32 x = i % cols;
+            i32 y = i / cols;
+
+            draw_rect(
+                Math::Vector2{ (f32)x * (size + gap), (f32)y * (size + gap) }, 
+                (u32)size, 
+                (u32)size, 
+                0.0f
+            );
+        }
     }
 };
 
-int main(){
-    Sandbox sandbox(800,800,"sandbox");
+int main() {
+    Sandbox sandbox(800, 800, "Lux - 100k Stress Test");
     sandbox.run();
 }

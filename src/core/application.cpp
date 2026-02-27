@@ -9,6 +9,7 @@
 
 #include <core/event.hpp>
 #include <core/input.hpp>
+#include <print>
 
 struct Lux::Core::Application::Impl{
     Lux::Platform::System           system_;
@@ -29,6 +30,7 @@ private:
         context_.make_current();
         window_.callback_ = Lux::Core::Input::on_event;
         window_.show();
+        context_.swap_interval(0);
     }
 };
 
@@ -53,6 +55,7 @@ void Lux::Core::Application::loop(){
     while(!impl_->window_.should_close()){
         current_time = Time::now();
         delta_time = current_time - last_time;
+        std::println("{}", delta_time.as_milliseconds());
         last_time = current_time;
 
         impl_->window_.poll_events();

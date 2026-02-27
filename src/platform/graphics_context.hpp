@@ -1,6 +1,7 @@
 #pragma once
 
 #include <platform/native.hpp>
+#include <core/types.hpp>
 
 namespace Lux::Platform{
     struct System;
@@ -17,6 +18,7 @@ namespace Lux::Platform{
         bool create(const Window& window);
         void make_current();
         void swap_buffers();
+        void swap_interval(i32 interval);
 
         
         private:

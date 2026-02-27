@@ -13,6 +13,7 @@ namespace Lux::Platform{
         void*   hglrc                       = nullptr;
         void*   hdc                         = nullptr;
         void*   wglCreateContextAttribsARB  = nullptr;
+        void*   wglSwapIntervalEXT          = nullptr;
     };
 
     struct SurfaceNativeSettings{

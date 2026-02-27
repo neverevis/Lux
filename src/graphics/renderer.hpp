@@ -36,6 +36,7 @@ namespace Lux::Graphics{
         void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation);
 
     private:
+        Platform::Window&                   window_;
         ResourceManager                     resource_manager;
         Memory::StaticPool<RenderObject>    render_table;
         std::vector<u32>                    active_ids;

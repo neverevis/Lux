@@ -17,6 +17,7 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window)
     : default_shader_("src/shaders/default.vert", "src/shaders/default.frag")
     , resource_manager(MAX_MESHES)
     , render_table(MAX_MESHES)
+    , window_(window)
 {
     default_shader_.use();
     default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
