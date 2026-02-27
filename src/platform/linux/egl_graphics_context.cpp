@@ -103,4 +103,10 @@ void* Lux::Platform::GraphicsContext::get_fn_address(const char* fn_name){
     return fn;
 }
 
+void Lux::Platform::GraphicsContext::swap_interval(i32 swap_interval){
+    if(eglGetCurrentContext() != nullptr){
+        eglSwapInterval(native_.egl_display, swap_interval);
+    }
+}
+
 #endif
