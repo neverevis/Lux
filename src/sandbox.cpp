@@ -21,15 +21,11 @@ public:
     }
 
     void render() override {
-        for(int i = 0; i < 400; i++){
-            for(int j = 0; j < 400; j++){
-                draw_rect({(f32)(i*2.0f)+ sinf(incremental + j)*20,(f32)(j*2.0f) + sinf(incremental + i)*20}, 2, 2,
-                (i % 2 == 0 ? sinf(incremental)*30 : sinf(-incremental)*30),
-                {0.5f, 0.5f});
-            }
-        }
-        rotation += delta_time.as_seconds() * 10;
-        incremental += 3 * delta_time.as_seconds();
+    u8 buf = get_current_buffer(); 
+    
+    if (buf == 0) draw_rect({100, 100}, 50, 50, 0, {0,0});
+    if (buf == 1) draw_rect({400, 100}, 50, 50, 0, {0,0});
+    if (buf == 2) draw_rect({700, 100}, 50, 50, 0, {0,0});
     }
 };
 

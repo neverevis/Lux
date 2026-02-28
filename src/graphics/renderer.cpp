@@ -60,7 +60,6 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
     transform_arena_.use((u8*)transform_instances_ptr_, MAX_INSTANCES * sizeof(Math::Matrix4) * num_buffers_);
     
     setup_default_meshes();
-    gl::ClearColor(1,0.8,0.8,1);
 }
 
 Lux::Graphics::Renderer::~Renderer() = default;
@@ -158,4 +157,8 @@ void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 h
     transform.set_pivot({pivot.x, pivot.y,0});
 
     submit(quad_, transform);
+}
+
+u8 Lux::Graphics::Renderer::get_current_buffer(){
+    return current_buffer_;
 }

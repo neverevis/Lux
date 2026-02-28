@@ -81,3 +81,7 @@ void Lux::Core::Application::loop(){
 void Lux::Core::Application::draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
     impl_->renderer_.draw_rect(position, width, height, rotation, pivot);
 }
+
+u8 Lux::Core::Application::get_current_buffer(){
+    return impl_->renderer_.get_current_buffer();
+}

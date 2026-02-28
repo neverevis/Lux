@@ -36,6 +36,8 @@ namespace Lux::Graphics{
 
         void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
 
+        u8 get_current_buffer();
+
     private:
         Platform::Window&                   window_;
         ResourceManager                     resource_manager;
