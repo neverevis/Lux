@@ -3,7 +3,7 @@
     "compiler" :            "clang",
     "source directory" :    "src",
     "build directory" :     "build",
-    "compilation mode" :    "debug",
+    "compilation mode" :    "release",
     "c++ version" :         23,
     "includes" :            ["src/external"]
 }

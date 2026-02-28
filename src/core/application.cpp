@@ -46,6 +46,9 @@ void Lux::Core::Application::run(){
 }
 
 void Lux::Core::Application::loop(){
+    f32 accum_s = 0.0f;
+    i32 accum_f = 0;
+
     setup();
     Time last_time;
     Time current_time;
@@ -53,9 +56,13 @@ void Lux::Core::Application::loop(){
     last_time = Time::now();
     
     while(!impl_->window_.should_close()){
+        if(accum_s >= 1.0){
+            printf("FPS: %d\n", accum_f);
+            accum_s = 0.0f;
+            accum_f = 0;
+        }
         current_time = Time::now();
         delta_time = current_time - last_time;
-        std::println("{}", delta_time.as_milliseconds());
         last_time = current_time;
 
         impl_->window_.poll_events();
@@ -65,9 +72,12 @@ void Lux::Core::Application::loop(){
         impl_->renderer_.end();
         impl_->context_.swap_buffers();
         Input::flush_frame_data();
+
+        accum_s += delta_time.as_seconds();
+        accum_f++;
     }
 }
 
-void Lux::Core::Application::draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation){
-    impl_->renderer_.draw_rect(position, width, height, rotation);
+void Lux::Core::Application::draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
+    impl_->renderer_.draw_rect(position, width, height, rotation, pivot);
 }

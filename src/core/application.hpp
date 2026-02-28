@@ -18,7 +18,7 @@ namespace Lux::Core{
         virtual void update() = 0;
         virtual void render() = 0;
 
-        void draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation);
+        void draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
     private:
         struct Impl;
         std::unique_ptr<Impl> impl_;

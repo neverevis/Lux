@@ -17,6 +17,11 @@ void Lux::Core::Transform::set_scale(const Math::Vector3& scale){
     dirty_ = true;
 }
 
+void Lux::Core::Transform::set_pivot(const Math::Vector3& pivot){
+    pivot_ = pivot;
+    dirty_ = true;
+}
+
 Lux::Math::Vector3 Lux::Core::Transform::get_position(){
     return position_;
 }
@@ -32,7 +37,7 @@ Lux::Math::Vector3 Lux::Core::Transform::get_scale(){
 Lux::Math::Matrix4 Lux::Core::Transform::get_matrix(){
     if(dirty_){
 
-        matrix = Math::Matrix4::translate(position_) * Math::Matrix4::rotate(rotation_) * Math::Matrix4::scale(scale_);
+        matrix = Math::Matrix4::translate(position_) * Math::Matrix4::rotate(rotation_) * Math::Matrix4::scale(scale_) * Math::Matrix4::translate({-pivot_.x, -pivot_.y, -pivot_.z});
         
         dirty_ = false;
     }

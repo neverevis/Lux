@@ -8,7 +8,7 @@
 #include <core/debug.hpp>
 #include <graphics/gl.hpp>
 
-#define MAX_INSTANCES 100000
+#define MAX_INSTANCES 180000
 #define MAX_MESHES 1024
 
 namespace gl = Lux::Graphics::gl;
@@ -53,7 +53,7 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window)
     transform_arena_.use((u8*)transform_instances_ptr_, MAX_INSTANCES * sizeof(Math::Matrix4));
     
     setup_default_meshes();
-    gl::ClearColor(0,0,0,1);
+    gl::ClearColor(1,0.8,0.8,1);
 }
 
 Lux::Graphics::Renderer::~Renderer() = default;
@@ -128,7 +128,7 @@ void Lux::Graphics::Renderer::unload_mesh(u32 mesh_id){
     resource_manager.unload_mesh(mesh_id);
 }
 
-void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation){
+void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
     Core::Transform transform;
 
     rotation = Math::to_radians(rotation);
@@ -136,6 +136,7 @@ void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 h
     transform.set_position(Math::Vector3{position.x, position.y, 0.0f});
     transform.set_scale(Math::Vector3{(f32)width, (f32)height, 1.0f});
     transform.set_rotation({0, 0, rotation});
+    transform.set_pivot({pivot.x, pivot.y,0});
 
     submit(quad_, transform);
 }

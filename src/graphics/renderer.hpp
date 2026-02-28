@@ -33,7 +33,7 @@ namespace Lux::Graphics{
         u32 load_mesh(VertexData* vertices, IndexData* indices, u32 vertices_count, u32 indices_count, u32 max_instances);
         void unload_mesh(u32 mesh_id);
 
-        void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation);
+        void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
 
     private:
         Platform::Window&                   window_;
