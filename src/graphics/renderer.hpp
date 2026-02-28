@@ -16,13 +16,14 @@ namespace Lux::Graphics{
         struct RenderObject{
             u32             instance_count;
             u32             base_instance_index;
+            u32             max_instances;
 
             Math::Matrix4*  transform_arena_bucket_ptr;
             size_t          transform_arena_bucket_offset;
         };
         
     public:
-        Renderer(Platform::Window& window);
+        Renderer(Platform::Window& window, u8 num_buffers);
         ~Renderer();
 
         void begin();
@@ -49,6 +50,11 @@ namespace Lux::Graphics{
 
         Memory::Arena                       transform_arena_;
         Math::Matrix4*                      transform_instances_ptr_;
+
+        u8                                  num_buffers_;
+        u8                                  current_buffer_;
+
+        i64                                 instances_usage;
 
         void setup_default_meshes();
     };

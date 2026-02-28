@@ -8,17 +8,24 @@
 #include <core/debug.hpp>
 #include <graphics/gl.hpp>
 
-#define MAX_INSTANCES 180000
+#define MAX_INSTANCES 160000
 #define MAX_MESHES 1024
 
 namespace gl = Lux::Graphics::gl;
 
-Lux::Graphics::Renderer::Renderer(Platform::Window& window)
+Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
     : default_shader_("src/shaders/default.vert", "src/shaders/default.frag")
     , resource_manager(MAX_MESHES)
     , render_table(MAX_MESHES)
     , window_(window)
+    , current_buffer_(0)
+    , instances_usage(0)
 {
+    LUX_VERIFY(num_buffers > 0 && num_buffers < 4, "invalid buffering number (min 1 : max 3)");
+
+    num_buffers_ = num_buffers;
+
+
     default_shader_.use();
     default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
 
@@ -49,8 +56,8 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window)
     vao.link_vbo(transform_vbo_, sizeof(Math::Matrix4), 1);
 
     //alloc shared gpu memory and add to an arena
-    transform_instances_ptr_ = (Math::Matrix4*) transform_vbo_.alloc_shared_memory(MAX_INSTANCES * sizeof(Math::Matrix4));
-    transform_arena_.use((u8*)transform_instances_ptr_, MAX_INSTANCES * sizeof(Math::Matrix4));
+    transform_instances_ptr_ = (Math::Matrix4*) transform_vbo_.alloc_shared_memory(MAX_INSTANCES * sizeof(Math::Matrix4) * num_buffers_);
+    transform_arena_.use((u8*)transform_instances_ptr_, MAX_INSTANCES * sizeof(Math::Matrix4) * num_buffers_);
     
     setup_default_meshes();
     gl::ClearColor(1,0.8,0.8,1);
@@ -72,7 +79,7 @@ void Lux::Graphics::Renderer::setup_default_meshes(){
         2,3,0
     };
 
-    quad_ = load_mesh(vertices, indices, sizeof(vertices) / sizeof(VertexData), sizeof(indices) / sizeof(IndexData), 1000);
+    quad_ = load_mesh(vertices, indices, sizeof(vertices) / sizeof(VertexData), sizeof(indices) / sizeof(IndexData), 160000);
 }
 
 void Lux::Graphics::Renderer::begin(){
@@ -86,10 +93,12 @@ void Lux::Graphics::Renderer::submit(u32 mesh_id, Core::Transform& transform){
         if(object.instance_count == 0){
             active_ids.push_back(mesh_id);
         }
-        object.instance_count++;
+            if(object.instance_count + 1 <= object.max_instances){
+                object.instance_count++;
 
-        *(object.transform_arena_bucket_ptr + object.transform_arena_bucket_offset) = transform.get_matrix();
-        object.transform_arena_bucket_offset ++;
+            *(object.transform_arena_bucket_ptr + MAX_INSTANCES*current_buffer_ + object.transform_arena_bucket_offset) = transform.get_matrix();
+            object.transform_arena_bucket_offset ++;
+        }
 
 
     }else{
@@ -105,18 +114,27 @@ void Lux::Graphics::Renderer::end(){
         vao.link_vbo(mesh.get_vbo(), sizeof(VertexData), 0);
         vao.link_ebo(mesh.get_ebo());
 
-        gl::DrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.get_index_count(), GL_UNSIGNED_INT, nullptr, render_obj.instance_count, render_obj.base_instance_index);
+        gl::DrawElementsInstancedBaseInstance(GL_TRIANGLES, mesh.get_index_count(), GL_UNSIGNED_INT, nullptr, render_obj.instance_count, render_obj.base_instance_index + MAX_INSTANCES*current_buffer_);
         
         render_obj.instance_count = 0;
         render_obj.transform_arena_bucket_offset = 0;
 
     }
     active_ids.clear();
+    
+    if(current_buffer_ < num_buffers_-1)
+        current_buffer_++;
+    else
+        current_buffer_ = 0;
 }
 
 u32 Lux::Graphics::Renderer::load_mesh(VertexData* vertex_data, IndexData* index_data, u32 vertex_count, u32 index_count, u32 max_instances){
+    LUX_VERIFY(instances_usage + max_instances <= MAX_INSTANCES, "ERROR: limit of instances exceeded");
+    instances_usage += max_instances;
+
     u32 id = render_table.add();
     render_table[id].instance_count = 0;
+    render_table[id].max_instances = max_instances;
     render_table[id].transform_arena_bucket_ptr = transform_arena_.alloc<Math::Matrix4>(max_instances);
     render_table[id].transform_arena_bucket_offset = 0;
     render_table[id].base_instance_index = render_table[id].transform_arena_bucket_ptr - transform_instances_ptr_;
@@ -124,6 +142,7 @@ u32 Lux::Graphics::Renderer::load_mesh(VertexData* vertex_data, IndexData* index
 }
 
 void Lux::Graphics::Renderer::unload_mesh(u32 mesh_id){
+    instances_usage -= render_table[mesh_id].max_instances; 
     render_table.remove(mesh_id);
     resource_manager.unload_mesh(mesh_id);
 }

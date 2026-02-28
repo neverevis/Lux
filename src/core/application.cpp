@@ -21,7 +21,7 @@ struct Lux::Core::Application::Impl{
         : system_()
         , context_(system_)
         , window_(system_, context_.surface_settings, width, height, title)
-        , renderer_((prepare_opengl(), Graphics::Renderer(window_)))
+        , renderer_((prepare_opengl(), Graphics::Renderer(window_,3)))
     {}
 
 private:
