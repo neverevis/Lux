@@ -11,6 +11,7 @@ namespace Lux::Graphics::gl{
     extern PFNGLCLEARCOLORPROC                     ClearColor                      ;
     extern PFNGLGETERRORPROC                       GetError                        ;
     extern PFNGLDISABLEPROC                        Disable;
+    extern PFNGLVIEWPORTPROC                       Viewport;
     
     extern PFNGLGETSTRINGIPROC                     GetStringi                      ;
     extern PFNGLGETINTEGERVPROC                    GetIntegerv                     ;

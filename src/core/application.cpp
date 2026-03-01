@@ -1,15 +1,11 @@
-#include "math/vector2.hpp"
 #include <core/application.hpp>
 
-#include <memory>
 #include <platform/system.hpp>
 #include <platform/window.hpp>
 #include <platform/graphics_context.hpp>
 #include <graphics/renderer.hpp>
 
-#include <core/event.hpp>
 #include <core/input.hpp>
-#include <print>
 
 struct Lux::Core::Application::Impl{
     Lux::Platform::System           system_;
@@ -82,6 +78,6 @@ void Lux::Core::Application::draw_rect(const Math::Vector2& position, u32 width,
     impl_->renderer_.draw_rect(position, width, height, rotation, pivot);
 }
 
-u8 Lux::Core::Application::get_current_buffer(){
-    return impl_->renderer_.get_current_buffer();
+void Lux::Core::Application::draw_circle(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
+    impl_->renderer_.draw_circle(position, width, height, rotation, pivot);
 }

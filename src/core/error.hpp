@@ -3,6 +3,6 @@
 
 namespace Lux::Core{
     enum class Result : u32{
-        
+        Success,
     };
 }

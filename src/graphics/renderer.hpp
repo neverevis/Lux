@@ -1,14 +1,18 @@
 #pragma once
 
-#include <memory/arena.hpp>
 #include <graphics/resource_manager.hpp>
-#include <math/matrix4.hpp>
-#include <core/types.hpp>
-#include <graphics/mesh.hpp>
 #include <graphics/shader.hpp>
+#include <graphics/mesh.hpp>
 #include <graphics/vao.hpp>
-#include <core/transform.hpp>
+
+#include <memory/arena.hpp>
+
+#include <math/matrix4.hpp>
 #include <math/vector2.hpp>
+
+#include <core/types.hpp>
+#include <core/transform.hpp>
+
 #include <platform/window.hpp>
 
 namespace Lux::Graphics{
@@ -34,9 +38,10 @@ namespace Lux::Graphics{
         u32 load_mesh(VertexData* vertices, IndexData* indices, u32 vertices_count, u32 indices_count, u32 max_instances);
         void unload_mesh(u32 mesh_id);
 
-        void draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
+        void draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
+        void draw_circle(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
 
-        u8 get_current_buffer();
+        void resize(u32 width, u32 height);
 
     private:
         Platform::Window&                   window_;
@@ -49,6 +54,7 @@ namespace Lux::Graphics{
 
         Shader                              default_shader_;
         u32                                 quad_;
+        u32                                 circle_;
 
         Memory::Arena                       transform_arena_;
         Math::Matrix4*                      transform_instances_ptr_;

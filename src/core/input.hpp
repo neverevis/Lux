@@ -20,6 +20,7 @@ namespace Lux::Core{
         static i32  s_mouseX;
         static i32  s_mouseY;
         static i32  s_delta_scroll;
+        static bool s_resize;
 
         static void keyboard_event(Event& event);
         static void mouse_event(Event& event);

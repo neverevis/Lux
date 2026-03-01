@@ -1,3 +1,4 @@
+#include "core/event.hpp"
 #include <core/input.hpp>
 #include <core/debug.hpp>
 
@@ -70,7 +71,9 @@ void Lux::Core::Input::mouse_event(Event& event){
 }
 
 void Lux::Core::Input::action_event(Event& event){
-
+    if(event.action == Action::Resize){
+        event.action = Action::Resize;
+    }
 }
 
 void Lux::Core::Input::flush_frame_data(){

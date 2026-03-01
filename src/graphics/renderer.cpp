@@ -1,12 +1,14 @@
-#include "core/transform.hpp"
-#include "graphics/data.hpp"
-#include "math/constants.hpp"
-#include "math/matrix4.hpp"
-#include "math/vector2.hpp"
 #include <graphics/renderer.hpp>
+
+#include <core/transform.hpp>
+#include <graphics/data.hpp>
+#include <math/constants.hpp>
+#include <math/matrix4.hpp>
+#include <math/vector2.hpp>
 
 #include <core/debug.hpp>
 #include <graphics/gl.hpp>
+#include <core/input.hpp>
 
 #define MAX_INSTANCES 160000
 #define MAX_MESHES 1024
@@ -24,7 +26,6 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
     LUX_VERIFY(num_buffers > 0 && num_buffers < 4, "invalid buffering number (min 1 : max 3)");
 
     num_buffers_ = num_buffers;
-
 
     default_shader_.use();
     default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
@@ -65,24 +66,77 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
 Lux::Graphics::Renderer::~Renderer() = default;
 
 void Lux::Graphics::Renderer::setup_default_meshes(){
-    //quad
-    VertexData vertices[] = {
+
+    // Quad
+    VertexData quad_vertices[] = {
         {0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f},
         {1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f},
         {1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f},
         {0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f}
     };
 
-    IndexData indices[] = {
+    IndexData quad_indices[] = {
         0,1,2,
         2,3,0
     };
 
-    quad_ = load_mesh(vertices, indices, sizeof(vertices) / sizeof(VertexData), sizeof(indices) / sizeof(IndexData), 160000);
+    quad_ = load_mesh(
+        quad_vertices,
+        quad_indices,
+        4,
+        6,
+        500
+    );
+
+
+    // Circle
+
+    constexpr u32 segments = 80;
+    constexpr f32 radius = 1.0f;
+
+    std::vector<VertexData> circle_vertices;
+    std::vector<IndexData>  circle_indices;
+
+    // Centro
+    circle_vertices.push_back({
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        0.5f, 0.5f
+    });
+
+    for(u32 i = 0; i <= segments; i++){
+        f32 angle = (2.0f * Math::PI * i) / segments;
+
+        f32 x = radius * cosf(angle);
+        f32 y = radius * sinf(angle);
+
+        circle_vertices.push_back({
+            x, y, 0.0f,
+            0.0f, 0.0f, 1.0f,
+            (x / radius + 1.0f) * 0.5f,
+            (y / radius + 1.0f) * 0.5f
+        });
+    }
+
+    for(u32 i = 1; i <= segments; i++){
+        circle_indices.push_back(0);
+        circle_indices.push_back(i);
+        circle_indices.push_back(i + 1);
+    }
+
+    circle_ = load_mesh(
+        circle_vertices.data(),
+        circle_indices.data(),
+        (u32)circle_vertices.size(),
+        (u32)circle_indices.size(),
+        500
+    );
 }
 
 void Lux::Graphics::Renderer::begin(){
     gl::Clear(GL_COLOR_BUFFER_BIT);
+    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window_.width_,window_.height_,0,-1.0f,1.0f), "u_Projection");
+    gl::Viewport(0,0,window_.width_,window_.height_);
 }
 
 void Lux::Graphics::Renderer::submit(u32 mesh_id, Core::Transform& transform){
@@ -146,7 +200,7 @@ void Lux::Graphics::Renderer::unload_mesh(u32 mesh_id){
     resource_manager.unload_mesh(mesh_id);
 }
 
-void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
+void Lux::Graphics::Renderer::draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
     Core::Transform transform;
 
     rotation = Math::to_radians(rotation);
@@ -159,6 +213,19 @@ void Lux::Graphics::Renderer::draw_rect(Math::Vector2 position, u32 width, u32 h
     submit(quad_, transform);
 }
 
-u8 Lux::Graphics::Renderer::get_current_buffer(){
-    return current_buffer_;
+void Lux::Graphics::Renderer::draw_circle(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
+    Core::Transform transform;
+
+    rotation = Math::to_radians(rotation);
+
+    transform.set_position(Math::Vector3{position.x, position.y, 0.0f});
+    transform.set_scale(Math::Vector3{(f32)width, (f32)height, 1.0f});
+    transform.set_rotation({0, 0, rotation});
+    transform.set_pivot({pivot.x, pivot.y,0});
+
+    submit(circle_, transform);
+}
+
+void Lux::Graphics::Renderer::resize(u32 width, u32 height){
+    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,width,height,0,-1.0f,1.0f), "u_Projection");
 }

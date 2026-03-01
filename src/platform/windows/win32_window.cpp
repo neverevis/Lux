@@ -190,6 +190,7 @@ LRESULT CALLBACK window_callback(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
             case WM_SIZE:
                 window->width_ = static_cast<i32>(LOWORD(lparam));
                 window->height_ = static_cast<i32>(HIWORD(lparam));
+
                 switch(wparam){
                     case SIZE_MINIMIZED:
                         event.type = Lux::Core::Event::Type::Action;

@@ -5,6 +5,7 @@
 
 namespace Lux::Graphics{
     struct Material{
-        
+        f32 r, g, b, a;
+        u32 texture;
     };
 }
