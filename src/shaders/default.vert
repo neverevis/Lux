@@ -7,7 +7,8 @@ layout (location = 2) in vec2 aUv;
 layout (location = 3) in mat4 aTransform;
 
 uniform mat4 u_Projection;
+uniform mat4 u_View;
 
 void main(){
-    gl_Position = u_Projection * aTransform * vec4(aPos, 1.0);
+    gl_Position = u_Projection * u_View * aTransform * vec4(aPos, 1.0);
 }

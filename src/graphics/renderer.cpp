@@ -28,7 +28,8 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
     num_buffers_ = num_buffers;
 
     default_shader_.use();
-    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
+    //default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
+    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::perspective(60, static_cast<f32>(window_.width_)/static_cast<f32>(window_.height_), 0.1, 1000), "u_Projection");
 
     // vertex locations/binding index configuration
     vao.bind();
@@ -135,7 +136,9 @@ void Lux::Graphics::Renderer::setup_default_meshes(){
 
 void Lux::Graphics::Renderer::begin(){
     gl::Clear(GL_COLOR_BUFFER_BIT);
-    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window_.width_,window_.height_,0,-1.0f,1.0f), "u_Projection");
+    //default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window_.width_,window_.height_,0,-1.0f,1.0f), "u_Projection");
+    view = Math::Matrix4::look_at(camera_position, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
+    default_shader_.set_uniform_matrix4f(view, "u_View");
     gl::Viewport(0,0,window_.width_,window_.height_);
 }
 
@@ -228,4 +231,8 @@ void Lux::Graphics::Renderer::draw_circle(const Math::Vector2& position, u32 wid
 
 void Lux::Graphics::Renderer::resize(u32 width, u32 height){
     default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,width,height,0,-1.0f,1.0f), "u_Projection");
+}
+
+void Lux::Graphics::Renderer::set_camera_position(Math::Vector3& position){
+    camera_position = position;
 }

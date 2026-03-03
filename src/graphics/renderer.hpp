@@ -43,6 +43,8 @@ namespace Lux::Graphics{
 
         void resize(u32 width, u32 height);
 
+        void set_camera_position(Math::Vector3& position);
+
     private:
         Platform::Window&                   window_;
         ResourceManager                     resource_manager;
@@ -63,6 +65,9 @@ namespace Lux::Graphics{
         u8                                  current_buffer_;
 
         i64                                 instances_usage;
+
+        Math::Matrix4                       view;
+        Math::Vector3                       camera_position;
 
         void setup_default_meshes();
     };

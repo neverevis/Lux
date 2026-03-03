@@ -2,6 +2,7 @@
 #include <core/types.hpp>
 #include <core/time.hpp>
 #include <math/vector2.hpp>
+#include <math/vector3.hpp>
 #include <memory>
 
 namespace Lux::Core{
@@ -20,6 +21,8 @@ namespace Lux::Core{
 
         void draw_rect(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
         void draw_circle(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot);
+
+        void set_camera_position(Math::Vector3& position);
 
     private:
         struct Impl;

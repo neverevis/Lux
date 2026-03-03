@@ -1,3 +1,4 @@
+#include "math/vector3.hpp"
 #include <core/application.hpp>
 
 #include <platform/system.hpp>
@@ -80,4 +81,8 @@ void Lux::Core::Application::draw_rect(const Math::Vector2& position, u32 width,
 
 void Lux::Core::Application::draw_circle(const Math::Vector2& position, u32 width, u32 height, f32 rotation, const Math::Vector2& pivot){
     impl_->renderer_.draw_circle(position, width, height, rotation, pivot);
+}
+
+void Lux::Core::Application::set_camera_position(Math::Vector3& position){
+    impl_->renderer_.set_camera_position(position);
 }
