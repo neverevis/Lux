@@ -12,12 +12,13 @@
 
 #define MAX_INSTANCES 160000
 #define MAX_MESHES 1024
+#define MAX_MATERIALS 1024
 
 namespace gl = Lux::Graphics::gl;
 
 Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
     : default_shader_("src/shaders/default.vert", "src/shaders/default.frag")
-    , resource_manager(MAX_MESHES)
+    , resource_manager(MAX_MESHES, MAX_MATERIALS)
     , render_table(MAX_MESHES)
     , window_(window)
     , current_buffer_(0)
@@ -28,8 +29,8 @@ Lux::Graphics::Renderer::Renderer(Platform::Window& window, u8 num_buffers)
     num_buffers_ = num_buffers;
 
     default_shader_.use();
-    //default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
-    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::perspective(60, static_cast<f32>(window_.width_)/static_cast<f32>(window_.height_), 0.1, 1000), "u_Projection");
+    default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window.width_,window.height_,0,-1.0f,1.0f), "u_Projection");
+    //default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::perspective(60, static_cast<f32>(window_.width_)/static_cast<f32>(window_.height_), 0.1, 1000), "u_Projection");
 
     // vertex locations/binding index configuration
     vao.bind();
@@ -98,7 +99,6 @@ void Lux::Graphics::Renderer::setup_default_meshes(){
     std::vector<VertexData> circle_vertices;
     std::vector<IndexData>  circle_indices;
 
-    // Centro
     circle_vertices.push_back({
         0.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f,
@@ -137,7 +137,8 @@ void Lux::Graphics::Renderer::setup_default_meshes(){
 void Lux::Graphics::Renderer::begin(){
     gl::Clear(GL_COLOR_BUFFER_BIT);
     //default_shader_.set_uniform_matrix4f(Lux::Math::Matrix4::ortho(0,window_.width_,window_.height_,0,-1.0f,1.0f), "u_Projection");
-    view = Math::Matrix4::look_at(camera_position, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
+    //view = Math::Matrix4::look_at(camera_position, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f});
+    view = Math::Matrix4::translate(camera_position * -1);
     default_shader_.set_uniform_matrix4f(view, "u_View");
     gl::Viewport(0,0,window_.width_,window_.height_);
 }
@@ -149,8 +150,8 @@ void Lux::Graphics::Renderer::submit(u32 mesh_id, Core::Transform& transform){
         if(object.instance_count == 0){
             active_ids.push_back(mesh_id);
         }
-            if(object.instance_count + 1 <= object.max_instances){
-                object.instance_count++;
+        if(object.instance_count + 1 <= object.max_instances){
+            object.instance_count++;
 
             *(object.transform_arena_bucket_ptr + MAX_INSTANCES*current_buffer_ + object.transform_arena_bucket_offset) = transform.get_matrix();
             object.transform_arena_bucket_offset ++;

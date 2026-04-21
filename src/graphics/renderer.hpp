@@ -17,11 +17,20 @@
 
 namespace Lux::Graphics{
     class Renderer{
+        struct Instance{
+            Math::Matrix4 transform;
+            u64 texture_handle;
+        };
+
         struct RenderObject{
             u32             instance_count;
             u32             base_instance_index;
             u32             max_instances;
 
+            Instance* arena_bucket_ptr;
+            size_t arena_bucket_offset;
+
+            //to be replaced
             Math::Matrix4*  transform_arena_bucket_ptr;
             size_t          transform_arena_bucket_offset;
         };

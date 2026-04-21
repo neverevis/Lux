@@ -23,10 +23,5 @@ namespace Lux::Graphics{
         VBO vertices_vbo_;
         EBO indices_ebo_;
         u32 index_count_;
-
-        static i32 assign_id();
-
-        static i32 next_id;
-        static std::vector<i32> free_index_list;
     };
 }

@@ -1,8 +1,9 @@
 #include <core/log.hpp>
 #include <graphics/resource_manager.hpp>
 
-Lux::Graphics::ResourceManager::ResourceManager(u32 mesh_limit)
+Lux::Graphics::ResourceManager::ResourceManager(u32 mesh_limit, u32 material_limit)
     : mesh_pool(mesh_limit)
+    , material_pool(material_limit)
 {}
 
 Lux::Graphics::ResourceManager::~ResourceManager(){}

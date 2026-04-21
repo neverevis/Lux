@@ -7,7 +7,7 @@ namespace Lux::Math{
     public:
         Matrix4();
 
-        static Matrix4 ortho(f32 left, f32 right, f32 bottom, f32 top, f32 far, f32 near);
+        static Matrix4 ortho(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far);
         static Matrix4 perspective(f32 fov, f32 aspect, f32 near, f32 far);
 
         static Matrix4 translate(const Vector3& vec3);

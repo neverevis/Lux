@@ -17,13 +17,13 @@ public:
 
     Math::Vector3 velocity;
 
-    f32 speed = 5;
+    f32 speed = 50;
 
     Sandbox(i32 width, i32 height, const char* title)
         : Application(width, height, title) {}
 
     void setup() override {
-        cam_pos.z = 3;
+        cam_pos.z = 0;
     }
 
     void update() override {
@@ -52,7 +52,7 @@ public:
     }
 
     void render() override {
-        draw_rect({0,0}, 1, 1, rotation, {0.5,0.5});
+        draw_rect({400,400}, 100, 100, rotation, {0.5,0.5});
         rotation += delta_time.as_seconds() * 70;
     }
 };

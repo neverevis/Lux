@@ -26,7 +26,7 @@ Lux::Math::Matrix4::Matrix4()
     matrix[15] = 1.0f;
 }
 
-Lux::Math::Matrix4 Lux::Math::Matrix4::ortho(f32 left, f32 right, f32 bottom, f32 top, f32 far, f32 near){
+Lux::Math::Matrix4 Lux::Math::Matrix4::ortho(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far){
     Matrix4 result;
 
     result.matrix[0]  = 2.0f / (right - left);
